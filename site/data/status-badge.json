@@ -1,0 +1,29 @@
+{
+  "enumState": {
+    "status": "已发布"
+  },
+  "editedLayers": {
+    "base": [
+      "rounded-md",
+      "px-2",
+      "py-0.5",
+      "text-xs",
+      "font-medium"
+    ],
+    "status": [
+      "bg-green-100",
+      "text-green-700"
+    ]
+  },
+  "contentMode": "block",
+  "activeVariantIndex": 3,
+  "layerMemory": {
+    "status": {
+      "": "bg-green-100 text-green-700",
+      "审核中": "bg-blue-100 text-blue-600",
+      "草稿": "bg-yellow-100 text-yellow-700",
+      "未发布": "bg-gray-100 text-gray-600",
+      "已发布": "bg-green-100 text-green-700"
+    }
+  }
+}

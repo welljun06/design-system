@@ -1,0 +1,26 @@
+{
+  "enumState": {
+    "variant": "glass"
+  },
+  "editedLayers": {
+    "base": [
+      "rounded-xl",
+      "p-5"
+    ],
+    "variant": [
+      "bg-white/25",
+      "border",
+      "border-white/60",
+      "shadow-[inset_1px_1px_4px_2px_rgba(0,0,0,0.03)]",
+      "backdrop-blur-sm"
+    ]
+  },
+  "contentMode": "block",
+  "activeVariantIndex": 0,
+  "layerMemory": {
+    "variant": {
+      "default": "bg-white shadow-[0_1px_3px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.06)] border border-[#e4e4e7]",
+      "glass": "bg-white/25 border border-white/60 shadow-[inset_1px_1px_4px_2px_rgba(0,0,0,0.03)] backdrop-blur-sm"
+    }
+  }
+}

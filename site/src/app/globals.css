@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  height: 100%;
+  background-color: #ffffff;
+  color: #09090b;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d4d4d8;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1aa;
+}
+
+/* Component viewer responsive layout */
+.preview-pane {
+  border-bottom: 1px solid #e4e4e7;
+}
+
+.style-panel {
+  width: 100%;
+  border-top: 1px solid #e4e4e7;
+  min-height: 280px;
+}
+
+@media (min-width: 1024px) {
+  .preview-pane {
+    border-bottom: none;
+    border-right: 1px solid #e4e4e7;
+  }
+
+  .style-panel {
+    width: 320px;
+    flex-shrink: 0;
+    border-top: none;
+    border-left: 1px solid #e4e4e7;
+    min-height: unset;
+  }
+}
+
+.shiki {
+  border-radius: 0;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.shiki code {
+  display: block;
+  font-family: 'Menlo', 'Monaco', 'Cascadia Code', 'Consolas', monospace;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
