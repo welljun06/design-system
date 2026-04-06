@@ -1,6 +1,6 @@
 {
   "enumState": {
-    "variant": "glass"
+    "variant": "default"
   },
   "editedLayers": {
     "base": [
@@ -8,11 +8,10 @@
       "p-5"
     ],
     "variant": [
-      "bg-white/25",
+      "bg-white",
+      "shadow-[0_1px_3px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.06)]",
       "border",
-      "border-white/60",
-      "shadow-[inset_1px_1px_4px_2px_rgba(0,0,0,0.03)]",
-      "backdrop-blur-sm"
+      "border-[#e4e4e7]"
     ]
   },
   "contentMode": "block",

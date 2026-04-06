@@ -1,4 +1,5 @@
 import React from 'react'
+import { cn } from '@/lib/utils'
 
 type CardProps = {
   variant?: 'default' | 'glass'
@@ -19,7 +20,7 @@ export function Card({ variant = 'default', children, classOverrides }: CardProp
     : (classOverrides?.variant ?? defaultClasses.default)
 
   return (
-    <div className={`${base} ${variantClass}`}>
+    <div className={cn(base, variantClass)}>
       {children ?? (
         <>
           <h3 className="text-sm font-semibold text-[#1c1f23]">Card Title</h3>

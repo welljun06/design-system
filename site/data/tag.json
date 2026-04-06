@@ -1,0 +1,35 @@
+{
+  "enumState": {
+    "color": "white",
+    "type": "solid",
+    "size": "lg",
+    "shape": "square"
+  },
+  "editedLayers": {
+    "base": [
+      "inline-flex",
+      "items-center",
+      "font-semibold"
+    ],
+    "color": [],
+    "type": [],
+    "size": [
+      "gap-1.5",
+      "px-2",
+      "py-[2px]",
+      "text-sm"
+    ],
+    "shape": [
+      "rounded-md"
+    ]
+  },
+  "contentMode": "block",
+  "activeVariantIndex": 0,
+  "layerMemory": {
+    "type": {
+      "light": "",
+      "solid": "",
+      "ghost": ""
+    }
+  }
+}

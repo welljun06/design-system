@@ -7,7 +7,12 @@ import { Button } from '@/ui/Button'
 import type { ButtonVariant, ButtonContent, ButtonSize, ButtonRadius } from '@/ui/Button'
 import { StatusBadge } from '@/ui/StatusBadge'
 import { Input } from '@/ui/Input'
-import type { InputSize } from '@/ui/Input'
+import type { InputSize, InputVariant } from '@/ui/Input'
+import { Select } from '@/ui/Select'
+import type { SelectSize, SelectVariant } from '@/ui/Select'
+import { Tag } from '@/ui/Tag'
+import { Tabs } from '@/ui/Tabs'
+import type { TabsVariant, TabsSize } from '@/ui/Tabs'
 import { Card } from '@/ui/Card'
 import { generateCode } from '@/lib/codeGen'
 import type { SerializableEntry } from '@/lib/registry'
@@ -162,8 +167,11 @@ function PreviewComponent({
   )
 
   if (slug === 'status-badge') return <StatusBadge status={(variantProps.status as StatusType) ?? '已发布'} classOverrides={classOverrides} />
-  if (slug === 'input') return <div className="w-64"><Input size={(variantProps.size as InputSize) ?? 'lg'} disabled={variantProps.disabled === 'true'} classOverrides={classOverrides} /></div>
-  if (slug === 'card') return <div className="w-72"><Card variant={(variantProps.variant as CardVariant) ?? 'default'} classOverrides={classOverrides} /></div>
+  if (slug === 'input') return <div className="w-64"><Input variant={(variantProps.variant as InputVariant) ?? 'default'} size={(variantProps.size as InputSize) ?? 'lg'} disabled={variantProps.disabled === 'true'} classOverrides={classOverrides} /></div>
+  if (slug === 'select') return <div className="w-64"><Select variant={(variantProps.variant as SelectVariant) ?? 'default'} size={(variantProps.size as SelectSize) ?? 'lg'} disabled={variantProps.disabled === 'true'} classOverrides={classOverrides} /></div>
+  if (slug === 'tabs') return <Tabs variant={(variantProps.variant as TabsVariant) ?? 'glass'} size={(variantProps.size as TabsSize) ?? 'md'} classOverrides={classOverrides} />
+  if (slug === 'tag') return <Tag color={(variantProps.color as any) ?? 'white'} type={(variantProps.type as any) ?? 'light'} size={(variantProps.size as any) ?? 'md'} shape={(variantProps.shape as any) ?? 'square'} classOverrides={classOverrides} />
+  if (slug === 'card') return <div className="w-72 flex"><Card variant={(variantProps.variant as CardVariant) ?? 'default'} classOverrides={classOverrides} /></div>
   return null
 }
 
@@ -369,14 +377,20 @@ export function ComponentViewer({ entry, initialHighlightedHtml, savedConfig }: 
   // ── Persistence: auto-save to project file via API ──────────────────────────
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const changeCountRef = useRef(0)
-  const initialRenderRef = useRef(true)
+  const skipCountRef = useRef(0)
   const [saveToast, setSaveToast] = useState<'saved' | 'error' | null>(null)
 
+  // Track user interaction — only start saving after first real click/change
+  const userInteractedRef = useRef(false)
   useEffect(() => {
-    if (initialRenderRef.current) {
-      initialRenderRef.current = false
-      return
-    }
+    const mark = () => { userInteractedRef.current = true }
+    window.addEventListener('pointerdown', mark, { once: true })
+    return () => window.removeEventListener('pointerdown', mark)
+  }, [])
+
+  useEffect(() => {
+    // Don't save until user has actually interacted with the page
+    if (!userInteractedRef.current) return
     changeCountRef.current++
     const currentChange = changeCountRef.current
     if (saveTimerRef.current) clearTimeout(saveTimerRef.current)

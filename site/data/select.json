@@ -1,0 +1,41 @@
+{
+  "enumState": {
+    "variant": "default",
+    "size": "md"
+  },
+  "editedLayers": {
+    "base": [
+      "border",
+      "outline-none",
+      "transition-all",
+      "cursor-pointer"
+    ],
+    "variant": [
+      "border-[#e4e4e7]",
+      "bg-white",
+      "text-[#1c1f23]",
+      "focus:border-[#a1a1aa]",
+      "focus:ring-2",
+      "focus:ring-[#a1a1aa]/20"
+    ],
+    "size": [
+      "py-[5px]",
+      "px-2.5",
+      "text-sm",
+      "rounded-md"
+    ]
+  },
+  "contentMode": "block",
+  "activeVariantIndex": 0,
+  "layerMemory": {
+    "variant": {
+      "default": "border-[#e4e4e7] bg-white text-[#1c1f23] focus:border-[#a1a1aa] focus:ring-2 focus:ring-[#a1a1aa]/20",
+      "glass": "border-white/60 bg-white/25 shadow-[inset_1px_1px_4px_2px_rgba(0,0,0,0.03)] text-[#1c1f23] focus:border-white/80 focus:ring-2 focus:ring-white/20 backdrop-blur-sm"
+    },
+    "size": {
+      "lg": "py-[7px] px-3 text-sm rounded-lg",
+      "sm": "py-[3px] px-2 text-xs rounded-md",
+      "md": "py-[5px] px-2.5 text-sm rounded-md"
+    }
+  }
+}

@@ -65,6 +65,50 @@ const aiPromptTemplate = `你是一位专业的前端工程师，正在基于以
 />
 \`\`\`
 
+### Tabs
+\`\`\`tsx
+{/* Glass */}
+<div className="inline-flex items-center rounded-full border border-white/60 bg-white/50 backdrop-blur-sm shadow-[inset_1px_1px_4px_2px_rgba(0,0,0,0.03)] h-9 p-1 gap-0.5">
+  <button className="px-4 py-0.5 text-sm rounded-full bg-white shadow-[0_2px_4px_-1px_rgba(0,0,0,0.05)] text-[#1c1f23] font-semibold">标签一</button>
+  <button className="px-4 py-0.5 text-sm rounded-full text-[#1c1f23]/60">标签二</button>
+</div>
+
+{/* Line */}
+<div className="inline-flex items-center border-b border-[#e4e4e7] h-9">
+  <button className="px-4 py-0.5 text-sm border-b-2 border-[#1c1f23] text-[#1c1f23] font-medium -mb-px">标签一</button>
+  <button className="px-4 py-0.5 text-sm text-[#71717a] -mb-px">标签二</button>
+</div>
+
+{/* Button */}
+<div className="inline-flex items-center bg-[#f4f4f5] rounded-lg h-9 p-1 gap-0.5">
+  <button className="px-4 py-0.5 text-sm rounded-md bg-white text-[#1c1f23] font-medium shadow-sm">标签一</button>
+  <button className="px-4 py-0.5 text-sm rounded-md text-[#71717a]">标签二</button>
+</div>
+\`\`\`
+
+### Tag
+\`\`\`tsx
+{/* light */}
+<span className="inline-flex items-center font-semibold bg-blue-50 text-blue-700 gap-1.5 px-1.5 py-[2px] text-xs rounded-md">标签</span>
+{/* solid */}
+<span className="inline-flex items-center font-semibold bg-blue-600 text-white gap-1.5 px-1.5 py-[2px] text-xs rounded-md">标签</span>
+{/* ghost */}
+<span className="inline-flex items-center font-semibold border border-blue-600 text-blue-600 gap-1.5 px-1.5 py-[2px] text-xs rounded-md">标签</span>
+\`\`\`
+
+### Select
+\`\`\`tsx
+<div className="relative inline-flex w-full">
+  <select className="w-full border border-[#e4e4e7] bg-white text-[#1c1f23] outline-none focus:border-[#a1a1aa] focus:ring-2 focus:ring-[#a1a1aa]/20 transition-all appearance-none cursor-pointer py-[7px] px-3 pr-8 text-sm rounded-lg">
+    <option>请选择...</option>
+  </select>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a1a1aa" strokeWidth="2"
+    className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none">
+    <path d="M6 9l6 6 6-6"/>
+  </svg>
+</div>
+\`\`\`
+
 ### Card
 \`\`\`tsx
 // 默认

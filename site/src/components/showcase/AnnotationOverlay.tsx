@@ -78,16 +78,21 @@ export function AnnotationOverlay({
   const wrapRef = useRef<HTMLDivElement>(null)
   const [size, setSize] = useState<{ w: number; h: number } | null>(null)
 
-  // Measure the inner button element (re-runs when classes change)
+  // Measure the actual component element (re-runs when classes change)
   useEffect(() => {
     if (!wrapRef.current) return
-    const btn = wrapRef.current.firstElementChild as HTMLElement | null
-    if (!btn) return
+    // Find the actual component element to measure
+    let el = wrapRef.current.firstElementChild as HTMLElement | null
+    if (!el) return
+    // Skip width-only wrapper divs (w-64, w-72) — only skip if child is the styled component
+    if (el.tagName === 'DIV' && el.children.length === 1 && el.className.split(' ').every(c => c.startsWith('w-') || c === 'flex')) {
+      el = el.firstElementChild as HTMLElement
+    }
 
-    const measure = () => setSize({ w: btn.offsetWidth, h: btn.offsetHeight })
+    const measure = () => setSize({ w: el!.offsetWidth, h: el!.offsetHeight })
     measure()
     const ro = new ResizeObserver(measure)
-    ro.observe(btn)
+    ro.observe(el)
     return () => ro.disconnect()
   }, [editedLayers])
 
@@ -109,7 +114,7 @@ export function AnnotationOverlay({
   const textValue = textCls   ? getCssValue(textCls)                           : null
   const iconValue = iconCls   ? getCssValue(iconCls)                           : null
 
-  const OUTER = 52 // padding around button to fit annotation labels
+  const OUTER = 56 // padding around component to fit annotation labels
 
   return (
     <div style={{ position: 'relative', display: 'inline-flex', padding: OUTER }}>
@@ -158,15 +163,22 @@ export function AnnotationOverlay({
           )}
 
           {/* Height — bracket on the right */}
-          {hCls && hValue && (
-            <div style={{
-              position: 'absolute',
-              left: OUTER + size.w + 10,
-              top: OUTER,
-            }}>
-              <VBar height={size.h} label={`${hCls} · ${hValue}`} />
-            </div>
-          )}
+          <div style={{
+            position: 'absolute',
+            left: OUTER + size.w + 10,
+            top: OUTER,
+          }}>
+            <VBar height={size.h} label={hCls ? `${hCls} · ${size.h}px` : `${size.h}px`} />
+          </div>
+
+          {/* Width — bar at the bottom */}
+          <div style={{
+            position: 'absolute',
+            left: OUTER,
+            top: OUTER + size.h + (gapCls ? 40 : (roundedCls ? 50 : 8)),
+          }}>
+            <HBar width={size.w} label={`${size.w}px`} />
+          </div>
 
           {/* Gap — label centered at bottom (if block content) */}
           {gapCls && gapValue && size.w > pxPx * 2 && (
@@ -189,12 +201,12 @@ export function AnnotationOverlay({
             </div>
           )}
 
-          {/* Radius — arc icon + label at bottom-left corner */}
+          {/* Radius — arc icon + label below width bar */}
           {roundedCls && radValue && (
             <div style={{
               position: 'absolute',
               left: OUTER - 4,
-              top: OUTER + size.h + (gapCls ? 40 : 10),
+              top: OUTER + size.h + (gapCls ? 70 : 38),
               display: 'flex',
               alignItems: 'center',
               gap: 4,

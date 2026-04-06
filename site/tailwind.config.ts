@@ -36,6 +36,7 @@ const config: Config = {
     'rounded-none', 'rounded-sm', 'rounded', 'rounded-md', 'rounded-lg',
     'rounded-xl', 'rounded-2xl', 'rounded-3xl', 'rounded-full',
     // ── typography ──
+    'text-[11px]', 'leading-[16px]',
     'text-xs', 'text-sm', 'text-base', 'text-lg', 'text-xl',
     'font-normal', 'font-medium', 'font-semibold', 'font-bold',
     // ── opacity ──
@@ -45,6 +46,7 @@ const config: Config = {
     // ── aspect ──
     'aspect-square',
   ],
+  plugins: [require('tailwindcss-animate')],
 }
 
 export default config

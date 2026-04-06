@@ -133,9 +133,7 @@ export const registry: RegistryEntry[] = [
       const size = overrides?.size ?? 'h-9 px-4 gap-2 text-sm'
       const radius = overrides?.radius ?? 'rounded-lg'
       return `<button className="${base} ${variant} ${size} ${radius}">
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M12 5v14M5 12l7 7 7-7"/>
-  </svg>
+  <ArrowDown size={14} />
   Button
 </button>`
     },
@@ -155,6 +153,7 @@ export const registry: RegistryEntry[] = [
           'text-xs',
           'font-medium',
         ],
+        editableClasses: ['rounded-md', 'px-2', 'py-0.5', 'text-xs', 'font-medium'],
       },
       status: {
         label: 'Status',
@@ -186,49 +185,244 @@ export const registry: RegistryEntry[] = [
     slug: 'input',
     name: 'Input',
     category: '基础组件',
-    description: '简洁的文本输入框，支持 placeholder、focus 状态和 ring 效果。适配亮色背景场景。',
+    description: '简洁的文本输入框，支持多种尺寸和视觉风格。',
     layers: {
       base: {
         label: 'Base',
         classes: [
           'w-full',
           'border',
-          'border-[#e4e4e7]',
-          'bg-white',
-          'text-[#1c1f23]',
-          'placeholder:text-[#a1a1aa]',
           'outline-none',
-          'focus:border-[#a1a1aa]',
-          'focus:ring-2',
-          'focus:ring-[#a1a1aa]/20',
           'transition-all',
+        ],
+        editableClasses: [],
+      },
+      variant: {
+        label: 'Variant',
+        variantPropKey: 'variant',
+        classes: ['border-[#e4e4e7]', 'bg-white', 'text-[#1c1f23]', 'placeholder:text-[#a1a1aa]', 'focus:border-[#a1a1aa]', 'focus:ring-2', 'focus:ring-[#a1a1aa]/20'],
+        enumOptions: [
+          { key: 'default', label: '默认',  description: '标准输入框，白底灰边，适用于亮色背景', classes: ['border-[#e4e4e7]', 'bg-white', 'text-[#1c1f23]', 'placeholder:text-[#a1a1aa]', 'focus:border-[#a1a1aa]', 'focus:ring-2', 'focus:ring-[#a1a1aa]/20'] },
+          { key: 'glass',   label: '玻璃',  description: '毛玻璃效果，适用于图片或渐变背景之上', classes: ['border-white/60', 'bg-white/25', 'shadow-[inset_1px_1px_4px_2px_rgba(0,0,0,0.03)]', 'text-[#1c1f23]', 'placeholder:text-[#71717a]', 'focus:border-white/80', 'focus:ring-2', 'focus:ring-white/20', 'backdrop-blur-sm'] },
         ],
       },
       size: {
         label: 'Size',
         variantPropKey: 'size',
-        classes: ['px-3', 'py-2', 'text-sm', 'rounded-lg'],
+        classes: ['py-[7px]', 'px-3', 'text-sm', 'rounded-lg'],
         enumOptions: [
-          { key: 'lg', label: 'LG', description: '大尺寸输入框，用于表单主要输入项', classes: ['px-3', 'py-2', 'text-sm', 'rounded-lg'] },
-          { key: 'md', label: 'MD', description: '默认尺寸，适用于大多数表单场景', classes: ['px-2.5', 'py-1.5', 'text-sm', 'rounded-md'] },
-          { key: 'sm', label: 'SM', description: '紧凑尺寸，用于空间受限的筛选、搜索等场景', classes: ['px-2', 'py-1', 'text-xs', 'rounded-md'] },
+          { key: 'lg', label: 'LG — 36px', description: '大尺寸输入框，用于表单主要输入项', classes: ['py-[7px]', 'px-3', 'text-sm', 'rounded-lg'] },
+          { key: 'md', label: 'MD — 32px', description: '默认尺寸，适用于大多数表单场景', classes: ['py-[5px]', 'px-2.5', 'text-sm', 'rounded-md'] },
+          { key: 'sm', label: 'SM — 24px', description: '紧凑尺寸，用于空间受限的筛选、搜索等场景', classes: ['py-[3px]', 'px-2', 'text-xs', 'rounded-md'] },
         ],
       },
     },
     variants: [
-      { label: 'Default', props: { size: 'lg' } },
-      { label: 'MD', props: { size: 'md' } },
-      { label: 'SM', props: { size: 'sm' } },
-      { label: 'Disabled', props: { size: 'lg', disabled: 'true' } },
+      { label: 'Default', props: { variant: 'default', size: 'lg' } },
+      { label: 'Glass', props: { variant: 'glass', size: 'lg' } },
+      { label: 'MD', props: { variant: 'default', size: 'md' } },
+      { label: 'SM', props: { variant: 'default', size: 'sm' } },
+      { label: 'Disabled', props: { variant: 'default', size: 'lg', disabled: 'true' } },
     ],
     code: (overrides) => {
-      const base = overrides?.base ?? 'w-full border border-[#e4e4e7] bg-white text-[#1c1f23] placeholder:text-[#a1a1aa] outline-none focus:border-[#a1a1aa] focus:ring-2 focus:ring-[#a1a1aa]/20 transition-all'
-      const size = overrides?.size ?? 'px-3 py-2 text-sm rounded-lg'
+      const base = overrides?.base ?? 'w-full border outline-none transition-all'
+      const variant = overrides?.variant ?? 'border-[#e4e4e7] bg-white text-[#1c1f23] placeholder:text-[#a1a1aa] focus:border-[#a1a1aa] focus:ring-2 focus:ring-[#a1a1aa]/20'
+      const size = overrides?.size ?? 'py-[7px] px-3 text-sm rounded-lg'
       return `<input
   type="text"
   placeholder="请输入内容..."
-  className="${base} ${size}"
+  className="${base} ${variant} ${size}"
 />`
+    },
+  },
+  {
+    slug: 'select',
+    name: 'Select',
+    category: '基础组件',
+    description: '下拉选择器，支持多种尺寸和视觉风格。基于 Radix UI 构建。',
+    layers: {
+      base: {
+        label: 'Base',
+        classes: [
+          'border',
+          'outline-none',
+          'transition-all',
+          'cursor-pointer',
+        ],
+        editableClasses: [],
+      },
+      variant: {
+        label: 'Variant',
+        variantPropKey: 'variant',
+        classes: ['border-[#e4e4e7]', 'bg-white', 'text-[#1c1f23]', 'focus:border-[#a1a1aa]', 'focus:ring-2', 'focus:ring-[#a1a1aa]/20'],
+        enumOptions: [
+          { key: 'default', label: '默认',  description: '标准选择器，白底灰边，适用于亮色背景', classes: ['border-[#e4e4e7]', 'bg-white', 'text-[#1c1f23]', 'focus:border-[#a1a1aa]', 'focus:ring-2', 'focus:ring-[#a1a1aa]/20'] },
+          { key: 'glass',   label: '玻璃',  description: '毛玻璃效果，适用于图片或渐变背景之上', classes: ['border-white/60', 'bg-white/25', 'shadow-[inset_1px_1px_4px_2px_rgba(0,0,0,0.03)]', 'text-[#1c1f23]', 'focus:border-white/80', 'focus:ring-2', 'focus:ring-white/20', 'backdrop-blur-sm'] },
+        ],
+      },
+      size: {
+        label: 'Size',
+        variantPropKey: 'size',
+        classes: ['py-[7px]', 'px-3', 'text-sm', 'rounded-lg'],
+        enumOptions: [
+          { key: 'lg', label: 'LG — 36px', description: '大尺寸选择器，用于表单主要选择项', classes: ['py-[7px]', 'px-3', 'text-sm', 'rounded-lg'] },
+          { key: 'md', label: 'MD — 32px', description: '默认尺寸，适用于大多数表单场景', classes: ['py-[5px]', 'px-2.5', 'text-sm', 'rounded-md'] },
+          { key: 'sm', label: 'SM — 24px', description: '紧凑尺寸，用于筛选栏或工具栏', classes: ['py-[3px]', 'px-2', 'text-xs', 'rounded-md'] },
+        ],
+      },
+    },
+    variants: [
+      { label: 'Default', props: { variant: 'default', size: 'lg' } },
+      { label: 'Glass', props: { variant: 'glass', size: 'lg' } },
+      { label: 'MD', props: { variant: 'default', size: 'md' } },
+      { label: 'SM', props: { variant: 'default', size: 'sm' } },
+      { label: 'Disabled', props: { variant: 'default', size: 'lg', disabled: 'true' } },
+    ],
+    code: (overrides) => {
+      const base = overrides?.base ?? 'border outline-none transition-all cursor-pointer'
+      const variant = overrides?.variant ?? 'border-[#e4e4e7] bg-white text-[#1c1f23] focus:border-[#a1a1aa] focus:ring-2 focus:ring-[#a1a1aa]/20'
+      const size = overrides?.size ?? 'py-[7px] px-3 text-sm rounded-lg'
+      return `{/* Requires: @radix-ui/react-select, lucide-react */}
+<Select.Root>
+  <Select.Trigger className="w-full flex items-center justify-between ${base} ${variant} ${size}">
+    <Select.Value placeholder="请选择..." />
+    <ChevronDown size={14} color="#a1a1aa" />
+  </Select.Trigger>
+  <Select.Portal>
+    <Select.Content className="bg-white rounded-lg border border-[#e4e4e7] shadow-lg p-1">
+      <Select.Viewport>
+        <Select.Item value="1" className="flex items-center justify-between px-2.5 py-1.5 text-sm rounded-md cursor-pointer data-[highlighted]:bg-[#f4f4f5]">
+          <Select.ItemText>选项一</Select.ItemText>
+          <Select.ItemIndicator><Check size={14} color="#a1a1aa" /></Select.ItemIndicator>
+        </Select.Item>
+      </Select.Viewport>
+    </Select.Content>
+  </Select.Portal>
+</Select.Root>`
+    },
+  },
+  {
+    slug: 'tag',
+    name: 'Tag',
+    category: '基础组件',
+    description: '标签组件，支持 6 种颜色 × 3 种类型 × 3 种尺寸 × 2 种形状，用于信息分类和状态标记。',
+    layers: {
+      base: {
+        label: 'Base',
+        classes: ['inline-flex', 'items-center', 'font-semibold'],
+        editableClasses: ['font-semibold'],
+      },
+      color: {
+        label: 'Color',
+        variantPropKey: 'color',
+        classes: [],
+        enumOptions: [
+          { key: 'white',  label: '白色',  description: '默认中性标签，适用于通用信息标记', classes: [] },
+          { key: 'blue',   label: '蓝色',  description: '信息类标签，标记链接或可操作项', classes: [] },
+          { key: 'green',  label: '绿色',  description: '成功/正向状态标签', classes: [] },
+          { key: 'red',    label: '红色',  description: '错误/危险状态标签', classes: [] },
+          { key: 'orange', label: '橙色',  description: '警告/待处理状态标签', classes: [] },
+          { key: 'violet', label: '紫色',  description: '特殊分类标签，如高级功能、实验特性', classes: [] },
+        ],
+      },
+      type: {
+        label: 'Type',
+        variantPropKey: 'type',
+        classes: [],
+        enumOptions: [
+          { key: 'light', label: '浅色', description: '浅色背景，最常用，视觉柔和', classes: [] },
+          { key: 'solid', label: '填充', description: '实心填充，视觉最强', classes: [] },
+          { key: 'ghost', label: '描边', description: '仅边框无底色，轻量透明', classes: [] },
+        ],
+      },
+      size: {
+        label: 'Size',
+        variantPropKey: 'size',
+        classes: ['gap-1.5', 'px-1.5', 'py-[2px]', 'text-xs'],
+        enumOptions: [
+          { key: 'lg', label: 'LG — 24px', description: '大尺寸标签，用于页面标题区域', classes: ['gap-1.5', 'px-2', 'py-[2px]', 'text-sm'] },
+          { key: 'md', label: 'MD — 20px', description: '默认尺寸，适用于大多数场景', classes: ['gap-1.5', 'px-1.5', 'py-[2px]', 'text-xs'] },
+          { key: 'sm', label: 'SM — 16px', description: '紧凑尺寸，用于列表或表格内', classes: ['gap-1', 'px-1', 'py-0', 'text-[11px]', 'leading-[16px]'] },
+        ],
+      },
+      shape: {
+        label: 'Shape',
+        variantPropKey: 'shape',
+        classes: ['rounded-md'],
+        enumOptions: [
+          { key: 'square', label: '方角', description: '标准圆角矩形', classes: ['rounded-md'] },
+          { key: 'circle', label: '圆角', description: '全圆角胶囊形', classes: ['rounded-full'] },
+        ],
+      },
+    },
+    variants: [
+      { label: '白 · 描边', props: { color: 'white', type: 'light', size: 'md', shape: 'square' } },
+      { label: '白 · 填充', props: { color: 'white', type: 'solid', size: 'md', shape: 'square' } },
+      { label: '蓝 · 描边', props: { color: 'blue', type: 'light', size: 'md', shape: 'square' } },
+      { label: '绿 · 描边', props: { color: 'green', type: 'light', size: 'md', shape: 'square' } },
+      { label: '红 · 填充', props: { color: 'red', type: 'solid', size: 'md', shape: 'square' } },
+      { label: 'LG', props: { color: 'white', type: 'light', size: 'lg', shape: 'square' } },
+      { label: 'SM', props: { color: 'white', type: 'light', size: 'sm', shape: 'square' } },
+      { label: '圆角', props: { color: 'blue', type: 'light', size: 'md', shape: 'circle' } },
+    ],
+    code: (overrides) => {
+      const base = overrides?.base ?? 'inline-flex items-center font-medium'
+      const color = overrides?.color ?? 'border border-[rgba(45,66,107,0.12)] bg-white text-[#1c1f23]'
+      const size = overrides?.size ?? 'gap-1.5 px-1.5 py-[2px] text-xs'
+      const shape = overrides?.shape ?? 'rounded-md'
+      return `<span className="${base} ${color} ${size} ${shape}">
+  标签
+</span>`
+    },
+  },
+  {
+    slug: 'tabs',
+    name: 'Tabs',
+    category: '基础组件',
+    description: '选项卡切换组件，支持 6 种视觉风格 × 3 种尺寸，用于内容分组切换。',
+    layers: {
+      variant: {
+        label: 'Variant',
+        variantPropKey: 'variant',
+        classes: [],
+        enumOptions: [
+          { key: 'glass',          label: '玻璃 · 全圆',  description: '毛玻璃胶囊风格，适用于渐变或图片背景之上', classes: [] },
+          { key: 'glass-rounded',  label: '玻璃 · 矩形',  description: '毛玻璃圆角矩形，适合嵌入页面布局', classes: [] },
+          { key: 'button',         label: '按钮 · 全圆',  description: '填充胶囊风格，视觉独立', classes: [] },
+          { key: 'button-rounded', label: '按钮 · 矩形',  description: '填充圆角矩形，适用于工具栏或紧凑布局', classes: [] },
+          { key: 'line',           label: '下划线',       description: '经典下划线风格，适用于内容区域顶部', classes: [] },
+          { key: 'card',           label: '卡片',         description: '卡片式标签，适用于面板或容器顶部', classes: [] },
+        ],
+      },
+      size: {
+        label: 'Size',
+        variantPropKey: 'size',
+        classes: ['h-8', 'p-0.5', 'gap-0.5'],
+        enumOptions: [
+          { key: 'lg', label: 'LG — 36px', description: '大尺寸，用于页面级导航', classes: ['h-9', 'p-1', 'gap-0.5'] },
+          { key: 'md', label: 'MD — 32px', description: '默认尺寸，适用于大多数场景', classes: ['h-8', 'p-0.5', 'gap-0.5'] },
+          { key: 'sm', label: 'SM — 24px', description: '紧凑尺寸，用于面板或弹窗内', classes: ['h-6', 'p-0.5', 'gap-0.5'] },
+        ],
+      },
+    },
+    variants: [
+      { label: 'Glass', props: { variant: 'glass', size: 'md' } },
+      { label: 'Glass · 矩形', props: { variant: 'glass-rounded', size: 'md' } },
+      { label: 'Button', props: { variant: 'button', size: 'md' } },
+      { label: 'Button · 矩形', props: { variant: 'button-rounded', size: 'md' } },
+      { label: 'Line', props: { variant: 'line', size: 'md' } },
+      { label: 'Card', props: { variant: 'card', size: 'md' } },
+    ],
+    code: (overrides) => {
+      return `{/* Glass variant example */}
+<div className="inline-flex items-center rounded-full border border-white bg-white/40 shadow-[inset_1px_1px_4px_2px_rgba(0,0,0,0.03)] h-9 p-1 gap-0.5">
+  <button className="px-4 py-0.5 text-sm rounded-full bg-white shadow-[0_2px_4px_-1px_rgba(0,0,0,0.05)] text-[#1c1f23] font-semibold">
+    标签一
+  </button>
+  <button className="px-4 py-0.5 text-sm rounded-full text-[#1c1f23]/60">
+    标签二
+  </button>
+</div>`
     },
   },
   {

@@ -1,0 +1,31 @@
+{
+  "enumState": {
+    "variant": "glass",
+    "size": "lg"
+  },
+  "editedLayers": {
+    "variant": [],
+    "size": [
+      "h-9",
+      "p-1",
+      "gap-0.5"
+    ]
+  },
+  "contentMode": "block",
+  "activeVariantIndex": 0,
+  "layerMemory": {
+    "variant": {
+      "glass": "",
+      "glass-rounded": "",
+      "button": "",
+      "button-rounded": "",
+      "line": "",
+      "card": ""
+    },
+    "size": {
+      "lg": "h-9 p-1 gap-0.5",
+      "md": "h-8 p-0.5 gap-0.5",
+      "sm": "h-6 p-0.5 gap-0.5"
+    }
+  }
+}

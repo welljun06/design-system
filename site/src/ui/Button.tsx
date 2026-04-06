@@ -1,6 +1,8 @@
 'use client'
 
 import React, { useId } from 'react'
+import { cn } from '@/lib/utils'
+import { ArrowDown, Loader2 } from 'lucide-react'
 
 // 样式：10 种视觉风格
 export type ButtonVariant =
@@ -110,9 +112,11 @@ export function Button({
 
   const aiGradient = 'linear-gradient(155deg, #FFB31E 8%, #49D127 23%, #4592F2 45%, #6E7CFD 66%, #E135F8 92%)'
   const gradId = useId()
+  const isAi = variant === 'ai'
 
+  // Lucide Sparkles paths with gradient stroke
   const AiIcon = (
-    <svg width={iconPx} height={iconPx} viewBox="0 0 24 24" fill="none">
+    <svg width={iconPx} height={iconPx} viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <defs>
         <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="8%" stopColor="#FFB31E" />
@@ -122,43 +126,22 @@ export function Button({
           <stop offset="92%" stopColor="#E135F8" />
         </linearGradient>
       </defs>
-      <path d="M9.5 2L11 7L16 8.5L11 10L9.5 15L8 10L3 8.5L8 7L9.5 2Z" stroke={`url(#${gradId})`} strokeWidth="1.5" strokeLinejoin="round" />
-      <path d="M18 12L19 15L22 16L19 17L18 20L17 17L14 16L17 15L18 12Z" stroke={`url(#${gradId})`} strokeWidth="1.5" strokeLinejoin="round" />
+      <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" stroke={`url(#${gradId})`} />
+      <path d="M20 3v4M22 5h-4" stroke={`url(#${gradId})`} />
     </svg>
   )
 
-  const ArrowIcon = (
-    <svg width={iconPx} height={iconPx} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M12 5v14M5 12l7 7 7-7" />
-    </svg>
-  )
-
-  const Spinner = (
-    <svg
-      width={iconPx}
-      height={iconPx}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      style={{ animation: 'spin 1s linear infinite' }}
-    >
-      <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-    </svg>
-  )
-
-  const isAi = variant === 'ai'
-  const icon = isAi ? AiIcon : ArrowIcon
+  const icon = isAi ? AiIcon : <ArrowDown size={iconPx} />
 
   const children = loading
-    ? <>{Spinner}{content !== 'icon' && <span>Loading...</span>}</>
+    ? <><Loader2 size={iconPx} className="animate-spin" />{content !== 'icon' && <span>Loading...</span>}</>
     : content === 'icon'
     ? icon
     : <>{icon}<span style={isAi ? { backgroundImage: aiGradient, WebkitBackgroundClip: 'text', color: 'transparent' } : undefined}>{label}</span></>
 
   return (
     <button
-      className={[base, variantClass, sizeClass, radiusClass, paddingClass, iconClass, stateClass].filter(Boolean).join(' ')}
+      className={cn(base, variantClass, sizeClass, radiusClass, paddingClass, iconClass, stateClass)}
       style={isAi ? { position: 'relative', overflow: 'hidden' } : undefined}
       disabled={disabled}
     >

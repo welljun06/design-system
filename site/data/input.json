@@ -1,43 +1,42 @@
 {
   "enumState": {
-    "size": "lg"
+    "variant": "default",
+    "size": "sm"
   },
   "editedLayers": {
     "base": [
       "w-full",
-      "rounded-lg",
       "border",
-      "border-[#e4e4e7]",
-      "bg-white",
-      "px-3",
-      "py-2",
-      "text-sm",
-      "text-[#1c1f23]",
-      "placeholder:text-[#a1a1aa]",
       "outline-none",
-      "focus:border-[#a1a1aa]",
-      "focus:ring-2",
-      "focus:ring-[#a1a1aa]/20",
       "transition-all"
     ],
+    "variant": [
+      "border-[#e4e4e7]",
+      "bg-white",
+      "text-[#1c1f23]",
+      "placeholder:text-[#a1a1aa]",
+      "focus:border-[#a1a1aa]",
+      "focus:ring-2",
+      "focus:ring-[#a1a1aa]/20"
+    ],
     "size": [
-      "px-3",
-      "py-2",
-      "text-sm",
-      "rounded-lg"
+      "py-[3px]",
+      "px-2",
+      "text-xs",
+      "rounded-md"
     ]
   },
   "contentMode": "block",
   "activeVariantIndex": 0,
   "layerMemory": {
-    "size": {
-      "": "",
-      "lg": "px-3 py-2 text-sm rounded-lg",
-      "md": "px-2.5 py-1.5 text-sm rounded-md",
-      "sm": "px-2 py-1 text-xs rounded-md"
+    "variant": {
+      "default": "border-[#e4e4e7] bg-white text-[#1c1f23] placeholder:text-[#a1a1aa] focus:border-[#a1a1aa] focus:ring-2 focus:ring-[#a1a1aa]/20",
+      "glass": "border-white/60 bg-white/25 text-[#1c1f23] placeholder:text-[#71717a] focus:border-white/80 focus:ring-2 focus:ring-white/20 backdrop-blur-sm"
     },
-    "base": {
-      "": "w-full rounded-lg border border-[#e4e4e7] bg-white px-3 py-2 text-sm text-[#1c1f23] placeholder:text-[#a1a1aa] outline-none focus:border-[#a1a1aa] focus:ring-2 focus:ring-[#a1a1aa]/20 transition-all"
+    "size": {
+      "lg": "py-[7px] px-3 text-sm rounded-lg",
+      "md": "py-[5px] px-2.5 text-sm rounded-md",
+      "sm": "py-[3px] px-2 text-xs rounded-md"
     }
   }
 }

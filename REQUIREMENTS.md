@@ -55,7 +55,6 @@
 | `tokens.ts` | 设计 token 单一来源（颜色、渐变、阴影） |
 | `GlassButton` | 玻璃风格按钮（circle / pill shape） |
 | `DarkButton` | 深色主 CTA 按钮 |
-| `IconButton` | 工具栏图标按钮 |
 | `StatusBadge` | 发布/草稿/审核状态标签 |
 | `ConfigIcon` | 彩色字符配置图标 |
 | `CardGradientBg` | 渐变背景卡片 |
@@ -88,64 +87,66 @@ Button 变体维度：
 
 ## 四、网站功能需求
 
-### 4.1 组件展示（核心）
+### 4.1 组件展示（核心） ✅ 已完成
 
 参考：21st.dev、shadcn/ui
 
-| 功能 | 描述 |
-|------|------|
-| 分类导航 | 左侧边栏，分基础组件 / 业务组件两大类 |
-| 组件预览 | 实时渲染组件效果（深色背景，与产品风格一致） |
-| 代码片段 | 展示 React + Tailwind 源码，一键复制 |
-| 变体切换 | 同一组件展示多个 variant |
-| 搜索 | 按组件名、分类、关键词检索（Fuse.js，纯客户端） |
-| **样式面板** | 展示组件各层的 Tailwind 属性值，支持直接在网站上修改，实时同步预览和代码 |
+| 功能 | 状态 | 描述 |
+|------|------|------|
+| 分类导航 | ✅ | 左侧边栏，基础组件分类 |
+| 组件预览 | ✅ | 实时渲染组件效果，支持渐变/纯白双背景切换 |
+| 代码片段 | ✅ | 展示 React + Tailwind 源码，一键复制 |
+| 变体切换 | ✅ | Enum 多维度配置（variant/size/radius 等），左侧面板切换 |
+| 搜索 | ✅ | ⌘K 快捷键，Fuse.js 客户端搜索 |
+| 样式面板 | ✅ | 右侧 StylePanel，Tailwind class 实时编辑，含下拉选项 |
+| 标注模式 | ✅ | 可视化展示 padding/height/gap/radius/fontSize/iconSize |
+| 使用说明 | ✅ | 每个 enum 选项附带 description，工具栏展示使用场景 |
+| 自动保存 | ✅ | 编辑后自动保存到项目 `data/` 目录（文件持久化） |
+| 导出 JSON | ✅ | 导出当前组件所有变体的 classOverrides 配置 |
 
-### 4.1.1 样式面板详细设计
+### 4.1.1 样式面板详细设计 ✅ 已实现
 
-目标：让设计师在不写代码的情况下，能够直观地调整组件样式并拿到对应代码。
-
-**面板布局：**
+**面板布局（实际实现）：**
 ```
-┌─────────────────────────────────────────────────────┐
-│  组件预览区                                           │
-├──────────────────────┬──────────────────────────────┤
-│  代码区（只读高亮）    │  样式面板                     │
-│                      │  ┌─ 容器层 ─────────────────┐ │
-│                      │  │ padding     px-4  py-2   │ │
-│                      │  │ border-radius  rounded-lg│ │
-│                      │  │ background  bg-white/25  │ │
-│                      │  └──────────────────────────┘ │
-│                      │  ┌─ 文字层 ─────────────────┐ │
-│                      │  │ font-size   text-sm      │ │
-│                      │  │ color       text-white   │ │
-│                      │  └──────────────────────────┘ │
-└──────────────────────┴──────────────────────────────┘
+┌──────────┬─────────────────────────────┬──────────────┐
+│ Enum     │  工具栏（说明 | 导出 | 背景 | 标注）│              │
+│ Controls │─────────────────────────────│  StylePanel  │
+│          │                             │  ┌ Variant ─┐│
+│ variant  │       组件预览区              │  │ mapped   ││
+│ size     │    （渐变/纯白背景）           │  │ values   ││
+│ radius   │                             │  ├ Size ────┤│
+│ content  │                             │  │ mapped   ││
+│          │                             │  │ iconSize ││
+│ loading  │                             │  ├ Padding ─┤│
+│ disabled │                             │  │ px-3     ││
+├──────────┴─────────────────────────────┤  └──────────┘│
+│ 代码区（JSX，一键复制）                   │              │
+└────────────────────────────────────────┴──────────────┘
 ```
 
 **交互方式：**
-- Tailwind 值以 **tag 形式**展示，点击可编辑
-- 修改后实时更新预览区渲染效果
-- 同步更新代码区对应的 className
-- 提供"复制修改后代码"按钮
+- Tailwind 值以行内属性展示，支持下拉选择（预定义选项）和文本编辑
+- 修改后实时更新预览区渲染效果 + 代码区 className
+- 自动保存到项目文件，toast 提示保存状态
+- Enum 层的自定义编辑通过 `layerMemory` 在选项切换间保持
+- `editableClasses` 控制哪些属性对外开放编辑
+- `groupUnder` 允许 free layer 视觉上归入 enum layer 的 Mapped values 分组
 
 **实现方案：**
-- 组件通过 props 接收 className 覆盖，面板控制这些 props
-- 每个组件附带一份 `styleMap`，描述各层的 Tailwind token 分组（如 spacing、color、border 等）
-- 不依赖 Sandpack，全部在同一页面内实现，性能更好
+- Layer + ClassOverrides 架构，组件通过 `classOverrides` prop 接收覆盖
+- `sideEffects` 系统：切换 enum 选项时自动重置关联的 free layer
+- `layerMemory`：per-combination 记忆，支持 enum 和 free 双层自定义持久化
 
-### 4.2 脚手架入口
+### 4.2 脚手架入口 ✅ 已完成
 
-| 功能 | 描述 |
-|------|------|
-| 说明页 | 介绍脚手架内容：路由结构、设计 token、基础页面 |
-| 获取命令 | `npx degit welljun06/ai-platform-skill my-project` |
-| AI Prompt 模板 | 可直接粘贴给 AI 的系统规范描述，帮助 AI 理解组件约束 |
+| 功能 | 状态 | 描述 |
+|------|------|------|
+| 说明页 | ✅ | 介绍脚手架内容：组件代码片段 |
+| 获取命令 | ✅ | `npx degit welljun06/ai-platform-skill my-project` |
 
-### 4.3 基础功能
-- 深色主题（与产品风格一致，不需要明暗切换）
-- 极简工具风 UI（参考 shadcn、Linear）
-- 部署到外网，供团队使用
+### 4.3 基础功能 ✅ 已完成
+- 亮色主题，极简工具风 UI
+- 预览背景可切换（渐变 / 纯白）
 
 ---
 
@@ -153,18 +154,29 @@ Button 变体维度：
 
 ### 5.1 设计原则
 - **最小化样式**：只保留视觉核心，无运行时 UI 框架依赖
-- **纯 React + Tailwind v4**：与脚手架一致
+- **纯 React + Tailwind v3**：展示网站使用 Tailwind CSS v3
 - **自包含**：每个组件可独立复制使用，依赖仅为 React + Tailwind
 - **语义清晰**：className 使用有意义的 Tailwind 组合，不过度抽象
 
-### 5.2 组件分类（初步）
+### 5.2 已实现组件
+
+```
+基础组件 (Primitives) — 4 个已完成
+├── Button（10 种视觉风格 × 3 尺寸 × 2 圆角 × 2 内容模式）
+│   ├── solid-black / solid-blue / solid-white
+│   ├── outline-blue / outline-gray
+│   ├── ghost-black / ghost-blue / ghost-gray
+│   ├── glass / ai（渐变文字 + 魔法图标 + 顶部微光）
+│   └── 每个 variant 附带使用场景 description
+├── Badge / StatusBadge（已发布/未发布/草稿/审核中，enum 配置）
+├── Input（LG/MD/SM 三种尺寸，enum 配置）
+└── Card（默认/玻璃两种变体，enum 配置）
+```
+
+### 5.3 待实现组件
 
 ```
 基础组件 (Primitives)
-├── Button（黑色/蓝色/玻璃，多 shape/size/variant）
-├── IconButton
-├── Badge / StatusBadge
-├── Input
 ├── Select
 ├── Checkbox / Radio
 ├── Tag
@@ -173,7 +185,6 @@ Button 变体维度：
 ├── Drawer
 ├── Table
 ├── Tabs
-├── Card（含渐变背景变体）
 └── Avatar / ConfigIcon
 
 业务组件 (Business)
@@ -185,7 +196,7 @@ Button 变体维度：
 └── AiAssistPanel
 ```
 
-### 5.3 组件来源策略
+### 5.4 组件来源策略
 
 1. **脚手架仓库直接提取**：`src/ui/` 下已有原语直接整理
 2. **Figma MCP 辅助**：通过 `get_design_context` 获取各组件的视觉规范，再用 Tailwind 实现
@@ -198,22 +209,21 @@ Button 变体维度：
 
 | 层级 | 选型 | 理由 |
 |------|------|------|
-| 框架 | Next.js 15（静态导出） | 文件路由 + 静态生成，未来可扩展 |
-| 样式 | Tailwind CSS v4 | 与脚手架保持一致 |
-| 组件预览 | Sandpack（@codesandbox/sandpack-react） | 支持交互式实时预览与代码编辑 |
+| 框架 | Next.js 15（静态导出 + dev API） | 文件路由 + 静态生成，dev 模式支持 API route |
+| 样式 | Tailwind CSS v3 | 稳定版本，JIT + safelist 支持动态编辑 |
+| 组件预览 | 同页面实时渲染 | 无 Sandpack，性能更好，所有组件在同一 React 树内 |
 | 搜索 | Fuse.js（客户端） | 纯静态，无需后端 |
-| 代码高亮 | Shiki | 高质量语法高亮，支持主题 |
-| 内容管理 | 手动维护 `.tsx` 组件文件 + JSON 元数据 | 简单直接 |
-| 部署 | Vercel | 静态导出，免费，GitHub 自动触发 |
+| 代码高亮 | Shiki | 高质量语法高亮 |
+| 持久化 | 文件系统（`data/*.json`） | dev 模式通过 API route 读写，构建时静态读取 |
+| 部署 | Vercel / 静态服务器 | `npm run build` 输出 `out/` 目录 |
 
 ---
 
 ## 七、信息架构
 
 ```
-/                          首页（介绍 + 快速开始）
-/components                组件总览（卡片网格）
-/components/[name]         组件详情（预览 + 变体 + 代码）
+/                          首页（介绍 + 组件列表）
+/components/[slug]         组件详情（预览 + 变体 + 样式面板 + 代码）
 /scaffold                  脚手架说明与获取命令
 ```
 
@@ -221,24 +231,31 @@ Button 变体维度：
 
 ---
 
-## 八、MVP 计划
+## 八、进度追踪
 
-### Phase 1 —— 网站框架 + 核心组件（优先）
-- [ ] 搭建 Next.js 静态网站
-- [ ] 左侧导航 + 组件详情页布局
-- [ ] Sandpack 预览 + Shiki 代码高亮
-- [ ] 全局搜索（⌘K）
-- [ ] 整理 Button、IconButton、Badge、Card、Input 共 5 个基础组件
+### Phase 1 —— 网站框架 + 核心组件 ✅ 已完成
+- [x] 搭建 Next.js 静态网站
+- [x] 左侧导航 + 组件详情页布局
+- [x] 实时预览 + Shiki 代码高亮
+- [x] 全局搜索（⌘K）
+- [x] 整理 Button、Badge、Input、Card 共 4 个基础组件
+- [x] 样式面板（Layer + ClassOverrides 架构）
+- [x] 标注模式
+- [x] 使用场景说明（description）
+- [x] 自动保存到项目文件
+- [x] JSON 配置导出
+- [x] 预览背景切换
 
 ### Phase 2 —— 业务组件 + 脚手架页
 - [ ] 从脚手架仓库提取业务组件（GlobalNav、各页面布局）
-- [ ] Figma MCP 辅助提取剩余基础组件
-- [ ] 脚手架说明页 + AI Prompt 模板
+- [ ] Figma MCP 辅助提取剩余基础组件（Select、Modal、Table 等）
+- [ ] AI Prompt 模板
 
 ### Phase 3 —— 完善
-- [ ] 组件总览页（卡片网格）
-- [ ] 更多组件（Table、Modal、Drawer、Tabs 等）
+- [ ] 组件总览页（卡片网格预览）
+- [ ] 更多基础组件（Tabs、Drawer、Tooltip 等）
 - [ ] 组件复制后的 AI 使用指引
+- [ ] 深色主题支持
 
 ---
 
@@ -246,5 +263,5 @@ Button 变体维度：
 
 - 组件内禁止硬编码颜色，引用 token 变量或 Tailwind 语义色
 - AI 渐变色仅用于 AI 功能入口，不滥用
-- 展示网站本身也要遵循组件库的设计语言（深色、极简、工具风）
+- 展示网站保持极简工具风 UI（参考 shadcn、Linear）
 - 脚手架仓库保持独立，展示网站不修改脚手架代码
