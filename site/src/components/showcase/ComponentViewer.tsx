@@ -20,7 +20,7 @@ import type { FormLayout, FormFieldType } from '@/ui/Form'
 import { Textarea } from '@/ui/Textarea'
 import type { TextareaSize, TextareaVariant } from '@/ui/Textarea'
 import { Checkbox } from '@/ui/Checkbox'
-import type { CheckboxSize } from '@/ui/Checkbox'
+import type { CheckboxVariant } from '@/ui/Checkbox'
 import { RadioGroup } from '@/ui/RadioGroup'
 import type { RadioSize } from '@/ui/RadioGroup'
 import { Switch } from '@/ui/Switch'
@@ -31,6 +31,8 @@ import { Upload } from '@/ui/Upload'
 import type { UploadSize } from '@/ui/Upload'
 import { InputGroup } from '@/ui/InputGroup'
 import type { InputGroupSize } from '@/ui/InputGroup'
+import { Nav } from '@/ui/Nav'
+import { BusinessSelector } from '@/ui/BusinessSelector'
 import { generateCode } from '@/lib/codeGen'
 import type { SerializableEntry } from '@/lib/registry'
 
@@ -72,6 +74,19 @@ function applySideEffects(
   return result
 }
 
+function getDependentVariantPropKeys(
+  layerKey: string,
+  layers: SerializableEntry['layers']
+): string[] {
+  return Object.entries(layers)
+    .filter(([, def]) =>
+      def.enumOptions &&
+      def.variantPropKey &&
+      def.enumOptions.some((opt) => opt.sideEffects?.[layerKey] !== undefined)
+    )
+    .map(([, def]) => def.variantPropKey!)
+}
+
 /**
  * Compute the combo key for a free layer's per-combination memory.
  * Only includes enum dimensions that have sideEffects targeting the given layer,
@@ -82,13 +97,8 @@ function computeLayerComboKey(
   layers: SerializableEntry['layers'],
   currentEnumState: Record<string, string>
 ): string {
-  return Object.entries(layers)
-    .filter(([, def]) =>
-      def.enumOptions &&
-      def.variantPropKey &&
-      def.enumOptions.some((opt) => opt.sideEffects?.[layerKey] !== undefined)
-    )
-    .map(([, def]) => `${def.variantPropKey}=${currentEnumState[def.variantPropKey!] ?? ''}`)
+  return getDependentVariantPropKeys(layerKey, layers)
+    .map((variantPropKey) => `${variantPropKey}=${currentEnumState[variantPropKey] ?? ''}`)
     .sort()
     .join(',')
 }
@@ -102,16 +112,19 @@ function computeLayerSubtitles(
   enumState: Record<string, string>
 ): Record<string, string> {
   const subtitles: Record<string, string> = {}
-  for (const [, def] of Object.entries(layers)) {
-    if (!def.enumOptions || !def.variantPropKey) continue
-    const currentKey = enumState[def.variantPropKey]
-    if (!currentKey) continue
-    const selectedOpt = def.enumOptions.find((o) => o.key === currentKey)
-    if (!selectedOpt?.sideEffects) continue
-    for (const freeKey of Object.keys(selectedOpt.sideEffects)) {
-      subtitles[freeKey] = subtitles[freeKey] ? `${subtitles[freeKey]} · ${currentKey}` : currentKey
-    }
+
+  for (const [layerKey, def] of Object.entries(layers)) {
+    if (def.enumOptions) continue
+
+    const keys = getDependentVariantPropKeys(layerKey, layers)
+    if (!keys.length) continue
+
+    subtitles[layerKey] = keys
+      .map((variantPropKey) => enumState[variantPropKey])
+      .filter(Boolean)
+      .join(' · ')
   }
+
   return subtitles
 }
 
@@ -157,6 +170,57 @@ function buildLayersFromVariantProps(
   })
 }
 
+function syncLayersToMemory(
+  layers: SerializableEntry['layers'],
+  enumState: Record<string, string>,
+  editedLayers: Record<string, string[]>,
+  layerMemory: Record<string, Record<string, string>>
+): Record<string, Record<string, string>> {
+  const next = Object.fromEntries(
+    Object.entries(layerMemory).map(([layerKey, memory]) => [layerKey, { ...memory }])
+  ) as Record<string, Record<string, string>>
+
+  for (const [layerKey, def] of Object.entries(layers)) {
+    const classes = editedLayers[layerKey]
+    if (!classes?.length) continue
+
+    if (def.enumOptions && def.variantPropKey) {
+      const optionKey = enumState[def.variantPropKey]
+      if (!optionKey) continue
+      next[layerKey] = { ...(next[layerKey] ?? {}), [optionKey]: classes.join(' ') }
+      continue
+    }
+
+    const comboKey = computeLayerComboKey(layerKey, layers, enumState)
+    next[layerKey] = { ...(next[layerKey] ?? {}), [comboKey]: classes.join(' ') }
+  }
+
+  return next
+}
+
+function buildLayersFromDefaultMemory(
+  layers: SerializableEntry['layers'],
+  enumState: Record<string, string>,
+  layerMemory: Record<string, Record<string, string>>
+): Record<string, string[]> {
+  const resolved = buildLayersFromEnumState(layers, enumState)
+
+  for (const [layerKey, def] of Object.entries(layers)) {
+    if (def.enumOptions && def.variantPropKey) {
+      const optionKey = enumState[def.variantPropKey]
+      const remembered = optionKey ? layerMemory[layerKey]?.[optionKey] : undefined
+      if (remembered) resolved[layerKey] = remembered.split(' ')
+      continue
+    }
+
+    const comboKey = computeLayerComboKey(layerKey, layers, enumState)
+    const remembered = layerMemory[layerKey]?.[comboKey]
+    if (remembered) resolved[layerKey] = remembered.split(' ')
+  }
+
+  return resolved
+}
+
 // ─── Preview renderer ─────────────────────────────────────────────────────────
 
 
@@ -192,12 +256,14 @@ function PreviewComponent({
   if (slug === 'card') return <div className="w-72 flex"><Card variant={(variantProps.variant as CardVariant) ?? 'default'} classOverrides={classOverrides} /></div>
   if (slug === 'form') return <Form layout={(variantProps.layout as FormLayout) ?? 'top'} fieldType={(variantProps.fieldType as FormFieldType) ?? 'input'} classOverrides={classOverrides} />
   if (slug === 'textarea') return <div className="w-64"><Textarea variant={(variantProps.variant as TextareaVariant) ?? 'default'} size={(variantProps.size as TextareaSize) ?? 'lg'} classOverrides={classOverrides} /></div>
-  if (slug === 'checkbox') return <Checkbox size={(variantProps.size as CheckboxSize) ?? 'md'} classOverrides={classOverrides} />
+  if (slug === 'checkbox') return <Checkbox variant={(variantProps.variant as CheckboxVariant) ?? 'default'} classOverrides={classOverrides} />
   if (slug === 'radio-group') return <RadioGroup size={(variantProps.size as RadioSize) ?? 'md'} classOverrides={classOverrides} />
   if (slug === 'switch') return <Switch size={(variantProps.size as SwitchSize) ?? 'md'} classOverrides={classOverrides} />
   if (slug === 'slider') return <div className="w-64"><Slider size={(variantProps.size as SliderSize) ?? 'md'} classOverrides={classOverrides} /></div>
   if (slug === 'upload') return <Upload size={(variantProps.size as UploadSize) ?? 'lg'} classOverrides={classOverrides} />
   if (slug === 'input-group') return <div className="w-80"><InputGroup size={(variantProps.size as InputGroupSize) ?? 'lg'} classOverrides={classOverrides} /></div>
+  if (slug === 'nav') return <Nav classOverrides={classOverrides} />
+  if (slug === 'business-selector') return <BusinessSelector classOverrides={classOverrides} />
   return null
 }
 
@@ -206,10 +272,15 @@ function PreviewComponent({
 function EnumControls({
   entry,
   enumState,
+  defaultEnumState,
   contentMode,
+  defaultContentMode,
   iconName,
+  defaultIconName,
   loading,
+  defaultLoading,
   disabled,
+  defaultDisabled,
   onEnumChange,
   onContentChange,
   onIconChange,
@@ -218,11 +289,16 @@ function EnumControls({
 }: {
   entry: SerializableEntry
   enumState: Record<string, string>
+  defaultEnumState: Record<string, string>
   contentMode: string
+  defaultContentMode: string
   iconName: string
+  defaultIconName: string
   loading: boolean
+  defaultLoading: boolean
   disabled: boolean
-  onEnumChange: (layerKey: string, variantPropKey: string, newKey: string, newClasses: string[], sideEffects?: Record<string, string[]>) => void
+  defaultDisabled: boolean
+  onEnumChange: (layerKey: string, variantPropKey: string, newKey: string, newClasses: string[]) => void
   onContentChange: (v: string) => void
   onIconChange: (v: string) => void
   onLoadingChange: (v: boolean) => void
@@ -251,7 +327,7 @@ function EnumControls({
               return (
                 <div key={opt.key}>
                   <button
-                    onClick={() => def.variantPropKey && onEnumChange(layerKey, def.variantPropKey, opt.key, opt.classes, opt.sideEffects)}
+                    onClick={() => def.variantPropKey && onEnumChange(layerKey, def.variantPropKey, opt.key, opt.classes)}
                     className="w-full text-left px-2.5 py-1.5 rounded-md text-[12px] transition-colors"
                     style={{
                       backgroundColor: active ? '#ffffff' : 'transparent',
@@ -335,7 +411,9 @@ function EnumControls({
                 onChange={(e) => (item.onChange as (v: boolean) => void)(e.target.checked)}
                 style={{ accentColor: '#09090b', width: 12, height: 12 }}
               />
-              <span className="text-[11px]" style={{ color: '#71717a' }}>{item.label}</span>
+              <span className="text-[11px]" style={{ color: '#71717a' }}>
+                {item.label}
+              </span>
             </label>
           ))}
         </div>
@@ -350,6 +428,9 @@ type SavedConfig = {
   enumState?: Record<string, string>
   editedLayers?: Record<string, string[]>
   contentMode?: string
+  iconName?: string
+  stateLoading?: boolean
+  stateDisabled?: boolean
   activeVariantIndex?: number
   layerMemory?: Record<string, Record<string, string>>
 } | null
@@ -366,31 +447,53 @@ export function ComponentViewer({ entry, initialHighlightedHtml, savedConfig }: 
     [entry.layers]
   )
 
+  const defaultEnumState = useMemo(
+    () => savedConfig?.enumState ?? (hasEnumLayers ? getInitialEnumState(entry.layers) : {}),
+    [savedConfig?.enumState, hasEnumLayers, entry.layers]
+  )
+  const defaultContentMode = savedConfig?.contentMode ?? 'block'
+  const defaultIconName = savedConfig?.iconName ?? 'arrow-down'
+  const defaultStateLoading = savedConfig?.stateLoading ?? false
+  const defaultStateDisabled = savedConfig?.stateDisabled ?? false
+  const defaultActiveVariantIndex = savedConfig?.activeVariantIndex ?? 0
+
+  const defaultEditedLayers = useMemo(
+    () => savedConfig?.editedLayers
+      ?? (hasEnumLayers
+        ? buildLayersFromEnumState(entry.layers, defaultEnumState)
+        : buildLayersFromVariantProps(entry.layers, entry.variants[defaultActiveVariantIndex]?.props ?? entry.variants[0]?.props ?? {})),
+    [savedConfig?.editedLayers, hasEnumLayers, entry.layers, defaultEnumState, entry.variants, defaultActiveVariantIndex]
+  )
+
+  const defaultLayerMemory = useMemo(
+    () => hasEnumLayers
+      ? syncLayersToMemory(entry.layers, defaultEnumState, defaultEditedLayers, savedConfig?.layerMemory ?? {})
+      : (savedConfig?.layerMemory ?? {}),
+    [hasEnumLayers, entry.layers, defaultEnumState, defaultEditedLayers, savedConfig?.layerMemory]
+  )
+
   // ── Enum-based state (for components with enumOptions layers) ──
   const [enumState, setEnumState] = useState<Record<string, string>>(
-    () => savedConfig?.enumState ?? (hasEnumLayers ? getInitialEnumState(entry.layers) : {})
+    () => defaultEnumState
   )
-  const [contentMode, setContentMode] = useState<string>(savedConfig?.contentMode ?? 'block')
-  const [iconName, setIconName] = useState<string>((savedConfig as any)?.iconName ?? 'arrow-down')
-  const [stateLoading, setStateLoading] = useState(false)
-  const [stateDisabled, setStateDisabled] = useState(false)
+  const [contentMode, setContentMode] = useState<string>(defaultContentMode)
+  const [iconName, setIconName] = useState<string>(defaultIconName)
+  const [stateLoading, setStateLoading] = useState(defaultStateLoading)
+  const [stateDisabled, setStateDisabled] = useState(defaultStateDisabled)
   const [annotationMode, setAnnotationMode] = useState(false)
   const [previewBg, setPreviewBg] = useState<'gradient' | 'white'>('gradient')
 
   // ── Per-combination memory for independently-configurable free layers ──
   const [layerMemory, setLayerMemory] = useState<Record<string, Record<string, string>>>(
-    savedConfig?.layerMemory ?? {}
+    defaultLayerMemory
   )
 
   // ── Tab-based state (for components without enumOptions) ──
-  const [activeVariantIndex, setActiveVariantIndex] = useState(savedConfig?.activeVariantIndex ?? 0)
+  const [activeVariantIndex, setActiveVariantIndex] = useState(defaultActiveVariantIndex)
 
   // ── Shared: editedLayers ──
   const [editedLayers, setEditedLayers] = useState<Record<string, string[]>>(
-    () => savedConfig?.editedLayers
-      ?? (hasEnumLayers
-        ? buildLayersFromEnumState(entry.layers, getInitialEnumState(entry.layers))
-        : buildLayersFromVariantProps(entry.layers, entry.variants[0]?.props ?? {}))
+    () => defaultEditedLayers
   )
 
   // Per-free-layer subtitles derived from enumState (always current, unaffected by class edits)
@@ -412,12 +515,13 @@ export function ComponentViewer({ entry, initialHighlightedHtml, savedConfig }: 
     return null
   }, [hasEnumLayers, entry.layers, enumState])
 
-  // originalLayers for StylePanel (reset target + change detection)
-  const originalLayers = useMemo(() => {
-    if (hasEnumLayers) return buildLayersFromEnumState(entry.layers, enumState)
+  // defaultLayers for StylePanel (reset target + change detection)
+  const defaultLayers = useMemo(() => {
+    if (hasEnumLayers) return buildLayersFromDefaultMemory(entry.layers, enumState, defaultLayerMemory)
+    if (activeVariantIndex === defaultActiveVariantIndex) return defaultEditedLayers
     const props = (entry.variants[activeVariantIndex] ?? entry.variants[0])?.props ?? {}
     return buildLayersFromVariantProps(entry.layers, props)
-  }, [hasEnumLayers, entry.layers, enumState, activeVariantIndex, entry.variants])
+  }, [hasEnumLayers, entry.layers, enumState, defaultLayerMemory, activeVariantIndex, defaultActiveVariantIndex, defaultEditedLayers, entry.variants])
 
   // variantProps for PreviewComponent
   const variantProps = useMemo((): Record<string, string> => {
@@ -463,6 +567,8 @@ export function ComponentViewer({ entry, initialHighlightedHtml, savedConfig }: 
           editedLayers,
           contentMode,
           iconName,
+          stateLoading,
+          stateDisabled,
           activeVariantIndex,
           layerMemory,
         }),
@@ -471,7 +577,7 @@ export function ComponentViewer({ entry, initialHighlightedHtml, savedConfig }: 
         .catch(() => { setSaveToast('error'); setTimeout(() => setSaveToast(null), 2000) })
     }, 500)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enumState, editedLayers, contentMode, iconName, activeVariantIndex, layerMemory])
+  }, [enumState, editedLayers, contentMode, iconName, stateLoading, stateDisabled, activeVariantIndex, layerMemory])
 
   // ─────────────────────────────────────────────────────────────────────────────
 
@@ -547,8 +653,7 @@ export function ComponentViewer({ entry, initialHighlightedHtml, savedConfig }: 
     layerKey: string,
     variantPropKey: string,
     newKey: string,
-    newClasses: string[],
-    sideEffects?: Record<string, string[]>
+    newClasses: string[]
   ) => {
     const currentOptionKey = enumState[variantPropKey] ?? ''
     const newEnumState = { ...enumState, [variantPropKey]: newKey }
@@ -565,14 +670,22 @@ export function ComponentViewer({ entry, initialHighlightedHtml, savedConfig }: 
       const remembered = layerMemory[layerKey]?.[newKey]
       const next = { ...prev, [layerKey]: remembered ? remembered.split(' ') : [...newClasses] }
 
-      // For each free layer in sideEffects: prefer per-combo remembered value, else use the default
-      if (sideEffects) {
-        for (const [freeKey, defaultClasses] of Object.entries(sideEffects)) {
-          const key = computeLayerComboKey(freeKey, entry.layers, newEnumState)
-          const remembered = layerMemory[freeKey]?.[key]
-          next[freeKey] = remembered ? [remembered] : [...defaultClasses]
+      // For every free layer that depends on any enum, recompute from memory/defaults
+      for (const [freeKey, def] of Object.entries(entry.layers)) {
+        if (def.enumOptions) continue
+        const dependsOnKeys = getDependentVariantPropKeys(freeKey, entry.layers)
+        if (!dependsOnKeys.length) continue
+        const comboKey = computeLayerComboKey(freeKey, entry.layers, newEnumState)
+        const rememberedCombo = layerMemory[freeKey]?.[comboKey]
+        if (rememberedCombo) {
+          next[freeKey] = rememberedCombo.split(' ')
+        } else {
+          // Build default via sideEffects chain from current enum selections
+          const defaults = buildLayersFromEnumState(entry.layers, newEnumState)[freeKey]
+          next[freeKey] = [...defaults]
         }
       }
+
       return next
     })
   }, [enumState, editedLayers, layerMemory, entry.layers])
@@ -646,10 +759,15 @@ export function ComponentViewer({ entry, initialHighlightedHtml, savedConfig }: 
             <EnumControls
               entry={entry}
               enumState={enumState}
+              defaultEnumState={defaultEnumState}
               contentMode={contentMode}
+              defaultContentMode={defaultContentMode}
               iconName={iconName}
+              defaultIconName={defaultIconName}
               loading={stateLoading}
+              defaultLoading={defaultStateLoading}
               disabled={stateDisabled}
+              defaultDisabled={defaultStateDisabled}
               onEnumChange={handleEnumChange}
               onContentChange={setContentMode}
               onIconChange={setIconName}
@@ -770,7 +888,7 @@ export function ComponentViewer({ entry, initialHighlightedHtml, savedConfig }: 
               }}
             >
               {annotationMode ? (
-                <AnnotationOverlay editedLayers={editedLayers}>
+                <AnnotationOverlay slug={entry.slug} editedLayers={editedLayers}>
                   <PreviewComponent
                     slug={entry.slug}
                     variantProps={variantProps}
@@ -792,7 +910,7 @@ export function ComponentViewer({ entry, initialHighlightedHtml, savedConfig }: 
         <div className="style-panel" style={{ backgroundColor: '#fafafa', borderColor: '#e4e4e7' }}>
           <StylePanel
             layers={entry.layers}
-            originalLayers={originalLayers}
+            defaultLayers={defaultLayers}
             editedLayers={editedLayers}
             layerSubtitles={layerSubtitles}
             onChange={handleLayerChange}

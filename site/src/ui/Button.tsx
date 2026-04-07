@@ -84,7 +84,7 @@ const variantClasses: Record<ButtonVariant, string> = {
   'outline-gray': 'border border-[#e4e4e7] text-[#71717a] bg-white hover:bg-[#f4f4f5]',
   'ghost-black':  'text-[#09090b] hover:bg-[#f4f4f5]',
   'ghost-blue':   'text-[#2563eb] hover:bg-[#eff6ff]',
-  'ghost-gray':   'text-[#71717a] hover:bg-[#f4f4f5]',
+  'ghost-gray':   'text-[#71717a] hover:bg-[rgba(83,96,143,0.07)]',
   'glass':        'border border-white/60 bg-white/25 shadow-[inset_1px_1px_4px_2px_rgba(0,0,0,0.03)] hover:bg-white/50 text-[#1c1f23]',
   'solid-white':  'bg-white text-[#09090b] border border-transparent hover:bg-[#f4f4f5]',
   'ai':           'bg-white border border-[rgba(45,66,107,0.12)] shadow-[0_2px_4px_-1px_rgba(0,0,0,0.05)] hover:bg-[#f9f9fb]',
@@ -93,7 +93,7 @@ const variantClasses: Record<ButtonVariant, string> = {
 const sizeMap: Record<ButtonSize, { h: string; gap: string; text: string; iconSize: string }> = {
   lg: { h: 'h-9', gap: 'gap-2',   text: 'text-sm', iconSize: 'size-4'   },
   md: { h: 'h-8', gap: 'gap-1.5', text: 'text-sm', iconSize: 'size-3.5' },
-  sm: { h: 'h-6', gap: 'gap-1.5', text: 'text-xs', iconSize: 'size-3'   },
+  sm: { h: 'h-6', gap: 'gap-0.5', text: 'text-xs', iconSize: 'size-3'   },
 }
 
 function parseIconSize(cls: string): number {
@@ -103,10 +103,14 @@ function parseIconSize(cls: string): number {
   return isNaN(n) ? 14 : n * 4
 }
 
-const paddingDefaults: Record<ButtonSize, string> = {
-  lg: 'px-3',
-  md: 'px-3',
-  sm: 'px-2',
+function defaultPadding(size: ButtonSize, radius: ButtonRadius): string {
+  // Code-level fallback mapping:
+  // - full: lg/md -> px-4 (16px), sm -> px-2 (8px)
+  // - rounded: lg/md -> px-3 (12px), sm -> px-1 (4px)
+  if (radius === 'full') {
+    return size === 'sm' ? 'px-2' : 'px-4'
+  }
+  return size === 'sm' ? 'px-1' : 'px-3'
 }
 
 const radiusMap: Record<ButtonRadius, string> = {
@@ -135,7 +139,7 @@ export function Button({
   const iconSizeCls = classOverrides?.iconSize ?? s.iconSize
   const iconPx = parseIconSize(iconSizeCls)
   const iconClass = content === 'icon' ? 'aspect-square' : ''
-  const paddingClass = content === 'icon' ? '' : (classOverrides?.padding ?? paddingDefaults[size])
+  const paddingClass = content === 'icon' ? '' : (classOverrides?.padding ?? defaultPadding(size, radius))
 
   const stateClass = disabled
     ? 'opacity-40 cursor-not-allowed pointer-events-none'

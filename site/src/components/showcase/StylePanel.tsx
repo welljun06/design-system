@@ -6,19 +6,19 @@ import { getPropertyName, isColorClass, getCssValue, getEditOptions, type EditOp
 
 type StylePanelProps = {
   layers: Record<string, LayerDef>
-  originalLayers: Record<string, string[]>
+  defaultLayers: Record<string, string[]>
   editedLayers: Record<string, string[]>
   layerSubtitles?: Record<string, string>
   onChange: (layerKey: string, newClasses: string[]) => void
 }
 
-export function StylePanel({ layers, originalLayers, editedLayers, layerSubtitles, onChange }: StylePanelProps) {
+export function StylePanel({ layers, defaultLayers, editedLayers, layerSubtitles, onChange }: StylePanelProps) {
   const hasChanges = Object.entries(editedLayers).some(
-    ([key, classes]) => JSON.stringify(classes) !== JSON.stringify(originalLayers[key] ?? [])
+    ([key, classes]) => JSON.stringify(classes) !== JSON.stringify(defaultLayers[key] ?? [])
   )
 
   const handleReset = () => {
-    Object.keys(layers).forEach((key) => onChange(key, [...(originalLayers[key] ?? layers[key].classes)]))
+    Object.keys(layers).forEach((key) => onChange(key, [...(defaultLayers[key] ?? layers[key].classes)]))
   }
 
   return (
@@ -50,7 +50,7 @@ export function StylePanel({ layers, originalLayers, editedLayers, layerSubtitle
             layerKey={key}
             def={def}
             classes={editedLayers[key] ?? def.classes}
-            originalClasses={originalLayers[key] ?? def.classes}
+            defaultClasses={defaultLayers[key] ?? def.classes}
             onChange={(newClasses) => onChange(key, newClasses)}
             isFirst={i === 0}
             subtitle={!def.enumOptions ? layerSubtitles?.[key] : undefined}
@@ -60,7 +60,7 @@ export function StylePanel({ layers, originalLayers, editedLayers, layerSubtitle
                 key: k,
                 def: d,
                 classes: editedLayers[k] ?? d.classes,
-                originalClasses: originalLayers[k] ?? d.classes,
+                defaultClasses: defaultLayers[k] ?? d.classes,
               }))}
             onGroupedChange={onChange}
           />
@@ -76,14 +76,14 @@ type GroupedLayer = {
   key: string
   def: LayerDef
   classes: string[]
-  originalClasses: string[]
+  defaultClasses: string[]
 }
 
 function LayerSection({
   layerKey,
   def,
   classes,
-  originalClasses,
+  defaultClasses,
   onChange,
   isFirst,
   subtitle,
@@ -93,7 +93,7 @@ function LayerSection({
   layerKey: string
   def: LayerDef
   classes: string[]
-  originalClasses: string[]
+  defaultClasses: string[]
   onChange: (classes: string[]) => void
   isFirst: boolean
   subtitle?: string
@@ -105,6 +105,7 @@ function LayerSection({
       <EnumLayerSection
         def={def}
         classes={classes}
+        defaultClasses={defaultClasses}
         onChange={onChange}
         isFirst={isFirst}
         groupedLayers={groupedLayers}
@@ -116,7 +117,7 @@ function LayerSection({
     <FreeLayerSection
       def={def}
       classes={classes}
-      originalClasses={originalClasses}
+      defaultClasses={defaultClasses}
       onChange={onChange}
       isFirst={isFirst}
       subtitle={subtitle}
@@ -129,6 +130,7 @@ function LayerSection({
 function EnumLayerSection({
   def,
   classes,
+  defaultClasses,
   onChange,
   isFirst,
   groupedLayers,
@@ -136,6 +138,7 @@ function EnumLayerSection({
 }: {
   def: LayerDef
   classes: string[]
+  defaultClasses: string[]
   onChange: (classes: string[]) => void
   isFirst: boolean
   groupedLayers?: GroupedLayer[]
@@ -148,20 +151,25 @@ function EnumLayerSection({
   const activeOption = options.find(
     (opt) => [...opt.classes].sort().join('|') === currentSig
   )
+  const sectionModified = JSON.stringify(classes) !== JSON.stringify(defaultClasses)
+    || groupedLayers?.some((gl) => JSON.stringify(gl.classes) !== JSON.stringify(gl.defaultClasses))
 
   return (
     <div style={{ borderTop: isFirst ? 'none' : '1px solid #f4f4f5' }}>
       {/* Layer header — shows label + active enum key */}
       <div className="px-4 pt-3 pb-2 flex items-center justify-between">
-        <span className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: '#c4c4c8' }}>
+        <span
+          className="text-[10px] font-semibold uppercase tracking-wider"
+          style={{ color: sectionModified ? '#7c3aed' : '#c4c4c8' }}
+        >
           {def.label}
         </span>
         {activeOption ? (
-          <span className="text-[10px] font-mono" style={{ color: '#a1a1aa' }}>
+          <span className="text-[10px] font-mono" style={{ color: sectionModified ? '#7c3aed' : '#a1a1aa' }}>
             {activeOption.key}
           </span>
         ) : (
-          <span className="text-[10px] font-mono" style={{ color: '#c4c4c8' }}>
+          <span className="text-[10px] font-mono" style={{ color: sectionModified ? '#7c3aed' : '#c4c4c8' }}>
             custom
           </span>
         )}
@@ -178,6 +186,7 @@ function EnumLayerSection({
           <EditableEnumRow
             key={cls}
             cls={cls}
+            defaultCls={defaultClasses.find((defaultCls) => getPropertyName(defaultCls) === getPropertyName(cls))}
             onChange={(newCls) => onChange(classes.map((c) => (c === cls ? newCls : c)))}
           />
         ))}
@@ -187,6 +196,7 @@ function EnumLayerSection({
             <EditableEnumRow
               key={`${gl.key}-${cls}`}
               cls={cls}
+              defaultCls={gl.defaultClasses.find((defaultCls) => getPropertyName(defaultCls) === getPropertyName(cls))}
               onChange={(newCls) =>
                 onGroupedChange?.(gl.key, gl.classes.map((c) => (c === cls ? newCls : c)))
               }
@@ -198,7 +208,7 @@ function EnumLayerSection({
   )
 }
 
-function EditableEnumRow({ cls, onChange }: { cls: string; onChange: (newCls: string) => void }) {
+function EditableEnumRow({ cls, defaultCls, onChange }: { cls: string; defaultCls?: string; onChange: (newCls: string) => void }) {
   const [editing, setEditing] = useState(false)
   const [editValue, setEditValue] = useState(cls)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -212,6 +222,7 @@ function EditableEnumRow({ cls, onChange }: { cls: string; onChange: (newCls: st
   const cssValue = getCssValue(cls)
   const editOptions = getEditOptions(cls)
   const colorSwatch = isColorClass(cls)
+  const isModified = defaultCls !== cls
 
   const commitEdit = () => {
     const trimmed = editValue.trim()
@@ -227,7 +238,7 @@ function EditableEnumRow({ cls, onChange }: { cls: string; onChange: (newCls: st
       <div className="flex items-center gap-2 px-4 py-[4px] group">
         <span
           className="text-[11px] shrink-0 truncate"
-          style={{ width: '80px', color: '#a1a1aa' }}
+          style={{ width: '80px', color: isModified ? '#7c3aed' : '#a1a1aa' }}
           title={propertyName}
         >
           {propertyName}
@@ -239,13 +250,13 @@ function EditableEnumRow({ cls, onChange }: { cls: string; onChange: (newCls: st
               onChange={(e) => onChange(e.target.value)}
               className="w-full h-[22px] text-[11px] font-mono rounded pl-1.5 pr-5 appearance-none outline-none transition-colors"
               style={{
-                border: '1px solid #e4e4e7',
-                color: '#52525b',
-                backgroundColor: '#f9f9f9',
+                border: `1px solid ${isModified ? '#c4b5fd' : '#e4e4e7'}`,
+                color: isModified ? '#7c3aed' : '#52525b',
+                backgroundColor: isModified ? '#faf5ff' : '#f9f9f9',
                 cursor: 'pointer',
               }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '#a1a1aa' }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '#e4e4e7' }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = isModified ? '#c4b5fd' : '#e4e4e7' }}
             >
               {!inList && <option value={cls}>{cls} (custom)</option>}
               {editOptions.map((opt) => (
@@ -302,7 +313,7 @@ function EditableEnumRow({ cls, onChange }: { cls: string; onChange: (newCls: st
           <button
             onClick={() => { setEditValue(cls); setEditing(true) }}
             className="flex-1 text-left text-[11px] font-mono truncate"
-            style={{ color: '#52525b' }}
+            style={{ color: isModified ? '#7c3aed' : '#52525b' }}
             title={cls}
           >
             {cls}
@@ -323,14 +334,14 @@ function EditableEnumRow({ cls, onChange }: { cls: string; onChange: (newCls: st
 function FreeLayerSection({
   def,
   classes,
-  originalClasses,
+  defaultClasses,
   onChange,
   isFirst,
   subtitle,
 }: {
   def: LayerDef
   classes: string[]
-  originalClasses: string[]
+  defaultClasses: string[]
   onChange: (classes: string[]) => void
   isFirst: boolean
   subtitle?: string
@@ -359,14 +370,22 @@ function FreeLayerSection({
     onChange(classes.map((c) => (c === oldCls ? trimmed : c)))
   }
 
+  const sectionModified = JSON.stringify(classes) !== JSON.stringify(defaultClasses)
+  const defaultClassByProperty = new Map(
+    defaultClasses.map((defaultCls) => [getPropertyName(defaultCls), defaultCls])
+  )
+
   return (
     <div style={{ borderTop: isFirst ? 'none' : '1px solid #f4f4f5' }}>
       <div className="px-4 pt-3 pb-1 flex items-center justify-between">
-        <span className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: '#c4c4c8' }}>
+        <span
+          className="text-[10px] font-semibold uppercase tracking-wider"
+          style={{ color: sectionModified ? '#7c3aed' : '#c4c4c8' }}
+        >
           {def.label}
         </span>
         {subtitle && (
-          <span className="text-[10px] font-mono" style={{ color: '#a1a1aa' }}>
+          <span className="text-[10px] font-mono" style={{ color: sectionModified ? '#7c3aed' : '#a1a1aa' }}>
             {subtitle}
           </span>
         )}
@@ -384,7 +403,7 @@ function FreeLayerSection({
           <PropertyRow
             key={cls}
             cls={cls}
-            isModified={!originalClasses.includes(cls)}
+            isModified={defaultClassByProperty.get(getPropertyName(cls)) !== cls}
             onEdit={(newVal) => handleEdit(cls, newVal)}
             onRemove={() => handleRemove(cls)}
           />
@@ -461,7 +480,7 @@ function PropertyRow({
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        <span className="text-[11px] shrink-0 truncate" style={{ width: '90px', color: '#a1a1aa' }} title={propertyName}>
+        <span className="text-[11px] shrink-0 truncate" style={{ width: '90px', color: isModified ? '#7c3aed' : '#a1a1aa' }} title={propertyName}>
           {propertyName}
         </span>
         <div className="flex-1 flex items-center gap-1.5 min-w-0">
@@ -470,9 +489,14 @@ function PropertyRow({
               value={cls}
               onChange={(e) => onEdit(e.target.value)}
               className="w-full h-[22px] text-[11px] font-mono rounded pl-1.5 pr-5 appearance-none outline-none transition-colors"
-              style={{ border: '1px solid #e4e4e7', color: '#52525b', backgroundColor: '#f9f9f9', cursor: 'pointer' }}
+              style={{
+                border: `1px solid ${isModified ? '#c4b5fd' : '#e4e4e7'}`,
+                color: isModified ? '#7c3aed' : '#52525b',
+                backgroundColor: isModified ? '#faf5ff' : '#f9f9f9',
+                cursor: 'pointer',
+              }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '#a1a1aa' }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '#e4e4e7' }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = isModified ? '#c4b5fd' : '#e4e4e7' }}
             >
               {!inList && <option value={cls}>{cls} (custom)</option>}
               {editOptions.map((opt) => (
@@ -504,7 +528,7 @@ function PropertyRow({
     >
       <span
         className="text-[11px] shrink-0 truncate"
-        style={{ width: '90px', color: '#a1a1aa' }}
+        style={{ width: '90px', color: isModified ? '#7c3aed' : '#a1a1aa' }}
         title={propertyName}
       >
         {propertyName}

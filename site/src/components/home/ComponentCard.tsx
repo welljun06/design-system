@@ -2,12 +2,27 @@
 
 import Link from 'next/link'
 import { Button } from '@/ui/Button'
+import { cn } from '@/lib/utils'
 
 import { Input } from '@/ui/Input'
 import { Select } from '@/ui/Select'
 import { Tag } from '@/ui/Tag'
 import { Tabs } from '@/ui/Tabs'
 import { Card } from '@/ui/Card'
+import { Form } from '@/ui/Form'
+import { Textarea } from '@/ui/Textarea'
+import { Checkbox } from '@/ui/Checkbox'
+import { RadioGroup } from '@/ui/RadioGroup'
+import { Switch } from '@/ui/Switch'
+import { Slider } from '@/ui/Slider'
+import { Upload } from '@/ui/Upload'
+import { InputGroup } from '@/ui/InputGroup'
+import { Nav } from '@/ui/Nav'
+import { BusinessSelector } from '@/ui/BusinessSelector'
+
+function usesTopCropPreview(slug: string) {
+  return slug === 'nav'
+}
 
 function PreviewThumbnail({ slug }: { slug: string }) {
   // Simplified previews — non-interactive, just for visual display
@@ -43,10 +58,68 @@ function PreviewThumbnail({ slug }: { slug: string }) {
       <Card />
     </div>
   )
+  if (slug === 'form') return (
+    <div className="scale-[0.85] origin-center">
+      <Form fieldType="input" />
+    </div>
+  )
+  if (slug === 'textarea') return (
+    <div className="w-52 scale-[0.92] origin-center">
+      <Textarea />
+    </div>
+  )
+  if (slug === 'checkbox') return (
+    <div className="scale-[0.82] origin-center">
+      <Checkbox variant="default" />
+    </div>
+  )
+  if (slug === 'radio-group') return (
+    <div className="scale-[0.82] origin-center">
+      <RadioGroup size="sm" />
+    </div>
+  )
+  if (slug === 'switch') return (
+    <div className="flex items-center gap-3">
+      <Switch size="md" />
+      <Switch size="sm" />
+    </div>
+  )
+  if (slug === 'slider') return (
+    <div className="w-52">
+      <Slider size="sm" />
+    </div>
+  )
+  if (slug === 'upload') return (
+    <div className="scale-[0.9] origin-center">
+      <Upload size="sm" />
+    </div>
+  )
+  if (slug === 'input-group') return (
+    <div className="w-56 scale-[0.9] origin-center">
+      <InputGroup size="sm" />
+    </div>
+  )
+  if (slug === 'nav') return (
+    <div className="scale-[0.42] origin-top">
+      <Nav />
+    </div>
+  )
+  if (slug === 'business-selector') return (
+    <div className="relative h-full w-[188px] overflow-hidden">
+      <div
+        className="absolute left-1/2 top-3 origin-top"
+        style={{ transform: 'translateX(-50%) scale(0.3)' }}
+      >
+        <BusinessSelector />
+      </div>
+    </div>
+  )
   return null
 }
 
 export function ComponentCard({ slug, name, description }: { slug: string; name: string; description: string }) {
+  const topCropPreview = usesTopCropPreview(slug)
+
   return (
     <Link
       href={`/components/${slug}`}
@@ -55,7 +128,10 @@ export function ComponentCard({ slug, name, description }: { slug: string; name:
     >
       {/* Preview area */}
       <div
-        className="flex items-center justify-center px-6 pointer-events-none"
+        className={cn(
+          'flex justify-center overflow-hidden px-6 pointer-events-none',
+          topCropPreview ? 'items-start pt-4' : 'items-center'
+        )}
         style={{ background: 'radial-gradient(41.09% 51.93% at 77% 39.53%, #D5DAEA 0%, #EAEDF3 100%)', height: 160 }}
       >
         <PreviewThumbnail slug={slug} />

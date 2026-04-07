@@ -1,8 +1,8 @@
 {
   "enumState": {
-    "variant": "solid-black",
-    "size": "lg",
-    "radius": "full"
+    "variant": "ghost-black",
+    "size": "sm",
+    "radius": "rounded"
   },
   "editedLayers": {
     "base": [
@@ -15,27 +15,28 @@
       "font-medium"
     ],
     "variant": [
-      "bg-[linear-gradient(180deg,#323232_0%,#222222_100%)]",
-      "text-white",
-      "hover:opacity-90"
+      "text-[#09090b]",
+      "hover:bg-[#f4f4f5]"
     ],
     "size": [
-      "h-9",
-      "gap-2",
-      "text-sm"
+      "h-6",
+      "gap-0.5",
+      "text-xs"
     ],
     "radius": [
-      "rounded-full"
+      "rounded-lg"
     ],
     "padding": [
-      "px-4"
+      "px-1"
     ],
     "iconSize": [
-      "size-4"
+      "size-3"
     ]
   },
   "contentMode": "block",
-  "iconName": "arrow-up",
+  "iconName": "arrow-down",
+  "stateLoading": false,
+  "stateDisabled": false,
   "activeVariantIndex": 0,
   "layerMemory": {
     "variant": {
@@ -53,11 +54,27 @@
     "size": {
       "lg": "h-9 gap-2 text-sm",
       "md": "h-8 gap-1.5 text-sm",
-      "sm": "h-6 gap-1.5 text-xs"
+      "sm": "h-6 gap-0.5 text-xs"
     },
     "radius": {
       "rounded": "rounded-lg",
       "full": "rounded-full"
+    },
+    "base": {
+      "": "cursor-pointer transition-all active:scale-95 flex items-center justify-center font-medium"
+    },
+    "padding": {
+      "radius=rounded,size=lg": "px-3",
+      "radius=rounded,size=md": "px-3",
+      "radius=rounded,size=sm": "px-1",
+      "radius=full,size=lg": "px-4",
+      "radius=full,size=md": "px-4",
+      "radius=full,size=sm": "px-2"
+    },
+    "iconSize": {
+      "size=sm": "size-3",
+      "size=lg": "size-4",
+      "size=md": "size-3.5"
     }
   }
 }

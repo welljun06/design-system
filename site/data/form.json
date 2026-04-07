@@ -1,0 +1,56 @@
+{
+  "enumState": {
+    "layout": "top",
+    "fieldType": "radio"
+  },
+  "editedLayers": {
+    "layout": [
+      "flex",
+      "flex-col",
+      "gap-1"
+    ],
+    "fieldType": [],
+    "label": [
+      "text-sm",
+      "font-semibold",
+      "text-[rgba(28,31,35,0.8)]",
+      "leading-5"
+    ],
+    "field": [
+      "w-full",
+      "bg-white",
+      "border",
+      "border-[rgba(45,66,107,0.12)]",
+      "rounded-lg",
+      "px-3",
+      "py-2"
+    ]
+  },
+  "contentMode": "block",
+  "iconName": "arrow-down",
+  "stateLoading": false,
+  "stateDisabled": false,
+  "activeVariantIndex": 0,
+  "layerMemory": {
+    "layout": {
+      "top": "flex flex-col gap-1"
+    },
+    "label": {
+      "": "text-sm font-semibold text-[rgba(28,31,35,0.8)] leading-5"
+    },
+    "field": {
+      "": "w-full bg-white border border-[rgba(45,66,107,0.12)] rounded-lg px-3 py-2"
+    },
+    "fieldType": {
+      "input": "",
+      "textarea": "",
+      "switch": "",
+      "slider": "",
+      "upload": "",
+      "inputgroup": "",
+      "taginput": "",
+      "select": "",
+      "radio": ""
+    }
+  }
+}

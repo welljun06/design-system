@@ -4,6 +4,7 @@ import { ComponentCard } from '@/components/home/ComponentCard'
 
 export default function HomePage() {
   const primitives = registry.filter((c) => c.category === '基础组件')
+  const business = registry.filter((c) => c.category === '业务组件')
 
   return (
     <div className="px-8 py-12 max-w-5xl">
@@ -50,6 +51,24 @@ export default function HomePage() {
           ))}
         </div>
       </div>
+
+      {business.length > 0 && (
+        <div className="mt-10">
+          <p className="text-[11px] font-medium mb-4 uppercase tracking-wider" style={{ color: '#a1a1aa' }}>
+            业务组件
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {business.map((c) => (
+              <ComponentCard
+                key={c.slug}
+                slug={c.slug}
+                name={c.name}
+                description={c.description}
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

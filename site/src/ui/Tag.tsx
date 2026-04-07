@@ -15,6 +15,7 @@ type TagProps = {
   shape?: TagShape
   size?: TagSize
   closable?: boolean
+  children?: React.ReactNode
   classOverrides?: Record<string, string>
 }
 
@@ -67,7 +68,7 @@ const shapeMap: Record<TagShape, string> = {
 
 const iconSizeMap: Record<TagSize, number> = { lg: 14, md: 12, sm: 10 }
 
-export function Tag({ color = 'white', type = 'light', shape = 'square', size = 'md', closable = false, classOverrides }: TagProps) {
+export function Tag({ color = 'white', type = 'light', shape = 'square', size = 'md', closable = false, children, classOverrides }: TagProps) {
   const base = classOverrides?.base ?? defaultBase
   // Color × Type is computed from props — not editable via classOverrides
   const colorClass = colorTypeMap[color]?.[type] ?? colorTypeMap.white.light
@@ -76,7 +77,7 @@ export function Tag({ color = 'white', type = 'light', shape = 'square', size = 
 
   return (
     <span className={cn(base, colorClass, sizeClass, shapeClass)}>
-      标签
+      {children ?? '标签'}
       {closable && <X size={iconSizeMap[size]} className="cursor-pointer opacity-60 hover:opacity-100" />}
     </span>
   )

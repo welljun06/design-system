@@ -1,8 +1,8 @@
 {
   "enumState": {
-    "color": "violet",
-    "type": "solid",
-    "size": "md",
+    "color": "white",
+    "type": "light",
+    "size": "lg",
     "shape": "circle"
   },
   "editedLayers": {
@@ -15,9 +15,9 @@
     "type": [],
     "size": [
       "gap-1.5",
-      "px-1.5",
+      "px-2",
       "py-[2px]",
-      "text-xs"
+      "text-sm"
     ],
     "shape": [
       "rounded-full"
@@ -25,6 +25,8 @@
   },
   "contentMode": "block",
   "iconName": "arrow-down",
+  "stateLoading": false,
+  "stateDisabled": false,
   "activeVariantIndex": 0,
   "layerMemory": {
     "type": {
@@ -33,17 +35,24 @@
       "ghost": ""
     },
     "shape": {
-      "square": "rounded-md"
+      "square": "rounded-md",
+      "circle": "rounded-full"
     },
     "color": {
       "white": "",
       "blue": "",
       "green": "",
       "red": "",
-      "orange": ""
+      "orange": "",
+      "violet": ""
     },
     "size": {
-      "lg": "gap-1.5 px-2 py-[2px] text-sm"
+      "lg": "gap-1.5 px-2 py-[2px] text-sm",
+      "md": "gap-1.5 px-1.5 py-[2px] text-xs",
+      "sm": "gap-1 px-1 py-0 text-[11px] leading-[16px]"
+    },
+    "base": {
+      "": "inline-flex items-center font-semibold"
     }
   }
 }

@@ -69,9 +69,11 @@ function RadiusArc({ radiusPx }: { radiusPx: number }) {
 // ─── Main component ────────────────────────────────────────────────────────────
 
 export function AnnotationOverlay({
+  slug,
   editedLayers,
   children,
 }: {
+  slug?: string
   editedLayers: Record<string, string[]>
   children: ReactNode
 }) {
@@ -88,31 +90,47 @@ export function AnnotationOverlay({
     if (el.tagName === 'DIV' && el.children.length === 1 && el.className.split(' ').every(c => c.startsWith('w-') || c === 'flex')) {
       el = el.firstElementChild as HTMLElement
     }
+    // Switch has an outer vertical padding wrapper; measure the actual switch root instead.
+    if (slug === 'switch' && el.tagName === 'DIV' && el.children.length === 1) {
+      el = el.firstElementChild as HTMLElement
+    }
 
     const measure = () => setSize({ w: el!.offsetWidth, h: el!.offsetHeight })
     measure()
     const ro = new ResizeObserver(measure)
     ro.observe(el)
     return () => ro.disconnect()
-  }, [editedLayers])
+  }, [editedLayers, slug])
 
-  // Extract values from ALL layers (scan every layer for relevant classes)
-  const allClasses = Object.values(editedLayers).flat()
+  const isSwitch = slug === 'switch'
+  const trackClasses = editedLayers.track ?? editedLayers.trackOn ?? editedLayers.trackOff ?? []
+  const thumbClasses = editedLayers.thumb ?? []
+  const annotationClasses = isSwitch ? trackClasses : Object.values(editedLayers).flat()
 
-  const pxCls      = allClasses.find(c => c.startsWith('px-'))
-  const hCls       = allClasses.find(c => c.startsWith('h-'))
-  const gapCls     = allClasses.find(c => c.startsWith('gap-'))
-  const roundedCls = allClasses.find(c => c === 'rounded' || c.startsWith('rounded-'))
-  const textCls    = allClasses.find(c => /^text-(xs|sm|base|lg|xl|2xl|3xl)$/.test(c))
-  const iconCls    = allClasses.find(c => c.startsWith('size-'))
+  const pxCls      = annotationClasses.find(c => c.startsWith('px-'))
+  const pCls       = annotationClasses.find(c => /^p-/.test(c))
+  const wCls       = annotationClasses.find(c => c.startsWith('w-'))
+  const hCls       = annotationClasses.find(c => c.startsWith('h-'))
+  const gapCls     = annotationClasses.find(c => c.startsWith('gap-'))
+  const roundedCls = annotationClasses.find(c => c === 'rounded' || c.startsWith('rounded-'))
+  const textCls    = annotationClasses.find(c => /^text-(xs|sm|base|lg|xl|2xl|3xl)$/.test(c))
+  const iconCls    = annotationClasses.find(c => c.startsWith('size-'))
+  const thumbWCls  = isSwitch ? thumbClasses.find(c => c.startsWith('w-')) : null
+  const thumbHCls  = isSwitch ? thumbClasses.find(c => c.startsWith('h-')) : null
+  const thumbTranslateCls = isSwitch ? thumbClasses.find(c => c.includes('translate-x-')) : null
 
   const pxPx      = pxCls     ? parseFloat(getCssValue(pxCls)     ?? '0') || 0 : 0
+  const pValue    = pCls      ? getCssValue(pCls)                              : null
+  const wValue    = wCls      ? getCssValue(wCls)                              : null
   const hValue    = hCls      ? getCssValue(hCls)                              : null
   const gapValue  = gapCls    ? getCssValue(gapCls)                            : null
   const radValue  = roundedCls ? getCssValue(roundedCls)                       : null
   const radPx     = radValue  ? parseFloat(radValue) || 0                      : 0
   const textValue = textCls   ? getCssValue(textCls)                           : null
   const iconValue = iconCls   ? getCssValue(iconCls)                           : null
+  const thumbWValue = thumbWCls ? getCssValue(thumbWCls)                       : null
+  const thumbHValue = thumbHCls ? getCssValue(thumbHCls)                       : null
+  const thumbTranslateValue = thumbTranslateCls ? getCssValue(thumbTranslateCls) : null
 
   const OUTER = 56 // padding around component to fit annotation labels
 
@@ -148,6 +166,53 @@ export function AnnotationOverlay({
       {/* ── Outer annotations (absolute, relative to outer container) ── */}
       {size && (
         <>
+          {isSwitch ? (
+            <>
+              <div style={{
+                position: 'absolute',
+                left: OUTER + size.w + 10,
+                top: OUTER,
+              }}>
+                <VBar height={size.h} label={hCls && hValue ? `${hCls} · ${hValue}` : `${size.h}px`} />
+              </div>
+
+              <div style={{
+                position: 'absolute',
+                left: OUTER,
+                top: OUTER + size.h + 14,
+              }}>
+                <HBar width={size.w} label={wCls && wValue ? `${wCls} · ${wValue}` : `${size.w}px`} />
+              </div>
+
+              {roundedCls && radValue && (
+                <div style={{
+                  position: 'absolute',
+                  left: OUTER - 4,
+                  top: OUTER + size.h + 44,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 4,
+                }}>
+                  <RadiusArc radiusPx={radPx} />
+                  <Label>{roundedCls} · {radValue}</Label>
+                </div>
+              )}
+
+              <div style={{
+                position: 'absolute',
+                left: OUTER,
+                top: OUTER - 34,
+                display: 'flex',
+                gap: 8,
+                alignItems: 'center',
+              }}>
+                {pCls && pValue && <Label>{pCls} · {pValue}</Label>}
+                {thumbWValue && thumbHValue && <Label>Thumb · {thumbWValue} × {thumbHValue}</Label>}
+                {thumbTranslateCls && thumbTranslateValue && <Label>{thumbTranslateCls} · {thumbTranslateValue}</Label>}
+              </div>
+            </>
+          ) : (
+            <>
           {/* Padding X — left half-bar above button */}
           {pxCls && pxPx > 0 && (
             <div style={{
@@ -177,7 +242,7 @@ export function AnnotationOverlay({
             left: OUTER,
             top: OUTER + size.h + (gapCls ? 40 : (roundedCls ? 50 : 8)),
           }}>
-            <HBar width={size.w} label={`${size.w}px`} />
+            <HBar width={size.w} label={wCls && wValue ? `${wCls} · ${wValue}` : `${size.w}px`} />
           </div>
 
           {/* Gap — label centered at bottom (if block content) */}
@@ -238,6 +303,8 @@ export function AnnotationOverlay({
                 </Label>
               )}
             </div>
+          )}
+            </>
           )}
         </>
       )}

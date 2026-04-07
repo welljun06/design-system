@@ -5,6 +5,9 @@ export type SavedConfig = {
   enumState?: Record<string, string>
   editedLayers?: Record<string, string[]>
   contentMode?: string
+  iconName?: string
+  stateLoading?: boolean
+  stateDisabled?: boolean
   activeVariantIndex?: number
   layerMemory?: Record<string, Record<string, string>>
 }

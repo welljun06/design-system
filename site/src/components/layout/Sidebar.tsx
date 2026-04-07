@@ -10,6 +10,7 @@ export function Sidebar() {
   const [hoveredHref, setHoveredHref] = useState<string | null>(null)
 
   const primitives = registry.filter((c) => c.category === '基础组件')
+  const business = registry.filter((c) => c.category === '业务组件')
 
   const isActive = (href: string) => pathname === href
 
@@ -49,6 +50,31 @@ export function Sidebar() {
             )
           })}
         </nav>
+
+        {business.length > 0 && (
+          <div className="mt-6 pt-5" style={{ borderTop: '1px solid #e4e4e7' }}>
+            <p className="px-3 mb-1.5 text-[11px] font-medium uppercase tracking-wider" style={{ color: '#a1a1aa' }}>
+              业务组件
+            </p>
+            <nav>
+              {business.map((item) => {
+                const href = `/components/${item.slug}`
+                return (
+                  <Link
+                    key={item.slug}
+                    href={href}
+                    className="flex items-center px-3 py-1.5 text-sm rounded-md transition-all"
+                    style={getLinkStyle(href, { color: '#09090b', fontWeight: 500, backgroundColor: 'transparent' })}
+                    onMouseEnter={() => setHoveredHref(href)}
+                    onMouseLeave={() => setHoveredHref(null)}
+                  >
+                    {item.name}
+                  </Link>
+                )
+              })}
+            </nav>
+          </div>
+        )}
 
         <div className="mt-6 pt-5" style={{ borderTop: '1px solid #e4e4e7' }}>
           <p className="px-3 mb-1.5 text-[11px] font-medium uppercase tracking-wider" style={{ color: '#a1a1aa' }}>

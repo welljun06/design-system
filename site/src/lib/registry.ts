@@ -87,7 +87,7 @@ export const registry: RegistryEntry[] = [
         enumOptions: [
           { key: 'lg', label: 'LG — 36px', classes: ['h-9', 'gap-2',   'text-sm'], sideEffects: { padding: ['px-3'], iconSize: ['size-4'] } },
           { key: 'md', label: 'MD — 32px', classes: ['h-8', 'gap-1.5', 'text-sm'], sideEffects: { padding: ['px-3'], iconSize: ['size-3.5'] } },
-          { key: 'sm', label: 'SM — 24px', classes: ['h-6', 'gap-1.5', 'text-xs'], sideEffects: { padding: ['px-2'], iconSize: ['size-3'] } },
+          { key: 'sm', label: 'SM — 24px', classes: ['h-6', 'gap-0.5', 'text-xs'], sideEffects: { padding: ['px-1'], iconSize: ['size-3'] } },
         ],
       },
       radius: {
@@ -95,7 +95,7 @@ export const registry: RegistryEntry[] = [
         variantPropKey: 'radius',
         classes: ['rounded-lg'],
         enumOptions: [
-          { key: 'rounded', label: '圆角矩形', classes: ['rounded-lg'],   sideEffects: { padding: ['px-3'] } },
+          { key: 'rounded', label: '圆角矩形', classes: ['rounded-lg'] },
           { key: 'full',    label: '全圆角',   classes: ['rounded-full'], sideEffects: { padding: ['px-4'] } },
         ],
       },
@@ -130,9 +130,10 @@ export const registry: RegistryEntry[] = [
     code: (overrides) => {
       const base = overrides?.base ?? 'cursor-pointer transition-all active:scale-95 flex items-center justify-center font-medium'
       const variant = overrides?.variant ?? 'bg-[linear-gradient(180deg,#323232_0%,#222222_100%)] text-white hover:opacity-90'
-      const size = overrides?.size ?? 'h-9 px-4 gap-2 text-sm'
+      const size = overrides?.size ?? 'h-9 gap-2 text-sm'
       const radius = overrides?.radius ?? 'rounded-lg'
-      return `<button className="${base} ${variant} ${size} ${radius}">
+      const padding = overrides?.padding ?? 'px-3'
+      return `<button className="${base} ${variant} ${size} ${radius} ${padding}">
   <ArrowDown size={14} />
   Button
 </button>`
@@ -505,35 +506,49 @@ export const registry: RegistryEntry[] = [
     layers: {
       checked: {
         label: 'Checked',
-        classes: ['size-4', 'rounded-[3px]', 'bg-[#1c1f23]', 'border', 'border-[#1c1f23]'],
+        classes: ['size-4', 'rounded-[3px]', 'border', 'border-[#1c1f23]', 'bg-[#1c1f23]', 'text-white'],
       },
       unchecked: {
         label: 'Unchecked',
-        classes: ['size-4', 'rounded-[3px]', 'bg-white', 'border', 'border-[rgba(45,66,107,0.12)]'],
+        classes: ['size-4', 'rounded-[3px]', 'border', 'border-[rgba(28,31,35,0.35)]', 'bg-white'],
       },
       label: {
         label: 'Label',
-        classes: ['text-sm', 'text-[#1c1f23]', 'select-none'],
+        classes: ['text-sm', 'leading-5', 'font-normal', 'text-[#1c1f23]', 'select-none'],
       },
-      size: {
-        label: 'Size',
-        variantPropKey: 'size',
+      cardTitle: {
+        label: 'Card Title',
+        classes: ['text-sm', 'leading-5', 'font-semibold', 'text-[#1c1f23]', 'select-none'],
+      },
+      description: {
+        label: 'Description',
+        classes: ['text-sm', 'leading-5', 'text-[rgba(28,31,35,0.6)]', 'select-none'],
+      },
+      cardChecked: {
+        label: 'Card · Checked',
+        classes: ['rounded-[8px]', 'border', 'border-[rgba(45,66,107,0.12)]', 'bg-[#f5f7fa]', 'px-[17px]', 'py-[13px]'],
+      },
+      cardUnchecked: {
+        label: 'Card · Unchecked',
+        classes: ['rounded-[8px]', 'border', 'border-[rgba(45,66,107,0.12)]', 'bg-white', 'px-[17px]', 'py-[13px]'],
+      },
+      variant: {
+        label: 'Variant',
+        variantPropKey: 'variant',
         classes: [],
         enumOptions: [
-          { key: 'lg', label: 'LG', classes: [], sideEffects: { checked: ['size-5', 'rounded', 'bg-[#1c1f23]', 'border', 'border-[#1c1f23]'], unchecked: ['size-5', 'rounded', 'bg-white', 'border', 'border-[rgba(45,66,107,0.12)]'] } },
-          { key: 'md', label: 'MD', classes: [], sideEffects: { checked: ['size-4', 'rounded-[3px]', 'bg-[#1c1f23]', 'border', 'border-[#1c1f23]'], unchecked: ['size-4', 'rounded-[3px]', 'bg-white', 'border', 'border-[rgba(45,66,107,0.12)]'] } },
-          { key: 'sm', label: 'SM', classes: [], sideEffects: { checked: ['size-3.5', 'rounded-[3px]', 'bg-[#1c1f23]', 'border', 'border-[#1c1f23]'], unchecked: ['size-3.5', 'rounded-[3px]', 'bg-white', 'border', 'border-[rgba(45,66,107,0.12)]'] } },
+          { key: 'default', label: 'Default', classes: [], sideEffects: {} },
+          { key: 'card', label: 'Card', classes: [], sideEffects: { cardTitle: ['text-sm', 'leading-5', 'font-semibold', 'text-[#1c1f23]', 'select-none'], description: ['text-sm', 'leading-5', 'text-[rgba(28,31,35,0.6)]', 'select-none'], cardChecked: ['rounded-[8px]', 'border', 'border-[rgba(45,66,107,0.12)]', 'bg-[#f5f7fa]', 'px-[17px]', 'py-[13px]'], cardUnchecked: ['rounded-[8px]', 'border', 'border-[rgba(45,66,107,0.12)]', 'bg-white', 'px-[17px]', 'py-[13px]'] } },
         ],
       },
     },
     variants: [
-      { label: 'MD', props: { size: 'md' } },
-      { label: 'LG', props: { size: 'lg' } },
-      { label: 'SM', props: { size: 'sm' } },
+      { label: 'Default', props: { variant: 'default' } },
+      { label: 'Card', props: { variant: 'card' } },
     ],
     code: (overrides) => {
-      const box = overrides?.box ?? 'h-4 w-4'
-      const label = overrides?.label ?? 'text-sm text-[#1c1f23]'
+      const box = overrides?.box ?? 'h-4 w-4 rounded-[3px]'
+      const label = overrides?.label ?? 'text-sm leading-5 font-normal text-[#1c1f23] select-none'
       return `{/* Requires: @radix-ui/react-checkbox, @radix-ui/react-label, lucide-react */}
 <div className="flex items-center gap-4 py-1">
   <div className="flex items-center gap-2">
@@ -603,41 +618,48 @@ export const registry: RegistryEntry[] = [
     category: '基础组件',
     description: '开关组件，支持多种尺寸，用于布尔值切换场景。',
     layers: {
-      trackOn: {
-        label: 'Track · On',
-        classes: ['w-10', 'h-6', 'rounded-full', 'bg-[#1c1f23]'],
-      },
-      trackOff: {
-        label: 'Track · Off',
-        classes: ['w-10', 'h-6', 'rounded-full', 'bg-[rgba(83,96,143,0.07)]'],
+      track: {
+        label: 'Track',
+        classes: [
+          'w-10',
+          'h-5',
+          'rounded-[12px]',
+          'p-[2px]',
+          'border',
+          'border-transparent',
+          'data-[state=checked]:bg-[#0275f4]',
+          'hover:data-[state=checked]:bg-[#175cd3]',
+          'data-[state=unchecked]:bg-[rgba(83,96,143,0.12)]',
+          'disabled:data-[state=checked]:bg-[#84caff]',
+          'disabled:data-[state=unchecked]:bg-[rgba(83,96,143,0.15)]',
+          'disabled:data-[state=unchecked]:border-[rgba(45,66,107,0.12)]',
+        ],
       },
       thumb: {
         label: 'Thumb',
-        classes: ['size-4', 'rounded-full', 'bg-white', 'shadow-[0_0_1px_rgba(0,0,0,0.3),0_4px_6px_rgba(0,0,0,0.1)]'],
+        classes: ['h-4', 'w-[22px]', 'rounded-[9px]', 'bg-white', 'shadow-[0_0_1px_rgba(0,0,0,0.3),0_4px_6px_rgba(0,0,0,0.1)]', 'data-[state=checked]:translate-x-[13px]'],
       },
       size: {
         label: 'Size',
         variantPropKey: 'size',
         classes: [],
         enumOptions: [
-          { key: 'lg', label: 'LG', classes: [], sideEffects: { trackOn: ['w-12', 'h-7', 'rounded-full', 'bg-[#1c1f23]'], trackOff: ['w-12', 'h-7', 'rounded-full', 'bg-[rgba(83,96,143,0.07)]'], thumb: ['size-5', 'rounded-full', 'bg-white', 'shadow-[0_0_1px_rgba(0,0,0,0.3),0_4px_6px_rgba(0,0,0,0.1)]'] } },
-          { key: 'md', label: 'MD', classes: [], sideEffects: { trackOn: ['w-10', 'h-6', 'rounded-full', 'bg-[#1c1f23]'], trackOff: ['w-10', 'h-6', 'rounded-full', 'bg-[rgba(83,96,143,0.07)]'], thumb: ['size-4', 'rounded-full', 'bg-white', 'shadow-[0_0_1px_rgba(0,0,0,0.3),0_4px_6px_rgba(0,0,0,0.1)]'] } },
-          { key: 'sm', label: 'SM', classes: [], sideEffects: { trackOn: ['w-8', 'h-5', 'rounded-full', 'bg-[#1c1f23]'], trackOff: ['w-8', 'h-5', 'rounded-full', 'bg-[rgba(83,96,143,0.07)]'], thumb: ['size-3', 'rounded-full', 'bg-white', 'shadow-[0_0_1px_rgba(0,0,0,0.3),0_4px_6px_rgba(0,0,0,0.1)]'] } },
+          { key: 'md', label: 'MD', classes: [], sideEffects: { track: ['w-10', 'h-5', 'rounded-[12px]', 'p-[2px]', 'border', 'border-transparent', 'data-[state=checked]:bg-[#0275f4]', 'hover:data-[state=checked]:bg-[#175cd3]', 'data-[state=unchecked]:bg-[rgba(83,96,143,0.12)]', 'disabled:data-[state=checked]:bg-[#84caff]', 'disabled:data-[state=unchecked]:bg-[rgba(83,96,143,0.15)]', 'disabled:data-[state=unchecked]:border-[rgba(45,66,107,0.12)]'], thumb: ['h-4', 'w-[22px]', 'rounded-[9px]', 'bg-white', 'shadow-[0_0_1px_rgba(0,0,0,0.3),0_4px_6px_rgba(0,0,0,0.1)]', 'data-[state=checked]:translate-x-[13px]'] } },
+          { key: 'sm', label: 'SM', classes: [], sideEffects: { track: ['w-8', 'h-4', 'rounded-[8px]', 'p-[2px]', 'border', 'border-transparent', 'data-[state=checked]:bg-[#0275f4]', 'hover:data-[state=checked]:bg-[#175cd3]', 'data-[state=unchecked]:bg-[rgba(83,96,143,0.12)]', 'disabled:data-[state=checked]:bg-[#84caff]', 'disabled:data-[state=unchecked]:bg-[rgba(83,96,143,0.15)]', 'disabled:data-[state=unchecked]:border-[rgba(45,66,107,0.12)]'], thumb: ['h-3', 'w-4', 'rounded-[6px]', 'bg-white', 'shadow-[0_0_1px_rgba(0,0,0,0.3),0_4px_6px_rgba(0,0,0,0.1)]', 'data-[state=checked]:translate-x-[11px]'] } },
         ],
       },
     },
     variants: [
       { label: 'MD', props: { size: 'md' } },
-      { label: 'LG', props: { size: 'lg' } },
       { label: 'SM', props: { size: 'sm' } },
     ],
     code: (overrides) => {
-      const track = overrides?.track ?? 'h-5 w-9'
-      const thumb = overrides?.thumb ?? 'h-4 w-4'
+      const track = overrides?.track ?? 'h-5 w-10 rounded-[12px] p-[2px] border border-transparent data-[state=checked]:bg-[#0275f4] hover:data-[state=checked]:bg-[#175cd3] data-[state=unchecked]:bg-[rgba(83,96,143,0.12)] disabled:data-[state=checked]:bg-[#84caff] disabled:data-[state=unchecked]:bg-[rgba(83,96,143,0.15)] disabled:data-[state=unchecked]:border-[rgba(45,66,107,0.12)]'
+      const thumb = overrides?.thumb ?? 'h-4 w-[22px] rounded-[9px] bg-white shadow-[0_0_1px_rgba(0,0,0,0.3),0_4px_6px_rgba(0,0,0,0.1)] data-[state=checked]:translate-x-[12px]'
       return `{/* Requires: @radix-ui/react-switch */}
 <Switch
   defaultChecked
-  className="${track} data-[state=checked]:bg-[#1c1f23] data-[state=unchecked]:bg-[rgba(83,96,143,0.07)]"
+  className="${track}"
   thumbClassName="${thumb}"
 />`
     },
@@ -777,6 +799,332 @@ export const registry: RegistryEntry[] = [
     className="flex-1 min-w-0 text-[#1c1f23] placeholder:text-[#a1a1aa] focus:border-[#a1a1aa] focus:ring-2 focus:ring-[#a1a1aa]/20 ${base} ${size} rounded-r-lg"
   />
 </div>`
+    },
+  },
+  {
+    slug: 'business-selector',
+    name: 'Business Selector',
+    category: '业务组件',
+    description: '业务方选择浮窗组件，对应个人空间点击后的业务入口选择面板。',
+    layers: {
+      container: {
+        label: 'Container',
+        classes: ['rounded-2xl', 'bg-white', 'p-3', 'shadow-[0_4px_14px_rgba(0,0,0,0.1),0_0_1px_rgba(0,0,0,0.3)]'],
+      },
+      section: {
+        label: 'Section',
+        classes: ['rounded-xl', 'p-3'],
+      },
+      title: {
+        label: 'Title',
+        classes: ['text-xs', 'leading-4', 'text-[rgba(28,28,35,0.6)]'],
+      },
+      option: {
+        label: 'Option',
+        classes: ['w-[136px]', 'rounded-lg', 'border', 'border-[rgba(45,66,107,0.12)]', 'bg-white', 'p-3'],
+      },
+    },
+    variants: [
+      { label: 'Default', props: {} },
+    ],
+    code: (overrides) => {
+      const container = overrides?.container ?? 'rounded-2xl bg-white p-3 shadow-[0_4px_14px_rgba(0,0,0,0.1),0_0_1px_rgba(0,0,0,0.3)]'
+      const section = overrides?.section ?? 'rounded-xl p-3'
+      const title = overrides?.title ?? 'text-xs leading-4 text-[rgba(28,28,35,0.6)]'
+      const option = overrides?.option ?? 'w-[136px] rounded-lg border border-[rgba(45,66,107,0.12)] bg-white p-3'
+      return `{/* Requires: lucide-react */}
+<div className="inline-flex flex-col items-center justify-center ${container}">
+  <div className="flex w-full flex-col ${section}">
+    <p className="mb-2 w-full ${title}">我的</p>
+    <div className="flex w-[576px] flex-wrap items-center gap-x-[10px] gap-y-[10px]">
+      <div className="flex items-center gap-2 ${option}">
+        <UserRound size={14} className="text-[#8b5cf6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">个人空间</span>
+      </div>
+    </div>
+  </div>
+  <div className="flex w-full flex-col ${section}">
+    <p className="mb-2 w-full ${title}">平台</p>
+    <div className="flex w-[576px] flex-wrap items-center gap-x-[10px] gap-y-[10px]">
+      <div className="flex items-center gap-2 ${option}">
+        <CheckSquare size={14} className="text-[#e72e75]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">解决方案</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <Telescope size={14} className="text-[#e72e75]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">前沿实验室</span>
+      </div>
+    </div>
+  </div>
+  <div className="flex w-full flex-col ${section}">
+    <p className="mb-2 w-full ${title}">运营</p>
+    <div className="flex w-[576px] flex-wrap items-center gap-x-[10px] gap-y-[10px]">
+      <div className="flex items-center gap-2 ${option}">
+        <UsersRound size={14} className="text-[#fa8b14]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">作者运营</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <BadgeDollarSign size={14} className="text-[#fa8b14]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">资金结算</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <Archive size={14} className="text-[#fa8b14]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">版权运营</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <Type size={14} className="text-[#fa8b14]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">敏感词运营</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <MessageSquareText size={14} className="text-[#fa8b14]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">群聊</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <Search size={14} className="text-[#fa8b14]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">抖音搜索</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <MessageCircleHeart size={14} className="text-[#fa8b14]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">垂类运营</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <Gamepad2 size={14} className="text-[#fa8b14]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">抖音游戏</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <FileSearch size={14} className="text-[#fa8b14]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">调研中台</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <Flashlight size={14} className="text-[#fa8b14]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">热点资讯运营</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <Video size={14} className="text-[#fa8b14]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">抖音直播运营</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <Clapperboard size={14} className="text-[#fa8b14]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">抖音UGC</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <Camera size={14} className="text-[#fa8b14]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">社交互动</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <SquareUser size={14} className="text-[#fa8b14]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">直播用户平台</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <Brush size={14} className="text-[#fa8b14]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">效果与创作</span>
+      </div>
+    </div>
+  </div>
+  <div className="flex w-full flex-col ${section}">
+    <p className="mb-2 w-full ${title}">治理</p>
+    <div className="flex w-[576px] flex-wrap items-center gap-x-[10px] gap-y-[10px]">
+      <div className="flex items-center gap-2 ${option}">
+        <MonitorPlay size={14} className="text-[#3b82f6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">视频治理</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <Video size={14} className="text-[#3b82f6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">直播治理</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <SquareUser size={14} className="text-[#3b82f6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">账号治理</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <MessageSquare size={14} className="text-[#3b82f6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">IM治理</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <Smartphone size={14} className="text-[#3b82f6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">小程序治理</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <Image size={14} className="text-[#3b82f6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">AIGC治理</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <ShieldCheck size={14} className="text-[#3b82f6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">版权治理</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <Clapperboard size={14} className="text-[#3b82f6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">短剧治理</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <Gamepad2 size={14} className="text-[#3b82f6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">游戏治理</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <BadgeDollarSign size={14} className="text-[#3b82f6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">资金安全</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <AlertTriangle size={14} className="text-[#3b82f6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">ZL治理</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <MessageSquareWarning size={14} className="text-[#3b82f6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">评论治理</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <Blocks size={14} className="text-[#3b82f6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">生态治理</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <MessageSquareText size={14} className="text-[#3b82f6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">舆情</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <Gift size={14} className="text-[#3b82f6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">投稿道具</span>
+      </div>
+    </div>
+  </div>
+  <div className="flex w-full flex-col ${section}">
+    <p className="mb-2 w-full ${title}">职能</p>
+    <div className="flex w-[576px] flex-wrap items-center gap-x-[10px] gap-y-[10px]">
+      <div className="flex items-center gap-2 ${option}">
+        <Sparkles size={14} className="text-[#8b5cf6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">开放平台</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <PencilLine size={14} className="text-[#8b5cf6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">智能标注</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <Flag size={14} className="text-[#8b5cf6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">数据BP</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <WandSparkles size={14} className="text-[#8b5cf6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">MagicX</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <MessageSquare size={14} className="text-[#8b5cf6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">体验</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <AppWindow size={14} className="text-[#8b5cf6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">产品研发</span>
+      </div>
+      <div className="flex items-center gap-2 ${option}">
+        <BriefcaseBusiness size={14} className="text-[#8b5cf6]" />
+        <span className="text-sm leading-5 text-[#1c1f23]">劳动力管理</span>
+      </div>
+    </div>
+  </div>
+</div>`
+    },
+  },
+  {
+    slug: 'nav',
+    name: 'Nav',
+    category: '基础组件',
+    description: '编辑器左侧导航组件，包含品牌区、AI 创作入口、分组标题和多级导航项。',
+    layers: {
+      container: {
+        label: 'Container',
+        classes: ['w-[220px]', 'h-[720px]', 'rounded-[24px]', 'bg-[#f2f2f7]', 'pt-6', 'pb-2'],
+      },
+      titleRow: {
+        label: 'Title Row',
+        classes: ['h-8', 'px-4'],
+      },
+      workspace: {
+        label: 'Workspace',
+        classes: ['rounded-md', 'px-[6px]', 'py-[2px]'],
+      },
+      createButton: {
+        label: 'Create Button',
+        classes: ['rounded-full', 'bg-black', 'px-4', 'py-3', 'text-white'],
+      },
+      sectionTitle: {
+        label: 'Section Title',
+        classes: ['px-3', 'py-1.5', 'text-xs', 'leading-4', 'text-[rgba(28,31,35,0.6)]'],
+      },
+      activeItem: {
+        label: 'Active Item',
+        classes: ['rounded-full', 'px-3', 'py-1', 'text-[#1c1f23]', 'bg-[#53608f12]'],
+      },
+      item: {
+        label: 'Item',
+        classes: ['rounded-full', 'px-3', 'py-1', 'text-[#1c1f23]'],
+      },
+      subItem: {
+        label: 'Sub Item',
+        classes: ['rounded-full', 'px-3', 'py-1', 'text-[#1c1f23]'],
+      },
+    },
+    variants: [
+      { label: 'Default', props: {} },
+    ],
+    code: (overrides) => {
+      const container = overrides?.container ?? 'w-[220px] h-[720px] rounded-[24px] bg-[#f2f2f7] pt-6 pb-2'
+      const titleRow = overrides?.titleRow ?? 'h-8 px-4'
+      const workspace = overrides?.workspace ?? 'rounded-md px-[6px] py-[2px] text-[#71717a] hover:bg-[rgba(83,96,143,0.07)]'
+      const createButton = overrides?.createButton ?? 'rounded-full bg-black px-4 py-3 text-white'
+      const sectionTitle = overrides?.sectionTitle ?? 'px-3 py-1.5 text-xs leading-4 text-[rgba(28,31,35,0.6)]'
+      const activeItem = overrides?.activeItem ?? 'rounded-full px-3 py-1 text-[#1c1f23] bg-[#53608f12]'
+      const item = overrides?.item ?? 'rounded-full px-3 py-1 text-[#1c1f23]'
+      const subItem = overrides?.subItem ?? 'rounded-full px-3 py-1 text-[#1c1f23]'
+      return `{/* Requires: lucide-react, @radix-ui/react-popover */}
+const [selectedBusiness, setSelectedBusiness] = useState('个人空间')
+const [selectorOpen, setSelectorOpen] = useState(false)
+
+<aside className="flex flex-col justify-between overflow-hidden ${container}">
+  <div className="flex flex-1 flex-col gap-6">
+    <div className="flex items-center ${titleRow}">
+      <div className="text-sm font-semibold leading-5 text-[#1c1f23]">Trae AI</div>
+      <div className="ml-2 mr-1 h-3 w-px shrink-0 bg-[#c6cacd]" />
+      <Popover open={selectorOpen} onOpenChange={setSelectorOpen}>
+        <PopoverTrigger asChild>
+          <button className="cursor-pointer transition-all active:scale-95 inline-flex flex-row-reverse items-center justify-center whitespace-nowrap font-medium h-6 gap-1 text-xs rounded-lg px-2 ${workspace}">
+            <ChevronDown size={12} />
+            {selectedBusiness}
+          </button>
+        </PopoverTrigger>
+        <PopoverContent align="start" side="bottom" sideOffset={10} className="w-auto border-none bg-transparent p-0 shadow-none">
+          <BusinessSelector
+            selectedLabel={selectedBusiness}
+            onSelect={(label) => {
+              setSelectedBusiness(label)
+              setSelectorOpen(false)
+            }}
+          />
+        </PopoverContent>
+      </Popover>
+    </div>
+    <div className="px-3">
+      <button className="flex w-full items-center gap-2 ${createButton}">
+        <Plus size={18} />
+        <span className="text-sm font-medium leading-[22px]">AI创作</span>
+      </button>
+    </div>
+    <div className="flex flex-col gap-3 px-3">
+      <div>
+        <div className="${sectionTitle}">管理</div>
+        <div className="mt-1 flex flex-col gap-2">
+          <div className="flex items-center gap-[6px] ${activeItem}"><BookOpen size={16} />Skills</div>
+          <div className="flex items-center justify-between ${item}">
+            <div className="flex items-center gap-[6px]"><Inbox size={16} />资源库</div>
+            <ChevronUp size={12} />
+          </div>
+          <div className="flex items-center gap-[6px] ${subItem}">模型库</div>
+          <div className="flex items-center gap-[6px] ${subItem}">工具箱</div>
+          <div className="flex items-center gap-[6px] ${subItem}">知识库</div>
+          <div className="flex items-center gap-[6px] ${activeItem}"><Boxes size={16} />发布器</div>
+          <div className="flex items-center gap-[6px] ${item}"><ClipboardCheck size={16} />评估器</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</aside>`
     },
   },
   {

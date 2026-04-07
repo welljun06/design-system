@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "mv src/app/api src/app/_api_tmp 2>/dev/null; next build; mv src/app/_api_tmp src/app/api 2>/dev/null",
+    "build": "mv src/app/api src/app/_api_tmp 2>/dev/null; NEXT_DIST_DIR=.next-build next build; mv src/app/_api_tmp src/app/api 2>/dev/null",
     "start": "next start",
     "lint": "next lint"
   },

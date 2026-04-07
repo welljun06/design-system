@@ -1,36 +1,57 @@
 {
   "enumState": {
-    "size": "sm"
+    "size": "md"
   },
   "editedLayers": {
-    "trackOn": [
-      "w-8",
+    "track": [
+      "w-10",
       "h-5",
-      "rounded-full",
-      "bg-[#1c1f23]"
-    ],
-    "trackOff": [
-      "w-8",
-      "h-5",
-      "rounded-full",
-      "bg-[rgba(83,96,143,0.07)]"
+      "rounded-[12px]",
+      "p-[2px]",
+      "border",
+      "border-transparent",
+      "data-[state=checked]:bg-[#0275f4]",
+      "hover:data-[state=checked]:bg-[#175cd3]",
+      "data-[state=unchecked]:bg-[rgba(83,96,143,0.12)]",
+      "disabled:data-[state=checked]:bg-[#84caff]",
+      "disabled:data-[state=unchecked]:bg-[rgba(83,96,143,0.15)]",
+      "disabled:data-[state=unchecked]:border-[rgba(45,66,107,0.12)]"
     ],
     "thumb": [
-      "size-3",
-      "rounded-full",
+      "h-4",
+      "w-[22px]",
+      "rounded-[9px]",
       "bg-white",
-      "shadow-[0_0_1px_rgba(0,0,0,0.3),0_4px_6px_rgba(0,0,0,0.1)]"
+      "shadow-[0_0_1px_rgba(0,0,0,0.3),0_4px_6px_rgba(0,0,0,0.1)]",
+      "data-[state=checked]:translate-x-[13px]"
     ],
     "size": []
   },
   "contentMode": "block",
   "iconName": "arrow-down",
+  "stateLoading": false,
+  "stateDisabled": false,
   "activeVariantIndex": 0,
   "layerMemory": {
+    "track": {
+      "md": "w-10 h-5 rounded-[12px] p-[2px] border border-transparent data-[state=checked]:bg-[#0275f4] hover:data-[state=checked]:bg-[#175cd3] data-[state=unchecked]:bg-[rgba(83,96,143,0.12)] disabled:data-[state=checked]:bg-[#84caff] disabled:data-[state=unchecked]:bg-[rgba(83,96,143,0.15)] disabled:data-[state=unchecked]:border-[rgba(45,66,107,0.12)]",
+      "sm": "w-8 h-4 rounded-[8px] p-[2px] border border-transparent data-[state=checked]:bg-[#0275f4] hover:data-[state=checked]:bg-[#175cd3] data-[state=unchecked]:bg-[rgba(83,96,143,0.12)] disabled:data-[state=checked]:bg-[#84caff] disabled:data-[state=unchecked]:bg-[rgba(83,96,143,0.15)] disabled:data-[state=unchecked]:border-[rgba(45,66,107,0.12)]",
+      "size=sm": "w-8 h-4 rounded-[8px] p-[2px] border border-transparent data-[state=checked]:bg-[#0275f4] hover:data-[state=checked]:bg-[#175cd3] data-[state=unchecked]:bg-[rgba(83,96,143,0.12)] disabled:data-[state=checked]:bg-[#84caff] disabled:data-[state=unchecked]:bg-[rgba(83,96,143,0.15)] disabled:data-[state=unchecked]:border-[rgba(45,66,107,0.12)]",
+      "size=md": "w-10 h-5 rounded-[12px] p-[2px] border border-transparent data-[state=checked]:bg-[#0275f4] hover:data-[state=checked]:bg-[#175cd3] data-[state=unchecked]:bg-[rgba(83,96,143,0.12)] disabled:data-[state=checked]:bg-[#84caff] disabled:data-[state=unchecked]:bg-[rgba(83,96,143,0.15)] disabled:data-[state=unchecked]:border-[rgba(45,66,107,0.12)]"
+    },
+    "thumb": {
+      "size=sm": "h-3 w-4 rounded-[6px] bg-white shadow-[0_0_1px_rgba(0,0,0,0.3),0_4px_6px_rgba(0,0,0,0.1)] data-[state=checked]:translate-x-[11px]",
+      "size=md": "h-4 w-[22px] rounded-[9px] bg-white shadow-[0_0_1px_rgba(0,0,0,0.3),0_4px_6px_rgba(0,0,0,0.1)] data-[state=checked]:translate-x-[13px]"
+    },
     "size": {
-      "lg": "",
       "md": "",
       "sm": ""
+    },
+    "trackOn": {
+      "size=sm": "w-8 h-5 rounded-full bg-[#1c1f23]"
+    },
+    "trackOff": {
+      "size=sm": "w-8 h-5 rounded-full bg-[rgba(83,96,143,0.07)]"
     }
   }
 }

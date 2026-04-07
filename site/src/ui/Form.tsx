@@ -47,7 +47,7 @@ export function Form({ layout = 'top', fieldType = 'input', classOverrides }: Fo
       case 'select': return <Select />
       case 'checkbox': return <Checkbox />
       case 'radio': return <RadioGroup />
-      case 'switch': return <Switch />
+      case 'switch': return <Switch size="md" />
       case 'slider': return <Slider />
       case 'upload': return <Upload />
       case 'inputgroup': return <InputGroup />

@@ -1,0 +1,34 @@
+{
+  "enumState": {},
+  "editedLayers": {
+    "container": [
+      "rounded-2xl",
+      "bg-white",
+      "p-3",
+      "shadow-[0_4px_14px_rgba(0,0,0,0.1),0_0_1px_rgba(0,0,0,0.3)]"
+    ],
+    "section": [
+      "rounded-xl",
+      "p-3"
+    ],
+    "title": [
+      "text-xs",
+      "leading-4",
+      "text-[rgba(28,28,35,0.6)]"
+    ],
+    "option": [
+      "w-[136px]",
+      "rounded-lg",
+      "border",
+      "border-[rgba(45,66,107,0.12)]",
+      "bg-white",
+      "p-3"
+    ]
+  },
+  "contentMode": "block",
+  "iconName": "arrow-down",
+  "stateLoading": false,
+  "stateDisabled": false,
+  "activeVariantIndex": 0,
+  "layerMemory": {}
+}

@@ -199,6 +199,9 @@ function spacingToPx(token: string): string | null {
   if (token === 'px') return '1px'
   if (token === 'auto') return 'auto'
   if (token === 'full') return '100%'
+  if (token.startsWith('[') && token.endsWith(']')) {
+    return token.slice(1, -1)
+  }
   const n = parseFloat(token)
   if (isNaN(n)) return null
   return `${n * 4}px`
@@ -209,6 +212,8 @@ export function getCssValue(cls: string): string | null {
   const { base } = stripStatePrefix(cls)
 
   if (base in ROUNDED_VALUES) return ROUNDED_VALUES[base]
+  const roundedArbitraryMatch = base.match(/^rounded-\[(.+)\]$/)
+  if (roundedArbitraryMatch) return roundedArbitraryMatch[1]
   if (base in TEXT_SIZE_VALUES) return TEXT_SIZE_VALUES[base]
   if (base in FONT_WEIGHT_VALUES) return FONT_WEIGHT_VALUES[base]
   if (base in LEADING_VALUES) return LEADING_VALUES[base]
@@ -309,6 +314,7 @@ export function getEditOptions(cls: string): EditOption[] | null {
   // Padding X
   if (base.match(/^px-/)) {
     return [
+      { value: 'px-1',   label: 'px-1 — 4px' },
       { value: 'px-2',   label: 'px-2 — 8px' },
       { value: 'px-2.5', label: 'px-2.5 — 10px' },
       { value: 'px-3',   label: 'px-3 — 12px' },
@@ -333,6 +339,7 @@ export function getEditOptions(cls: string): EditOption[] | null {
   // Gap
   if (base.match(/^gap-/)) {
     return [
+      { value: 'gap-0.5', label: 'gap-0.5 — 2px' },
       { value: 'gap-1',   label: 'gap-1 — 4px' },
       { value: 'gap-1.5', label: 'gap-1.5 — 6px' },
       { value: 'gap-2',   label: 'gap-2 — 8px' },

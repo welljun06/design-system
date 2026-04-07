@@ -1,37 +1,104 @@
 {
   "enumState": {
-    "size": "lg"
+    "variant": "card"
   },
   "editedLayers": {
     "checked": [
-      "size-5",
-      "rounded",
-      "bg-[#1c1f23]",
+      "size-4",
+      "rounded-[3px]",
       "border",
-      "border-[#1c1f23]"
+      "border-[#1c1f23]",
+      "bg-[#1c1f23]",
+      "text-white"
     ],
     "unchecked": [
-      "size-5",
-      "rounded",
-      "bg-white",
+      "size-4",
+      "rounded-[3px]",
       "border",
-      "border-[rgba(45,66,107,0.12)]"
+      "border-[rgba(28,31,35,0.35)]",
+      "bg-white"
     ],
     "label": [
       "text-sm",
+      "leading-5",
       "text-[#1c1f23]",
       "select-none"
     ],
-    "size": []
+    "description": [
+      "text-sm",
+      "leading-5",
+      "text-[rgba(28,31,35,0.6)]",
+      "select-none"
+    ],
+    "cardChecked": [
+      "rounded-[8px]",
+      "border",
+      "border-[rgba(45,66,107,0.12)]",
+      "bg-[#f5f7fa]",
+      "px-[17px]",
+      "py-[13px]"
+    ],
+    "cardUnchecked": [
+      "rounded-[8px]",
+      "border",
+      "border-[rgba(45,66,107,0.12)]",
+      "bg-[#f5f7fa]",
+      "px-[17px]",
+      "py-[13px]"
+    ],
+    "variant": [],
+    "cardTitle": [
+      "text-sm",
+      "leading-5",
+      "font-semibold",
+      "text-[#1c1f23]",
+      "select-none"
+    ]
   },
   "contentMode": "block",
   "iconName": "arrow-down",
+  "stateLoading": false,
+  "stateDisabled": false,
   "activeVariantIndex": 0,
   "layerMemory": {
-    "size": {
-      "lg": "",
-      "md": "",
-      "sm": ""
+    "variant": {
+      "default": "",
+      "card": ""
+    },
+    "checked": {
+      "size=lg": "size-5 rounded-[4px] bg-[#1c1f23] text-white shadow-none",
+      "size=md": "size-4 rounded-[3px] bg-[#1c1f23] text-white shadow-none",
+      "size=sm": "size-4 rounded-[3px] bg-[#1c1f23] text-white shadow-none",
+      "variant=default": "size-4 rounded-[3px] border border-[#1c1f23] bg-[#1c1f23] text-white",
+      "variant=card": "size-4 rounded-[3px] border border-[#1c1f23] bg-[#1c1f23] text-white",
+      "": "size-4 rounded-[3px] border border-[#1c1f23] bg-[#1c1f23] text-white"
+    },
+    "unchecked": {
+      "size=lg": "size-5 rounded-[4px] bg-white shadow-[inset_0_0_0_1px_rgba(28,31,35,0.35)]",
+      "size=md": "size-4 rounded-[3px] bg-white shadow-[inset_0_0_0_1px_rgba(28,31,35,0.35)]",
+      "size=sm": "size-4 rounded-[3px] bg-white shadow-[inset_0_0_0_1px_rgba(28,31,35,0.35)]",
+      "variant=default": "size-4 rounded-[3px] border border-[rgba(28,31,35,0.35)] bg-white",
+      "variant=card": "size-4 rounded-[3px] border border-[rgba(28,31,35,0.35)] bg-white",
+      "": "size-4 rounded-[3px] border border-[rgba(28,31,35,0.35)] bg-white"
+    },
+    "label": {
+      "": "text-sm leading-5 text-[#1c1f23] select-none"
+    },
+    "description": {
+      "variant=card": "text-sm leading-5 text-[rgba(28,31,35,0.6)] select-none",
+      "variant=default": "text-sm leading-5 text-[rgba(28,31,35,0.6)] select-none"
+    },
+    "cardChecked": {
+      "variant=card": "rounded-[8px] border border-[rgba(45,66,107,0.12)] bg-[#f5f7fa] px-[17px] py-[13px]",
+      "variant=default": "rounded-[8px] border border-[rgba(45,66,107,0.12)] bg-[#f5f7fa] px-[17px] py-[13px]"
+    },
+    "cardUnchecked": {
+      "variant=card": "rounded-[8px] border border-[rgba(45,66,107,0.12)] bg-[#f5f7fa] px-[17px] py-[13px]",
+      "variant=default": "rounded-[8px] border border-[rgba(45,66,107,0.12)] bg-[#f5f7fa] px-[17px] py-[13px]"
+    },
+    "cardTitle": {
+      "variant=card": "text-sm leading-5 font-semibold text-[#1c1f23] select-none",
+      "variant=default": "text-sm leading-5 font-semibold text-[#1c1f23] select-none"
     }
   }
 }

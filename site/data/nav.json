@@ -1,0 +1,68 @@
+{
+  "enumState": {},
+  "editedLayers": {
+    "container": [
+      "w-[220px]",
+      "h-[720px]",
+      "rounded-[24px]",
+      "bg-[#f2f2f7]",
+      "pt-6",
+      "pb-2"
+    ],
+    "titleRow": [
+      "h-8",
+      "px-4"
+    ],
+    "workspace": [
+      "rounded-md",
+      "px-[6px]",
+      "py-[2px]"
+    ],
+    "createButton": [
+      "rounded-full",
+      "bg-black",
+      "px-4",
+      "py-3",
+      "text-white"
+    ],
+    "sectionTitle": [
+      "px-3",
+      "py-1.5",
+      "text-xs",
+      "leading-4",
+      "text-[rgba(28,31,35,0.6)]"
+    ],
+    "activeItem": [
+      "rounded-full",
+      "px-3",
+      "py-1",
+      "text-[#1c1f23]",
+      "bg-[#53608f12]"
+    ],
+    "item": [
+      "rounded-full",
+      "px-3",
+      "py-1",
+      "text-[#1c1f23]"
+    ],
+    "subItem": [
+      "rounded-full",
+      "px-3",
+      "py-1",
+      "text-[#1c1f23]"
+    ]
+  },
+  "contentMode": "block",
+  "iconName": "arrow-down",
+  "stateLoading": false,
+  "stateDisabled": false,
+  "activeVariantIndex": 0,
+  "layerMemory": {
+    "titleRow": {
+      "": "h-8 px-4"
+    },
+    "subItem": {
+      "": "rounded-full px-3 py-1 text-[#1c1f23]"
+    }
+  }
+}

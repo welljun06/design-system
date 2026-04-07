@@ -1,5 +1,3 @@
-import { highlight } from '@/lib/highlight'
-
 export const metadata = {
   title: '项目脚手架 — Design System',
   description: '快速部署 AI 平台基础框架，在此基础上 vibe coding。',
@@ -122,12 +120,7 @@ const aiPromptTemplate = `你是一位专业的前端工程师，正在基于以
 - 页面背景使用上述 radial-gradient
 `
 
-export default async function ScaffoldPage() {
-  const [degitHtml, promptHtml] = await Promise.all([
-    highlight(degitCommand, 'bash'),
-    highlight(aiPromptTemplate, 'typescript'),
-  ])
-
+export default function ScaffoldPage() {
   return (
     <div className="px-8 py-10 max-w-3xl">
       {/* Header */}
@@ -186,10 +179,20 @@ export default async function ScaffoldPage() {
               Terminal
             </span>
           </div>
-          <div
-            dangerouslySetInnerHTML={{ __html: degitHtml }}
-            style={{ backgroundColor: '#0d0d0d' }}
-          />
+          <pre
+            style={{
+              backgroundColor: '#0d0d0d',
+              color: '#e4e4e7',
+              padding: '1rem 1.25rem',
+              margin: 0,
+              fontSize: '13px',
+              lineHeight: '1.6',
+              overflowX: 'auto',
+              fontFamily: "'Menlo', 'Monaco', 'Cascadia Code', 'Consolas', monospace",
+            }}
+          >
+            <code>{degitCommand}</code>
+          </pre>
         </div>
         <p className="text-xs mt-3" style={{ color: '#52525b' }}>
           需要安装{' '}
@@ -262,11 +265,22 @@ export default async function ScaffoldPage() {
               AI Prompt
             </span>
           </div>
-          <div
+          <pre
             className="overflow-x-auto"
-            dangerouslySetInnerHTML={{ __html: promptHtml }}
-            style={{ backgroundColor: '#0d0d0d', maxHeight: '480px', overflowY: 'auto' }}
-          />
+            style={{
+              backgroundColor: '#0d0d0d',
+              color: '#e4e4e7',
+              maxHeight: '480px',
+              overflowY: 'auto',
+              padding: '1rem 1.25rem',
+              margin: 0,
+              fontSize: '13px',
+              lineHeight: '1.6',
+              fontFamily: "'Menlo', 'Monaco', 'Cascadia Code', 'Consolas', monospace",
+            }}
+          >
+            <code>{aiPromptTemplate}</code>
+          </pre>
         </div>
       </Section>
 

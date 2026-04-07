@@ -12,6 +12,9 @@
     ]
   },
   "contentMode": "block",
+  "iconName": "arrow-down",
+  "stateLoading": false,
+  "stateDisabled": false,
   "activeVariantIndex": 0,
   "layerMemory": {
     "variant": {

@@ -141,7 +141,7 @@ export function EditorTemplate() {
   return (
     <div className="flex h-[720px] w-full flex-col overflow-hidden rounded-2xl bg-[radial-gradient(41.09%_51.93%_at_77%_39.53%,#D5DAEA_0%,#EAEDF3_100%)]">
       {/* ── Header ── */}
-      <header className="flex items-center justify-between px-6 py-3">
+      <header className="shrink-0 flex items-center justify-between px-6 py-3">
         {/* Left: Back + Info */}
         <div className="flex items-center gap-3">
           <Button variant="glass" content="icon" size="lg" radius="full" iconName="chevron-left" />
@@ -212,9 +212,9 @@ export function EditorTemplate() {
           </div>
 
           {/* Editor pane */}
-          <div className="flex flex-1 flex-col min-w-0 overflow-hidden rounded-3xl bg-white border border-gray-100/60 shadow-[0px_1.25px_3px_0px_rgba(50,50,50,0.1)]">
-            <div className="sticky top-0 z-10 bg-white">
-              <div className="flex h-15 items-center justify-between px-6">
+          <div className="flex flex-1 min-w-0 flex-col overflow-hidden rounded-3xl border border-gray-100/60 bg-white shadow-[0px_1.25px_3px_0px_rgba(50,50,50,0.1)]">
+            <div className="sticky top-0 z-10 h-[60px] shrink-0 bg-white">
+              <div className="flex h-[60px] shrink-0 items-center justify-between px-6">
                 <h2 className="text-base font-semibold leading-9 text-gray-900">{activeConfig}</h2>
                 <div className="flex items-center gap-2">
                   <button className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-gray-200 text-gray-600 transition-transform active:scale-95 hover:bg-gray-50">
@@ -230,7 +230,7 @@ export function EditorTemplate() {
                 </div>
               </div>
             </div>
-            <div className="flex-1 overflow-y-auto pt-1 px-6">
+            <div className="min-h-0 flex-1 overflow-y-auto px-6 pt-1">
               <div className="prose prose-sm max-w-none text-sm text-gray-400">
                 在此输入人设 Prompt...
               </div>
