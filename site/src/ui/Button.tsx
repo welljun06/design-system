@@ -2,7 +2,16 @@
 
 import React, { useId } from 'react'
 import { cn } from '@/lib/utils'
-import { ArrowDown, Loader2 } from 'lucide-react'
+import {
+  ArrowDown, ArrowRight, ArrowUp, ArrowLeft,
+  Plus, Minus, X, Check,
+  Search, Settings, Share2, Download,
+  Upload, Send, Heart, Star,
+  Edit3, Trash2, Copy, ExternalLink,
+  ChevronDown, ChevronRight, ChevronLeft, ChevronUp,
+  Loader2,
+  type LucideIcon,
+} from 'lucide-react'
 
 // 样式：10 种视觉风格
 export type ButtonVariant =
@@ -26,11 +35,42 @@ export type ButtonSize = 'lg' | 'md' | 'sm'
 // 圆角：圆角矩形 | 全圆角
 export type ButtonRadius = 'rounded' | 'full'
 
+// 可选图标
+export type ButtonIconName = 'none' | keyof typeof iconMap
+
+export const iconMap: Record<string, LucideIcon> = {
+  'arrow-down': ArrowDown,
+  'arrow-right': ArrowRight,
+  'arrow-up': ArrowUp,
+  'arrow-left': ArrowLeft,
+  'plus': Plus,
+  'minus': Minus,
+  'x': X,
+  'check': Check,
+  'search': Search,
+  'settings': Settings,
+  'share': Share2,
+  'download': Download,
+  'upload': Upload,
+  'send': Send,
+  'heart': Heart,
+  'star': Star,
+  'edit': Edit3,
+  'trash': Trash2,
+  'copy': Copy,
+  'external-link': ExternalLink,
+  'chevron-down': ChevronDown,
+  'chevron-right': ChevronRight,
+  'chevron-left': ChevronLeft,
+  'chevron-up': ChevronUp,
+}
+
 type ButtonProps = {
   variant?: ButtonVariant
   content?: ButtonContent
   size?: ButtonSize
   radius?: ButtonRadius
+  iconName?: ButtonIconName
   loading?: boolean
   disabled?: boolean
   label?: string
@@ -56,7 +96,6 @@ const sizeMap: Record<ButtonSize, { h: string; gap: string; text: string; iconSi
   sm: { h: 'h-6', gap: 'gap-1.5', text: 'text-xs', iconSize: 'size-3'   },
 }
 
-/** Parse a Tailwind size class to a pixel number for SVG attributes */
 function parseIconSize(cls: string): number {
   const m = cls.match(/^size-(.+)$/)
   if (!m) return 14
@@ -80,6 +119,7 @@ export function Button({
   content = 'block',
   size = 'lg',
   radius = 'rounded',
+  iconName = 'arrow-down',
   loading = false,
   disabled = false,
   label = 'Button',
@@ -90,17 +130,10 @@ export function Button({
   const base = classOverrides?.base
     ?? 'cursor-pointer transition-all active:scale-95 flex items-center justify-center font-medium'
   const variantClass = classOverrides?.variant ?? variantClasses[variant]
-
   const radiusClass = classOverrides?.radius ?? radiusMap[radius]
-
-  // size layer: height + gap + text
   const sizeClass = classOverrides?.size ?? `${s.h} ${s.gap} ${s.text}`
-
-  // icon size layer (separate free layer, grouped under size in UI)
   const iconSizeCls = classOverrides?.iconSize ?? s.iconSize
   const iconPx = parseIconSize(iconSizeCls)
-
-  // icon buttons: square (aspect-ratio 1:1), no padding
   const iconClass = content === 'icon' ? 'aspect-square' : ''
   const paddingClass = content === 'icon' ? '' : (classOverrides?.padding ?? paddingDefaults[size])
 
@@ -113,31 +146,36 @@ export function Button({
   const aiGradient = 'linear-gradient(155deg, #FFB31E 8%, #49D127 23%, #4592F2 45%, #6E7CFD 66%, #E135F8 92%)'
   const gradId = useId()
   const isAi = variant === 'ai'
+  const showIcon = iconName !== 'none'
 
-  // Lucide Sparkles paths with gradient stroke
-  const AiIcon = (
-    <svg width={iconPx} height={iconPx} viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <defs>
-        <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="8%" stopColor="#FFB31E" />
-          <stop offset="23%" stopColor="#49D127" />
-          <stop offset="45%" stopColor="#4592F2" />
-          <stop offset="66%" stopColor="#6E7CFD" />
-          <stop offset="92%" stopColor="#E135F8" />
-        </linearGradient>
-      </defs>
-      <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" stroke={`url(#${gradId})`} />
-      <path d="M20 3v4M22 5h-4" stroke={`url(#${gradId})`} />
-    </svg>
-  )
-
-  const icon = isAi ? AiIcon : <ArrowDown size={iconPx} />
+  // Resolve icon element
+  let iconEl: React.ReactNode = null
+  if (isAi && showIcon) {
+    iconEl = (
+      <svg width={iconPx} height={iconPx} viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <defs>
+          <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="8%" stopColor="#FFB31E" />
+            <stop offset="23%" stopColor="#49D127" />
+            <stop offset="45%" stopColor="#4592F2" />
+            <stop offset="66%" stopColor="#6E7CFD" />
+            <stop offset="92%" stopColor="#E135F8" />
+          </linearGradient>
+        </defs>
+        <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" stroke={`url(#${gradId})`} />
+        <path d="M20 3v4M22 5h-4" stroke={`url(#${gradId})`} />
+      </svg>
+    )
+  } else if (showIcon) {
+    const Icon = iconMap[iconName] ?? ArrowDown
+    iconEl = <Icon size={iconPx} />
+  }
 
   const children = loading
     ? <><Loader2 size={iconPx} className="animate-spin" />{content !== 'icon' && <span>Loading...</span>}</>
     : content === 'icon'
-    ? icon
-    : <>{icon}<span style={isAi ? { backgroundImage: aiGradient, WebkitBackgroundClip: 'text', color: 'transparent' } : undefined}>{label}</span></>
+    ? iconEl
+    : <>{iconEl}<span style={isAi ? { backgroundImage: aiGradient, WebkitBackgroundClip: 'text', color: 'transparent' } : undefined}>{label}</span></>
 
   return (
     <button

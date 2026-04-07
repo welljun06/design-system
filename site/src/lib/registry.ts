@@ -96,7 +96,7 @@ export const registry: RegistryEntry[] = [
         classes: ['rounded-lg'],
         enumOptions: [
           { key: 'rounded', label: '圆角矩形', classes: ['rounded-lg'],   sideEffects: { padding: ['px-3'] } },
-          { key: 'full',    label: '全圆角',   classes: ['rounded-full'], sideEffects: { padding: ['px-5'] } },
+          { key: 'full',    label: '全圆角',   classes: ['rounded-full'], sideEffects: { padding: ['px-4'] } },
         ],
       },
       padding: {
@@ -136,49 +136,6 @@ export const registry: RegistryEntry[] = [
   <ArrowDown size={14} />
   Button
 </button>`
-    },
-  },
-  {
-    slug: 'status-badge',
-    name: 'Badge',
-    category: '基础组件',
-    description: '状态标签，用于展示内容发布状态。支持已发布、未发布、草稿和审核中四种状态。',
-    layers: {
-      base: {
-        label: 'Base',
-        classes: [
-          'rounded-md',
-          'px-2',
-          'py-0.5',
-          'text-xs',
-          'font-medium',
-        ],
-        editableClasses: ['rounded-md', 'px-2', 'py-0.5', 'text-xs', 'font-medium'],
-      },
-      status: {
-        label: 'Status',
-        variantPropKey: 'status',
-        classes: ['bg-green-100', 'text-green-700'],
-        enumOptions: [
-          { key: '已发布', label: '已发布', description: '内容已上线，对外可见', classes: ['bg-green-100', 'text-green-700'] },
-          { key: '未发布', label: '未发布', description: '内容已完成但未对外发布', classes: ['bg-gray-100', 'text-gray-600'] },
-          { key: '草稿',   label: '草稿',   description: '编辑中的内容，尚未完成', classes: ['bg-yellow-100', 'text-yellow-700'] },
-          { key: '审核中', label: '审核中', description: '内容已提交，等待审核通过', classes: ['bg-blue-100', 'text-blue-600'] },
-        ],
-      },
-    },
-    variants: [
-      { label: '已发布', props: { status: '已发布' } },
-      { label: '未发布', props: { status: '未发布' } },
-      { label: '草稿', props: { status: '草稿' } },
-      { label: '审核中', props: { status: '审核中' } },
-    ],
-    code: (overrides) => {
-      const base = overrides?.base ?? 'rounded-md px-2 py-0.5 text-xs font-medium'
-      const status = overrides?.status ?? 'bg-green-100 text-green-700'
-      return `<span className="${base} ${status}">
-  已发布
-</span>`
     },
   },
   {
@@ -422,6 +379,403 @@ export const registry: RegistryEntry[] = [
   <button className="px-4 py-0.5 text-sm rounded-full text-[#1c1f23]/60">
     标签二
   </button>
+</div>`
+    },
+  },
+  {
+    slug: 'form',
+    name: 'Form',
+    category: '基础组件',
+    description: '表单字段组件，支持 12 种字段类型 × 2 种标签布局，涵盖输入、选择、开关、日期、上传等常见表单场景。',
+    layers: {
+      layout: {
+        label: 'Layout',
+        variantPropKey: 'layout',
+        classes: ['flex', 'flex-col', 'gap-1'],
+        enumOptions: [
+          { key: 'top',  label: '标签在上', description: '标签位于字段上方，适用于标准表单', classes: ['flex', 'flex-col', 'gap-1'] },
+          { key: 'left', label: '标签在左', description: '标签位于字段左侧，适用于紧凑横向表单', classes: ['flex', 'items-start'] },
+        ],
+      },
+      fieldType: {
+        label: 'Field Type',
+        variantPropKey: 'fieldType',
+        classes: [],
+        enumOptions: [
+          { key: 'input',       label: '输入框',     description: '单行文本输入', classes: [] },
+          { key: 'textarea',    label: '文本域',     description: '多行文本输入，带字数统计', classes: [] },
+          { key: 'select',      label: '选择器',     description: '下拉选择', classes: [] },
+          { key: 'checkbox',    label: '多选框',     description: '多选复选框组', classes: [] },
+          { key: 'radio',       label: '单选框',     description: '单选按钮组', classes: [] },
+          { key: 'switch',      label: '开关',       description: '切换开关', classes: [] },
+          { key: 'slider',      label: '滑块',       description: '范围滑块', classes: [] },
+          { key: 'upload',      label: '上传',       description: '图片上传', classes: [] },
+          { key: 'inputgroup',  label: '组合输入',   description: '选择器 + 输入框组合', classes: [] },
+          { key: 'taginput',    label: '标签输入',   description: '标签式输入框', classes: [] },
+        ],
+      },
+      label: {
+        label: 'Label',
+        classes: ['text-sm', 'font-semibold', 'text-[rgba(28,31,35,0.8)]', 'leading-5'],
+      },
+      field: {
+        label: 'Field',
+        classes: ['w-full', 'bg-white', 'border', 'border-[rgba(45,66,107,0.12)]', 'rounded-lg', 'px-3', 'py-2'],
+      },
+    },
+    variants: [
+      { label: '输入框 · 上',     props: { layout: 'top',  fieldType: 'input' } },
+      { label: '输入框 · 左',     props: { layout: 'left', fieldType: 'input' } },
+      { label: '文本域',          props: { layout: 'top',  fieldType: 'textarea' } },
+      { label: '选择器',          props: { layout: 'top',  fieldType: 'select' } },
+      { label: '多选框',          props: { layout: 'top',  fieldType: 'checkbox' } },
+      { label: '单选框',          props: { layout: 'top',  fieldType: 'radio' } },
+      { label: '开关',            props: { layout: 'top',  fieldType: 'switch' } },
+      { label: '滑块',            props: { layout: 'top',  fieldType: 'slider' } },
+      { label: '上传',            props: { layout: 'top',  fieldType: 'upload' } },
+      { label: '组合输入',        props: { layout: 'top',  fieldType: 'inputgroup' } },
+      { label: '标签输入',        props: { layout: 'top',  fieldType: 'taginput' } },
+    ],
+    code: (overrides) => {
+      const label = overrides?.label ?? 'text-sm font-semibold text-[rgba(28,31,35,0.8)] leading-5'
+      return `<div className="flex flex-col gap-1 w-[300px]">
+  <span className="${label}">字段标题</span>
+  <div className="flex flex-col gap-1">
+    <input
+      type="text"
+      placeholder="请输入"
+      className="w-full border border-[#e4e4e7] bg-white text-[#1c1f23] placeholder:text-[#a1a1aa] focus:border-[#a1a1aa] focus:ring-2 focus:ring-[#a1a1aa]/20 outline-none transition-all py-[7px] px-3 text-sm rounded-lg"
+    />
+  </div>
+</div>`
+    },
+  },
+  {
+    slug: 'textarea',
+    name: 'Textarea',
+    category: '基础组件',
+    description: '多行文本输入框，支持多种尺寸和视觉风格，适用于描述、备注等长文本输入。',
+    layers: {
+      base: {
+        label: 'Base',
+        classes: ['w-full', 'border', 'outline-none', 'transition-all', 'resize-y', 'min-h-[92px]'],
+        editableClasses: ['min-h-[92px]'],
+      },
+      variant: {
+        label: 'Variant',
+        variantPropKey: 'variant',
+        classes: ['border-[#e4e4e7]', 'bg-white', 'text-[#1c1f23]', 'placeholder:text-[#a1a1aa]', 'focus:border-[#a1a1aa]', 'focus:ring-2', 'focus:ring-[#a1a1aa]/20'],
+        enumOptions: [
+          { key: 'default', label: '默认', description: '标准文本域，白底灰边', classes: ['border-[#e4e4e7]', 'bg-white', 'text-[#1c1f23]', 'placeholder:text-[#a1a1aa]', 'focus:border-[#a1a1aa]', 'focus:ring-2', 'focus:ring-[#a1a1aa]/20'] },
+          { key: 'glass', label: '玻璃', description: '毛玻璃效果，适用于图片或渐变背景之上', classes: ['border-white/60', 'bg-white/25', 'shadow-[inset_1px_1px_4px_2px_rgba(0,0,0,0.03)]', 'text-[#1c1f23]', 'placeholder:text-[#71717a]', 'focus:border-white/80', 'focus:ring-2', 'focus:ring-white/20', 'backdrop-blur-sm'] },
+        ],
+      },
+      size: {
+        label: 'Size',
+        variantPropKey: 'size',
+        classes: ['py-[7px]', 'px-3', 'text-sm', 'rounded-lg'],
+        enumOptions: [
+          { key: 'lg', label: 'LG — 36px', classes: ['py-[7px]', 'px-3', 'text-sm', 'rounded-lg'] },
+          { key: 'md', label: 'MD — 32px', classes: ['py-[5px]', 'px-2.5', 'text-sm', 'rounded-md'] },
+          { key: 'sm', label: 'SM — 24px', classes: ['py-[3px]', 'px-2', 'text-xs', 'rounded-md'] },
+        ],
+      },
+    },
+    variants: [
+      { label: 'Default', props: { variant: 'default', size: 'lg' } },
+      { label: 'Glass', props: { variant: 'glass', size: 'lg' } },
+      { label: 'MD', props: { variant: 'default', size: 'md' } },
+      { label: 'SM', props: { variant: 'default', size: 'sm' } },
+    ],
+    code: (overrides) => {
+      const base = overrides?.base ?? 'w-full border outline-none transition-all resize-y min-h-[92px]'
+      const variant = overrides?.variant ?? 'border-[#e4e4e7] bg-white text-[#1c1f23] placeholder:text-[#a1a1aa] focus:border-[#a1a1aa] focus:ring-2 focus:ring-[#a1a1aa]/20'
+      const size = overrides?.size ?? 'py-[7px] px-3 text-sm rounded-lg'
+      return `<textarea
+  placeholder="请输入内容..."
+  className="${base} ${variant} ${size}"
+/>`
+    },
+  },
+  {
+    slug: 'checkbox',
+    name: 'Checkbox',
+    category: '基础组件',
+    description: '复选框组，支持多种尺寸，用于多选场景。',
+    layers: {
+      checked: {
+        label: 'Checked',
+        classes: ['size-4', 'rounded-[3px]', 'bg-[#1c1f23]', 'border', 'border-[#1c1f23]'],
+      },
+      unchecked: {
+        label: 'Unchecked',
+        classes: ['size-4', 'rounded-[3px]', 'bg-white', 'border', 'border-[rgba(45,66,107,0.12)]'],
+      },
+      label: {
+        label: 'Label',
+        classes: ['text-sm', 'text-[#1c1f23]', 'select-none'],
+      },
+      size: {
+        label: 'Size',
+        variantPropKey: 'size',
+        classes: [],
+        enumOptions: [
+          { key: 'lg', label: 'LG', classes: [], sideEffects: { checked: ['size-5', 'rounded', 'bg-[#1c1f23]', 'border', 'border-[#1c1f23]'], unchecked: ['size-5', 'rounded', 'bg-white', 'border', 'border-[rgba(45,66,107,0.12)]'] } },
+          { key: 'md', label: 'MD', classes: [], sideEffects: { checked: ['size-4', 'rounded-[3px]', 'bg-[#1c1f23]', 'border', 'border-[#1c1f23]'], unchecked: ['size-4', 'rounded-[3px]', 'bg-white', 'border', 'border-[rgba(45,66,107,0.12)]'] } },
+          { key: 'sm', label: 'SM', classes: [], sideEffects: { checked: ['size-3.5', 'rounded-[3px]', 'bg-[#1c1f23]', 'border', 'border-[#1c1f23]'], unchecked: ['size-3.5', 'rounded-[3px]', 'bg-white', 'border', 'border-[rgba(45,66,107,0.12)]'] } },
+        ],
+      },
+    },
+    variants: [
+      { label: 'MD', props: { size: 'md' } },
+      { label: 'LG', props: { size: 'lg' } },
+      { label: 'SM', props: { size: 'sm' } },
+    ],
+    code: (overrides) => {
+      const box = overrides?.box ?? 'h-4 w-4'
+      const label = overrides?.label ?? 'text-sm text-[#1c1f23]'
+      return `{/* Requires: @radix-ui/react-checkbox, @radix-ui/react-label, lucide-react */}
+<div className="flex items-center gap-4 py-1">
+  <div className="flex items-center gap-2">
+    <Checkbox id="cb1" defaultChecked className="${box}" />
+    <Label htmlFor="cb1" className="cursor-pointer ${label}">选择框标题</Label>
+  </div>
+  <div className="flex items-center gap-2">
+    <Checkbox id="cb2" className="${box}" />
+    <Label htmlFor="cb2" className="cursor-pointer ${label}">选择框标题</Label>
+  </div>
+</div>`
+    },
+  },
+  {
+    slug: 'radio-group',
+    name: 'RadioGroup',
+    category: '基础组件',
+    description: '单选按钮组，支持多种尺寸，用于互斥选择场景。',
+    layers: {
+      selected: {
+        label: 'Selected',
+        classes: ['size-4', 'rounded-full', 'border-[5px]', 'border-[#1c1f23]', 'bg-white'],
+      },
+      unselected: {
+        label: 'Unselected',
+        classes: ['size-4', 'rounded-full', 'border', 'border-[rgba(45,66,107,0.12)]', 'bg-white'],
+      },
+      label: {
+        label: 'Label',
+        classes: ['text-sm', 'text-[#1c1f23]', 'select-none'],
+      },
+      size: {
+        label: 'Size',
+        variantPropKey: 'size',
+        classes: [],
+        enumOptions: [
+          { key: 'lg', label: 'LG', classes: [], sideEffects: { selected: ['size-5', 'rounded-full', 'border-[6px]', 'border-[#1c1f23]', 'bg-white'], unselected: ['size-5', 'rounded-full', 'border', 'border-[rgba(45,66,107,0.12)]', 'bg-white'] } },
+          { key: 'md', label: 'MD', classes: [], sideEffects: { selected: ['size-4', 'rounded-full', 'border-[5px]', 'border-[#1c1f23]', 'bg-white'], unselected: ['size-4', 'rounded-full', 'border', 'border-[rgba(45,66,107,0.12)]', 'bg-white'] } },
+          { key: 'sm', label: 'SM', classes: [], sideEffects: { selected: ['size-3.5', 'rounded-full', 'border-[4px]', 'border-[#1c1f23]', 'bg-white'], unselected: ['size-3.5', 'rounded-full', 'border', 'border-[rgba(45,66,107,0.12)]', 'bg-white'] } },
+        ],
+      },
+    },
+    variants: [
+      { label: 'MD', props: { size: 'md' } },
+      { label: 'LG', props: { size: 'lg' } },
+      { label: 'SM', props: { size: 'sm' } },
+    ],
+    code: (overrides) => {
+      const radio = overrides?.radio ?? 'h-4 w-4'
+      const label = overrides?.label ?? 'text-sm text-[#1c1f23]'
+      return `{/* Requires: @radix-ui/react-radio-group, @radix-ui/react-label */}
+<RadioGroup defaultValue="a" className="flex items-center gap-4 py-1">
+  <div className="flex items-center gap-2">
+    <RadioGroupItem value="a" id="r1" className="${radio}" />
+    <Label htmlFor="r1" className="cursor-pointer ${label}">单选框标题</Label>
+  </div>
+  <div className="flex items-center gap-2">
+    <RadioGroupItem value="b" id="r2" className="${radio}" />
+    <Label htmlFor="r2" className="cursor-pointer ${label}">单选框标题</Label>
+  </div>
+</RadioGroup>`
+    },
+  },
+  {
+    slug: 'switch',
+    name: 'Switch',
+    category: '基础组件',
+    description: '开关组件，支持多种尺寸，用于布尔值切换场景。',
+    layers: {
+      trackOn: {
+        label: 'Track · On',
+        classes: ['w-10', 'h-6', 'rounded-full', 'bg-[#1c1f23]'],
+      },
+      trackOff: {
+        label: 'Track · Off',
+        classes: ['w-10', 'h-6', 'rounded-full', 'bg-[rgba(83,96,143,0.07)]'],
+      },
+      thumb: {
+        label: 'Thumb',
+        classes: ['size-4', 'rounded-full', 'bg-white', 'shadow-[0_0_1px_rgba(0,0,0,0.3),0_4px_6px_rgba(0,0,0,0.1)]'],
+      },
+      size: {
+        label: 'Size',
+        variantPropKey: 'size',
+        classes: [],
+        enumOptions: [
+          { key: 'lg', label: 'LG', classes: [], sideEffects: { trackOn: ['w-12', 'h-7', 'rounded-full', 'bg-[#1c1f23]'], trackOff: ['w-12', 'h-7', 'rounded-full', 'bg-[rgba(83,96,143,0.07)]'], thumb: ['size-5', 'rounded-full', 'bg-white', 'shadow-[0_0_1px_rgba(0,0,0,0.3),0_4px_6px_rgba(0,0,0,0.1)]'] } },
+          { key: 'md', label: 'MD', classes: [], sideEffects: { trackOn: ['w-10', 'h-6', 'rounded-full', 'bg-[#1c1f23]'], trackOff: ['w-10', 'h-6', 'rounded-full', 'bg-[rgba(83,96,143,0.07)]'], thumb: ['size-4', 'rounded-full', 'bg-white', 'shadow-[0_0_1px_rgba(0,0,0,0.3),0_4px_6px_rgba(0,0,0,0.1)]'] } },
+          { key: 'sm', label: 'SM', classes: [], sideEffects: { trackOn: ['w-8', 'h-5', 'rounded-full', 'bg-[#1c1f23]'], trackOff: ['w-8', 'h-5', 'rounded-full', 'bg-[rgba(83,96,143,0.07)]'], thumb: ['size-3', 'rounded-full', 'bg-white', 'shadow-[0_0_1px_rgba(0,0,0,0.3),0_4px_6px_rgba(0,0,0,0.1)]'] } },
+        ],
+      },
+    },
+    variants: [
+      { label: 'MD', props: { size: 'md' } },
+      { label: 'LG', props: { size: 'lg' } },
+      { label: 'SM', props: { size: 'sm' } },
+    ],
+    code: (overrides) => {
+      const track = overrides?.track ?? 'h-5 w-9'
+      const thumb = overrides?.thumb ?? 'h-4 w-4'
+      return `{/* Requires: @radix-ui/react-switch */}
+<Switch
+  defaultChecked
+  className="${track} data-[state=checked]:bg-[#1c1f23] data-[state=unchecked]:bg-[rgba(83,96,143,0.07)]"
+  thumbClassName="${thumb}"
+/>`
+    },
+  },
+  {
+    slug: 'slider',
+    name: 'Slider',
+    category: '基础组件',
+    description: '滑块组件，支持多种尺寸，用于数值范围选择。',
+    layers: {
+      track: {
+        label: 'Track',
+        classes: ['h-1', 'rounded-full', 'bg-[rgba(83,96,143,0.07)]'],
+      },
+      range: {
+        label: 'Range',
+        classes: ['h-1', 'rounded-full', 'bg-[#1c1f23]'],
+      },
+      thumb: {
+        label: 'Thumb',
+        classes: ['size-6', 'rounded-full', 'bg-white', 'shadow-[0_0_1px_rgba(0,0,0,0.3),0_4px_6px_rgba(0,0,0,0.1)]'],
+      },
+      size: {
+        label: 'Size',
+        variantPropKey: 'size',
+        classes: [],
+        enumOptions: [
+          { key: 'lg', label: 'LG', classes: [], sideEffects: { track: ['h-1.5', 'rounded-full', 'bg-[rgba(83,96,143,0.07)]'], range: ['h-1.5', 'rounded-full', 'bg-[#1c1f23]'], thumb: ['size-6', 'rounded-full', 'bg-white', 'shadow-[0_0_1px_rgba(0,0,0,0.3),0_4px_6px_rgba(0,0,0,0.1)]'] } },
+          { key: 'md', label: 'MD', classes: [], sideEffects: { track: ['h-1', 'rounded-full', 'bg-[rgba(83,96,143,0.07)]'], range: ['h-1', 'rounded-full', 'bg-[#1c1f23]'], thumb: ['size-6', 'rounded-full', 'bg-white', 'shadow-[0_0_1px_rgba(0,0,0,0.3),0_4px_6px_rgba(0,0,0,0.1)]'] } },
+          { key: 'sm', label: 'SM', classes: [], sideEffects: { track: ['h-1', 'rounded-full', 'bg-[rgba(83,96,143,0.07)]'], range: ['h-1', 'rounded-full', 'bg-[#1c1f23]'], thumb: ['size-4', 'rounded-full', 'bg-white', 'shadow-[0_0_1px_rgba(0,0,0,0.3),0_4px_6px_rgba(0,0,0,0.1)]'] } },
+        ],
+      },
+    },
+    variants: [
+      { label: 'MD', props: { size: 'md' } },
+      { label: 'LG', props: { size: 'lg' } },
+      { label: 'SM', props: { size: 'sm' } },
+    ],
+    code: () => {
+      return `{/* Requires: @radix-ui/react-slider */}
+<Slider defaultValue={[30]} max={100} step={1} />`
+    },
+  },
+  {
+    slug: 'upload',
+    name: 'Upload',
+    category: '基础组件',
+    description: '图片上传组件，支持多种尺寸，展示预览缩略图和上传触发区域。',
+    layers: {
+      item: {
+        label: 'Item Size',
+        classes: ['size-24', 'rounded-lg'],
+      },
+      trigger: {
+        label: 'Trigger',
+        classes: ['border', 'border-dashed', 'border-[#d4d4d8]', 'bg-white', 'flex', 'items-center', 'justify-center', 'cursor-pointer', 'hover:bg-[#fafafa]', 'transition-colors'],
+      },
+      preview: {
+        label: 'Preview',
+        classes: ['overflow-hidden', 'bg-[#f0f0f0]'],
+      },
+      size: {
+        label: 'Size',
+        variantPropKey: 'size',
+        classes: [],
+        enumOptions: [
+          { key: 'lg', label: 'LG — 96px', classes: [], sideEffects: { item: ['size-24', 'rounded-lg'] } },
+          { key: 'md', label: 'MD — 80px', classes: [], sideEffects: { item: ['size-20', 'rounded-lg'] } },
+          { key: 'sm', label: 'SM — 64px', classes: [], sideEffects: { item: ['size-16', 'rounded-md'] } },
+        ],
+      },
+    },
+    variants: [
+      { label: 'LG', props: { size: 'lg' } },
+      { label: 'MD', props: { size: 'md' } },
+      { label: 'SM', props: { size: 'sm' } },
+    ],
+    code: (overrides) => {
+      const item = overrides?.item ?? 'size-24 rounded-lg'
+      const trigger = overrides?.trigger ?? 'border border-dashed border-[#d4d4d8] bg-white flex items-center justify-center cursor-pointer hover:bg-[#fafafa] transition-colors'
+      const preview = overrides?.preview ?? 'overflow-hidden bg-[#f0f0f0]'
+      return `{/* Requires: lucide-react */}
+<div className="flex items-start gap-2">
+  <div className="${item} ${preview}">
+    <img src="..." alt="" className="w-full h-full object-cover" />
+  </div>
+  <div className="${item} ${trigger}">
+    <Plus size={24} className="text-[#a1a1aa]" />
+  </div>
+</div>`
+    },
+  },
+  {
+    slug: 'input-group',
+    name: 'InputGroup',
+    category: '基础组件',
+    description: '组合输入组件，将选择器与输入框合并为一个控件，用于带前缀分类的输入。',
+    layers: {
+      base: {
+        label: 'Base',
+        classes: ['border', 'border-[#e4e4e7]', 'bg-white', 'transition-all', 'outline-none'],
+        editableClasses: [],
+      },
+      size: {
+        label: 'Size',
+        variantPropKey: 'size',
+        classes: ['py-[7px]', 'px-3', 'text-sm', 'rounded-lg'],
+        enumOptions: [
+          { key: 'lg', label: 'LG', classes: ['py-[7px]', 'px-3', 'text-sm', 'rounded-lg'] },
+          { key: 'md', label: 'MD', classes: ['py-[5px]', 'px-2.5', 'text-sm', 'rounded-md'] },
+          { key: 'sm', label: 'SM', classes: ['py-[3px]', 'px-2', 'text-xs', 'rounded-md'] },
+        ],
+      },
+      selectWidth: {
+        label: 'Select Width',
+        classes: ['w-[115px]'],
+      },
+    },
+    variants: [
+      { label: 'LG', props: { size: 'lg' } },
+      { label: 'MD', props: { size: 'md' } },
+      { label: 'SM', props: { size: 'sm' } },
+    ],
+    code: (overrides) => {
+      const base = overrides?.base ?? 'border border-[#e4e4e7] bg-white transition-all outline-none'
+      const size = overrides?.size ?? 'py-[7px] px-3 text-sm rounded-lg'
+      const selectWidth = overrides?.selectWidth ?? 'w-[115px]'
+      return `{/* Requires: lucide-react */}
+<div className="flex items-center w-full">
+  <div className="shrink-0 flex items-center justify-between border-r-0 cursor-pointer ${base} ${size} rounded-l-lg ${selectWidth}">
+    <span className="text-[#a1a1aa]">请选择</span>
+    <ChevronDown size={16} className="text-[#a1a1aa]" />
+  </div>
+  <input
+    type="text"
+    placeholder="请输入"
+    className="flex-1 min-w-0 text-[#1c1f23] placeholder:text-[#a1a1aa] focus:border-[#a1a1aa] focus:ring-2 focus:ring-[#a1a1aa]/20 ${base} ${size} rounded-r-lg"
+  />
 </div>`
     },
   },

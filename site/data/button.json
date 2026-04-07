@@ -1,8 +1,8 @@
 {
   "enumState": {
-    "variant": "ghost-gray",
+    "variant": "solid-black",
     "size": "lg",
-    "radius": "rounded"
+    "radius": "full"
   },
   "editedLayers": {
     "base": [
@@ -15,8 +15,9 @@
       "font-medium"
     ],
     "variant": [
-      "text-[#71717a]",
-      "hover:bg-[#f4f4f5]"
+      "bg-[linear-gradient(180deg,#323232_0%,#222222_100%)]",
+      "text-white",
+      "hover:opacity-90"
     ],
     "size": [
       "h-9",
@@ -24,16 +25,17 @@
       "text-sm"
     ],
     "radius": [
-      "rounded-lg"
+      "rounded-full"
     ],
     "padding": [
-      "px-3"
+      "px-4"
     ],
     "iconSize": [
       "size-4"
     ]
   },
   "contentMode": "block",
+  "iconName": "arrow-up",
   "activeVariantIndex": 0,
   "layerMemory": {
     "variant": {
@@ -43,9 +45,19 @@
       "outline-gray": "border border-[#e4e4e7] text-[#71717a] bg-white hover:bg-[#f4f4f5]",
       "ghost-black": "text-[#09090b] hover:bg-[#f4f4f5]",
       "ghost-blue": "text-[#2563eb] hover:bg-[#eff6ff]",
-      "ghost-gray": "text-[#71717a] hover:bg-[#f4f4f5]",
+      "glass": "border border-white/60 bg-white/25 shadow-[inset_1px_1px_4px_2px_rgba(0,0,0,0.03)] hover:bg-white/50 text-[#1c1f23]",
       "solid-white": "bg-white text-[#09090b] border border-transparent hover:bg-[#f4f4f5]",
-      "ai": "bg-white border border-[rgba(45,66,107,0.12)] shadow-[0_2px_4px_-1px_rgba(0,0,0,0.05)] hover:bg-[#f9f9fb]"
+      "ai": "bg-white border border-[rgba(45,66,107,0.12)] shadow-[0_2px_4px_-1px_rgba(0,0,0,0.05)] hover:bg-[#f9f9fb]",
+      "ghost-gray": "text-[#71717a] hover:bg-[#f4f4f5]"
+    },
+    "size": {
+      "lg": "h-9 gap-2 text-sm",
+      "md": "h-8 gap-1.5 text-sm",
+      "sm": "h-6 gap-1.5 text-xs"
+    },
+    "radius": {
+      "rounded": "rounded-lg",
+      "full": "rounded-full"
     }
   }
 }

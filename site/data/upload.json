@@ -1,0 +1,38 @@
+{
+  "enumState": {
+    "size": "md"
+  },
+  "editedLayers": {
+    "item": [
+      "size-20",
+      "rounded-lg"
+    ],
+    "trigger": [
+      "border",
+      "border-dashed",
+      "border-[#d4d4d8]",
+      "bg-white",
+      "flex",
+      "items-center",
+      "justify-center",
+      "cursor-pointer",
+      "hover:bg-[#fafafa]",
+      "transition-colors"
+    ],
+    "preview": [
+      "overflow-hidden",
+      "bg-[#f0f0f0]"
+    ],
+    "size": []
+  },
+  "contentMode": "block",
+  "iconName": "arrow-down",
+  "activeVariantIndex": 0,
+  "layerMemory": {
+    "size": {
+      "lg": "",
+      "md": "",
+      "sm": ""
+    }
+  }
+}

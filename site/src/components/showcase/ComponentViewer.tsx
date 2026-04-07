@@ -4,8 +4,9 @@ import { useState, useCallback, useMemo, useEffect, useRef } from 'react'
 import { StylePanel } from './StylePanel'
 import { AnnotationOverlay } from './AnnotationOverlay'
 import { Button } from '@/ui/Button'
-import type { ButtonVariant, ButtonContent, ButtonSize, ButtonRadius } from '@/ui/Button'
-import { StatusBadge } from '@/ui/StatusBadge'
+import type { ButtonVariant, ButtonContent, ButtonSize, ButtonRadius, ButtonIconName } from '@/ui/Button'
+import { iconMap } from '@/ui/Button'
+
 import { Input } from '@/ui/Input'
 import type { InputSize, InputVariant } from '@/ui/Input'
 import { Select } from '@/ui/Select'
@@ -14,6 +15,22 @@ import { Tag } from '@/ui/Tag'
 import { Tabs } from '@/ui/Tabs'
 import type { TabsVariant, TabsSize } from '@/ui/Tabs'
 import { Card } from '@/ui/Card'
+import { Form } from '@/ui/Form'
+import type { FormLayout, FormFieldType } from '@/ui/Form'
+import { Textarea } from '@/ui/Textarea'
+import type { TextareaSize, TextareaVariant } from '@/ui/Textarea'
+import { Checkbox } from '@/ui/Checkbox'
+import type { CheckboxSize } from '@/ui/Checkbox'
+import { RadioGroup } from '@/ui/RadioGroup'
+import type { RadioSize } from '@/ui/RadioGroup'
+import { Switch } from '@/ui/Switch'
+import type { SwitchSize } from '@/ui/Switch'
+import { Slider } from '@/ui/Slider'
+import type { SliderSize } from '@/ui/Slider'
+import { Upload } from '@/ui/Upload'
+import type { UploadSize } from '@/ui/Upload'
+import { InputGroup } from '@/ui/InputGroup'
+import type { InputGroupSize } from '@/ui/InputGroup'
 import { generateCode } from '@/lib/codeGen'
 import type { SerializableEntry } from '@/lib/registry'
 
@@ -142,7 +159,7 @@ function buildLayersFromVariantProps(
 
 // ─── Preview renderer ─────────────────────────────────────────────────────────
 
-type StatusType = '已发布' | '未发布' | '草稿' | '审核中'
+
 type CardVariant = 'default' | 'glass'
 
 function PreviewComponent({
@@ -160,18 +177,27 @@ function PreviewComponent({
       content={(variantProps.content as ButtonContent) ?? 'block'}
       size={(variantProps.size as ButtonSize) ?? 'lg'}
       radius={(variantProps.radius as ButtonRadius) ?? 'rounded'}
+      iconName={(variantProps.icon as ButtonIconName) ?? 'arrow-down'}
       loading={variantProps.loading === 'true'}
       disabled={variantProps.disabled === 'true'}
       classOverrides={classOverrides}
     />
   )
 
-  if (slug === 'status-badge') return <StatusBadge status={(variantProps.status as StatusType) ?? '已发布'} classOverrides={classOverrides} />
+
   if (slug === 'input') return <div className="w-64"><Input variant={(variantProps.variant as InputVariant) ?? 'default'} size={(variantProps.size as InputSize) ?? 'lg'} disabled={variantProps.disabled === 'true'} classOverrides={classOverrides} /></div>
   if (slug === 'select') return <div className="w-64"><Select variant={(variantProps.variant as SelectVariant) ?? 'default'} size={(variantProps.size as SelectSize) ?? 'lg'} disabled={variantProps.disabled === 'true'} classOverrides={classOverrides} /></div>
   if (slug === 'tabs') return <Tabs variant={(variantProps.variant as TabsVariant) ?? 'glass'} size={(variantProps.size as TabsSize) ?? 'md'} classOverrides={classOverrides} />
   if (slug === 'tag') return <Tag color={(variantProps.color as any) ?? 'white'} type={(variantProps.type as any) ?? 'light'} size={(variantProps.size as any) ?? 'md'} shape={(variantProps.shape as any) ?? 'square'} classOverrides={classOverrides} />
   if (slug === 'card') return <div className="w-72 flex"><Card variant={(variantProps.variant as CardVariant) ?? 'default'} classOverrides={classOverrides} /></div>
+  if (slug === 'form') return <Form layout={(variantProps.layout as FormLayout) ?? 'top'} fieldType={(variantProps.fieldType as FormFieldType) ?? 'input'} classOverrides={classOverrides} />
+  if (slug === 'textarea') return <div className="w-64"><Textarea variant={(variantProps.variant as TextareaVariant) ?? 'default'} size={(variantProps.size as TextareaSize) ?? 'lg'} classOverrides={classOverrides} /></div>
+  if (slug === 'checkbox') return <Checkbox size={(variantProps.size as CheckboxSize) ?? 'md'} classOverrides={classOverrides} />
+  if (slug === 'radio-group') return <RadioGroup size={(variantProps.size as RadioSize) ?? 'md'} classOverrides={classOverrides} />
+  if (slug === 'switch') return <Switch size={(variantProps.size as SwitchSize) ?? 'md'} classOverrides={classOverrides} />
+  if (slug === 'slider') return <div className="w-64"><Slider size={(variantProps.size as SliderSize) ?? 'md'} classOverrides={classOverrides} /></div>
+  if (slug === 'upload') return <Upload size={(variantProps.size as UploadSize) ?? 'lg'} classOverrides={classOverrides} />
+  if (slug === 'input-group') return <div className="w-80"><InputGroup size={(variantProps.size as InputGroupSize) ?? 'lg'} classOverrides={classOverrides} /></div>
   return null
 }
 
@@ -181,20 +207,24 @@ function EnumControls({
   entry,
   enumState,
   contentMode,
+  iconName,
   loading,
   disabled,
   onEnumChange,
   onContentChange,
+  onIconChange,
   onLoadingChange,
   onDisabledChange,
 }: {
   entry: SerializableEntry
   enumState: Record<string, string>
   contentMode: string
+  iconName: string
   loading: boolean
   disabled: boolean
   onEnumChange: (layerKey: string, variantPropKey: string, newKey: string, newClasses: string[], sideEffects?: Record<string, string[]>) => void
   onContentChange: (v: string) => void
+  onIconChange: (v: string) => void
   onLoadingChange: (v: boolean) => void
   onDisabledChange: (v: boolean) => void
 }) {
@@ -238,6 +268,33 @@ function EnumControls({
           </div>
         </div>
       ))}
+
+      {/* Icon selector (button only) */}
+      {isButton && (
+        <div className="pb-3 mb-3" style={{ borderBottom: '1px solid #f0f0f0' }}>
+          <p className="text-[10px] font-semibold uppercase tracking-wider mb-1.5" style={{ color: '#c4c4c8' }}>
+            Icon
+          </p>
+          <div className="relative">
+            <select
+              value={iconName}
+              onChange={(e) => onIconChange(e.target.value)}
+              className="w-full h-7 text-[11px] font-mono rounded-md pl-2 pr-6 appearance-none outline-none cursor-pointer"
+              style={{ border: '1px solid #e4e4e7', color: '#52525b', backgroundColor: '#ffffff' }}
+            >
+              <option value="none">无图标</option>
+              {Object.keys(iconMap).map((name) => (
+                <option key={name} value={name}>{name}</option>
+              ))}
+            </select>
+            <span className="pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2" style={{ color: '#a1a1aa' }}>
+              <svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M1 2.5L4 5.5L7 2.5" />
+              </svg>
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Content toggle (button only) */}
       {isButton && (
@@ -314,6 +371,7 @@ export function ComponentViewer({ entry, initialHighlightedHtml, savedConfig }: 
     () => savedConfig?.enumState ?? (hasEnumLayers ? getInitialEnumState(entry.layers) : {})
   )
   const [contentMode, setContentMode] = useState<string>(savedConfig?.contentMode ?? 'block')
+  const [iconName, setIconName] = useState<string>((savedConfig as any)?.iconName ?? 'arrow-down')
   const [stateLoading, setStateLoading] = useState(false)
   const [stateDisabled, setStateDisabled] = useState(false)
   const [annotationMode, setAnnotationMode] = useState(false)
@@ -367,12 +425,13 @@ export function ComponentViewer({ entry, initialHighlightedHtml, savedConfig }: 
       return {
         ...enumState,
         content: contentMode,
+        icon: iconName,
         loading: stateLoading ? 'true' : 'false',
         disabled: stateDisabled ? 'true' : 'false',
       }
     }
     return (entry.variants[activeVariantIndex] ?? entry.variants[0])?.props ?? {}
-  }, [hasEnumLayers, enumState, contentMode, stateLoading, stateDisabled, activeVariantIndex, entry.variants])
+  }, [hasEnumLayers, enumState, contentMode, iconName, stateLoading, stateDisabled, activeVariantIndex, entry.variants])
 
   // ── Persistence: auto-save to project file via API ──────────────────────────
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -403,6 +462,7 @@ export function ComponentViewer({ entry, initialHighlightedHtml, savedConfig }: 
           enumState,
           editedLayers,
           contentMode,
+          iconName,
           activeVariantIndex,
           layerMemory,
         }),
@@ -411,12 +471,12 @@ export function ComponentViewer({ entry, initialHighlightedHtml, savedConfig }: 
         .catch(() => { setSaveToast('error'); setTimeout(() => setSaveToast(null), 2000) })
     }, 500)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enumState, editedLayers, contentMode, activeVariantIndex, layerMemory])
+  }, [enumState, editedLayers, contentMode, iconName, activeVariantIndex, layerMemory])
 
   // ─────────────────────────────────────────────────────────────────────────────
 
   const classOverrides = useMemo(() => buildOverrides(editedLayers), [editedLayers])
-  const rawCode = useMemo(() => generateCode(entry.slug, classOverrides), [entry.slug, classOverrides])
+  const rawCode = useMemo(() => generateCode(entry.slug, classOverrides, variantProps), [entry.slug, classOverrides, variantProps])
 
   // ── Export all variants as JSON ──
   const handleExport = useCallback(() => {
@@ -587,10 +647,12 @@ export function ComponentViewer({ entry, initialHighlightedHtml, savedConfig }: 
               entry={entry}
               enumState={enumState}
               contentMode={contentMode}
+              iconName={iconName}
               loading={stateLoading}
               disabled={stateDisabled}
               onEnumChange={handleEnumChange}
               onContentChange={setContentMode}
+              onIconChange={setIconName}
               onLoadingChange={setStateLoading}
               onDisabledChange={setStateDisabled}
             />

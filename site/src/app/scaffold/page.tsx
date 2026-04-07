@@ -48,14 +48,6 @@ const aiPromptTemplate = `你是一位专业的前端工程师，正在基于以
 </button>
 \`\`\`
 
-### StatusBadge
-\`\`\`tsx
-<span className="rounded-md px-2 py-0.5 text-xs font-medium bg-green-100 text-green-700">已发布</span>
-<span className="rounded-md px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-600">未发布</span>
-<span className="rounded-md px-2 py-0.5 text-xs font-medium bg-yellow-100 text-yellow-700">草稿</span>
-<span className="rounded-md px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-600">审核中</span>
-\`\`\`
-
 ### Input
 \`\`\`tsx
 <input

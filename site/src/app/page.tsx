@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { registry } from '@/lib/registry'
+import { ComponentCard } from '@/components/home/ComponentCard'
 
 export default function HomePage() {
   const primitives = registry.filter((c) => c.category === '基础组件')
@@ -35,22 +36,17 @@ export default function HomePage() {
       </div>
 
       <div>
-        <p className="text-[11px] font-medium mb-3 uppercase tracking-wider" style={{ color: '#a1a1aa' }}>
+        <p className="text-[11px] font-medium mb-4 uppercase tracking-wider" style={{ color: '#a1a1aa' }}>
           基础组件
         </p>
-        <div style={{ borderTop: '1px solid #e4e4e7' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {primitives.map((c) => (
-            <Link
+            <ComponentCard
               key={c.slug}
-              href={`/components/${c.slug}`}
-              className="group flex items-center justify-between py-3 border-b transition-colors hover:bg-[#fafafa] -mx-2 px-2 rounded"
-              style={{ borderColor: '#e4e4e7', color: '#71717a' }}
-            >
-              <span className="text-sm font-medium" style={{ color: '#09090b' }}>{c.name}</span>
-              <span className="text-xs opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: '#a1a1aa' }}>
-                查看 →
-              </span>
-            </Link>
+              slug={c.slug}
+              name={c.name}
+              description={c.description}
+            />
           ))}
         </div>
       </div>

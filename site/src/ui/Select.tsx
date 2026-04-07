@@ -50,6 +50,7 @@ export function Select({ size = 'lg', variant = 'default', disabled = false, cla
             base,
             variantClass,
             sizeClass,
+            'data-[placeholder]:text-[#a1a1aa]',
             disabled && 'opacity-50 cursor-not-allowed',
           )}
         >

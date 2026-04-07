@@ -51,6 +51,29 @@ export function Sidebar() {
         </nav>
 
         <div className="mt-6 pt-5" style={{ borderTop: '1px solid #e4e4e7' }}>
+          <p className="px-3 mb-1.5 text-[11px] font-medium uppercase tracking-wider" style={{ color: '#a1a1aa' }}>
+            界面模板
+          </p>
+          <nav>
+            {[
+              { href: '/templates/form', name: '表单页' },
+              { href: '/templates/editor', name: '编辑器页' },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="flex items-center px-3 py-1.5 text-sm rounded-md transition-all"
+                style={getLinkStyle(item.href, { color: '#09090b', fontWeight: 500, backgroundColor: 'transparent' })}
+                onMouseEnter={() => setHoveredHref(item.href)}
+                onMouseLeave={() => setHoveredHref(null)}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </nav>
+        </div>
+
+        <div className="mt-6 pt-5" style={{ borderTop: '1px solid #e4e4e7' }}>
           <nav>
             {(() => {
               const href = '/scaffold'
