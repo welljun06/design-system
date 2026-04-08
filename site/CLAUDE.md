@@ -74,3 +74,15 @@ The `next.config.ts` conditionally sets `output: 'export'` only in production (`
 - All UI components use inline `style={}` for colors/borders on the showcase shell; Tailwind classes are used for the editable preview components
 - `trailingSlash: true` — API fetch URLs must include trailing slash (e.g., `/api/config/button/`)
 - Button component uses `useId()` for SVG gradient IDs and is a client component (`'use client'`)
+
+## Page UI Rules
+
+- For new page templates, prefer existing business/layout components first (`Nav`, `Filter`, `Card`, `Button`, `Tag`, `Textarea`, etc.) and only customize the central hero/input area when necessary.
+- On non-white or tinted surfaces, secondary actions should prefer `ghost-black` or be removed entirely. Avoid `outline-gray` on translucent/glass sections unless the background is clearly white.
+- Filter-style inline groups should use `8px` internal spacing by default.
+- Background atmosphere effects should be subtle: use low-opacity blurred gradients attached to the page root/background layer, not content-local overlays. Favor soft cyan + warm light accents over saturated purple glows.
+- Hover effects for cards should preserve clipping and radius first. Prefer slight lift plus outer shadow; do not use internal glow layers that break rounded-corner masking or let underlying colors bleed through.
+- Large prompt/input areas should stay refined rather than poster-like. Keep the input container large, but default the typed text itself to normal reading scale first (around `16px / 28px`), and only increase beyond that when the text is functioning as a headline rather than an editable prompt body.
+- Headline motion effects should be restrained and localized. If a hero title needs animation, apply it only to the key word (for example a subtle marquee/shine sweep on one word), keep the speed slow, and avoid turning the whole heading into a high-frequency animated banner.
+- Hero slogans may use a more designed display-style font stack, but prefer platform-safe/system-available display fonts first (`Avenir Next`, `SF Pro Display`, `Segoe UI`, `Helvetica Neue`, `Inter`, etc.) and do not introduce a new font dependency just for one page headline.
+- For immersive workflow detail pages (such as vibe coding after entering the workspace), remove template-internal menu navigation, use a transparent or lightly frosted conversation area on the left, and keep the artifact/workspace area on the right inside a clear white framed panel so the output stays visually stable and readable.

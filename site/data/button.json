@@ -1,6 +1,6 @@
 {
   "enumState": {
-    "variant": "ghost-blue",
+    "variant": "ghost-black",
     "size": "sm",
     "radius": "rounded"
   },
@@ -15,8 +15,8 @@
       "font-medium"
     ],
     "variant": [
-      "text-[#2563eb]",
-      "hover:bg-[#eff6ff]"
+      "text-[#09090b]",
+      "hover:bg-[#f4f4f5]"
     ],
     "size": [
       "h-6",

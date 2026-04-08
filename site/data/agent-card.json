@@ -66,7 +66,7 @@
   "iconName": "arrow-down",
   "stateLoading": false,
   "stateDisabled": false,
-  "activeVariantIndex": 2,
+  "activeVariantIndex": 0,
   "layerMemory": {
     "tag": {
       "": "inline-flex h-5 shrink-0 items-center gap-1 rounded-md border border-[rgba(45,66,107,0.12)] bg-white px-1.5 text-xs font-semibold leading-4 text-[#e72e75]"

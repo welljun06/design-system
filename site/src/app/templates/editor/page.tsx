@@ -18,7 +18,7 @@ export default function EditorTemplatePage() {
       </div>
 
       {/* Preview */}
-      <div className="rounded-xl overflow-hidden border" style={{ borderColor: '#e4e4e7' }}>
+      <div className="rounded-[24px] overflow-hidden border" style={{ borderColor: '#e4e4e7' }}>
         <EditorTemplate />
       </div>
     </div>

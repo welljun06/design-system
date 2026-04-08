@@ -68,7 +68,7 @@ export default function FormTemplatePage() {
 
       {/* Preview */}
       <div
-        className="rounded-xl overflow-hidden border mb-6"
+        className="rounded-[24px] overflow-hidden border mb-6"
         style={{ borderColor: '#e4e4e7' }}
       >
         <div

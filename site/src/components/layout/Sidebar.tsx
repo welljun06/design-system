@@ -82,6 +82,8 @@ export function Sidebar() {
           </p>
           <nav>
             {[
+              { href: '/templates/ai-create', name: 'AI创作页' },
+              { href: '/templates/ai-create-detail', name: 'AI创作详情页' },
               { href: '/templates/form', name: '表单页' },
               { href: '/templates/editor', name: '编辑器页' },
               { href: '/templates/resource-list', name: '列表页' },

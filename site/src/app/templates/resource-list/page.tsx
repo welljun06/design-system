@@ -17,7 +17,7 @@ export default function ResourceListTemplatePage() {
         </p>
       </div>
 
-      <div className="rounded-xl overflow-hidden border" style={{ borderColor: '#e4e4e7' }}>
+      <div className="rounded-[24px] overflow-hidden border" style={{ borderColor: '#e4e4e7' }}>
         <ResourceListTemplate />
       </div>
     </div>

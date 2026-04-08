@@ -128,23 +128,28 @@ function PreviewThumbnail({ slug }: { slug: string }) {
     </div>
   )
   if (slug === 'filter') return (
-    <div className="w-[280px] scale-[0.52] origin-center">
-      <Filter
-        searchPlaceholder="搜索"
-        filters={['更新时间', '模式']}
-        filterOptions={[
-          [
-            { value: 'updated-desc', label: '最近更新' },
-            { value: 'created-desc', label: '最近创建' },
-          ],
-          [
-            { value: 'all', label: '全部模式' },
-            { value: 'agent', label: '智能体' },
-          ],
-        ]}
-        ownershipLabel="我创建的"
-        actionLabel="新增智能体"
-      />
+    <div className="relative h-full w-full overflow-hidden">
+      <div
+        className="absolute left-1/2 top-1/2 w-[560px] origin-center"
+        style={{ transform: 'translate(-50%, -50%) scale(0.42)' }}
+      >
+        <Filter
+          searchPlaceholder="搜索"
+          filters={['更新时间', '模式']}
+          filterOptions={[
+            [
+              { value: 'updated-desc', label: '最近更新' },
+              { value: 'created-desc', label: '最近创建' },
+            ],
+            [
+              { value: 'all', label: '全部模式' },
+              { value: 'agent', label: '智能体' },
+            ],
+          ]}
+          ownershipLabel="我创建的"
+          actionLabel="新增智能体"
+        />
+      </div>
     </div>
   )
   return null
