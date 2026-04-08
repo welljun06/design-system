@@ -1,7 +1,10 @@
 import type { NextConfig } from 'next'
 
+const isVercel = process.env.VERCEL === '1'
+const isStaticExportBuild = process.env.NODE_ENV === 'production' && !isVercel
+
 const nextConfig: NextConfig = {
-  ...(process.env.NODE_ENV === 'production' ? { output: 'export' } : {}),
+  ...(isStaticExportBuild ? { output: 'export' } : {}),
   distDir: process.env.NEXT_DIST_DIR || '.next',
   images: {
     unoptimized: true,

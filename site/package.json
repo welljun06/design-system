@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "mv src/app/api src/app/_api_tmp 2>/dev/null; NEXT_DIST_DIR=.next-build next build; mv src/app/_api_tmp src/app/api 2>/dev/null",
+    "build": "if [ \"$VERCEL\" = \"1\" ]; then next build; else mv src/app/api src/app/_api_tmp 2>/dev/null; NEXT_DIST_DIR=.next-build next build; mv src/app/_api_tmp src/app/api 2>/dev/null; fi",
     "start": "next start",
     "lint": "next lint"
   },
