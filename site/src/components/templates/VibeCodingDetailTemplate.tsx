@@ -64,23 +64,23 @@ export function VibeCodingDetailTemplate() {
       <div className="pointer-events-none absolute left-[-120px] top-[120px] h-[320px] w-[420px] rounded-full bg-[radial-gradient(circle_at_50%_50%,rgba(121,211,255,0.14)_0%,rgba(121,211,255,0.06)_32%,rgba(255,255,255,0)_72%)] blur-[88px]" />
       <div className="pointer-events-none absolute right-[-90px] top-[-80px] h-[340px] w-[420px] rounded-full bg-[radial-gradient(circle_at_50%_50%,rgba(255,232,166,0.14)_0%,rgba(255,232,166,0.06)_30%,rgba(255,255,255,0)_74%)] blur-[96px]" />
 
-      <section className="relative z-[1] flex min-w-0 flex-1 flex-col">
-        <div className="mb-3 flex items-center justify-between px-2">
-          <Button
-            variant="ghost-black"
-            size="sm"
-            radius="full"
-            iconName="arrow-left"
-            label="返回创作页"
-          />
-          <div className="text-right">
-            <p className="text-sm font-semibold text-[#1c1f23]">产物工作台</p>
-            <p className="text-xs leading-5 text-[rgba(28,31,35,0.55)]">对话生成过程与实时产物在同一视图协同推进</p>
-          </div>
-        </div>
-
-        <div className="grid min-w-0 flex-1 grid-cols-[minmax(0,0.95fr)_minmax(0,1.15fr)] gap-4">
+      <section className="relative z-[1] min-w-0 flex-1">
+        <div className="grid h-full min-w-0 grid-cols-[minmax(0,0.95fr)_minmax(0,1.15fr)] gap-4">
         <div className="flex min-w-0 flex-col rounded-[24px] px-5 pb-4 pt-5">
+          <div className="mb-5">
+            <Button
+              variant="ghost-black"
+              size="sm"
+              radius="full"
+              iconName="arrow-left"
+              label="返回创作页"
+            />
+            <div className="mt-4">
+              <p className="text-sm font-semibold text-[#1c1f23]">产物工作台</p>
+              <p className="mt-1 text-xs leading-5 text-[rgba(28,31,35,0.55)]">对话生成过程与实时产物在同一视图协同推进</p>
+            </div>
+          </div>
+
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Tag color="violet" type="light" shape="circle" size="md">

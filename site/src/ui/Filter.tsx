@@ -67,7 +67,7 @@ export function Filter({
             checked={ownedOnly}
             onCheckedChange={setOwnedOnly}
             classOverrides={{
-              label: 'text-sm leading-5 font-semibold text-[rgba(34,39,39,0.8)]',
+              label: 'whitespace-nowrap text-sm leading-5 font-semibold text-[rgba(34,39,39,0.8)]',
             }}
           />
         </div>
