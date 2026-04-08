@@ -1,17 +1,15 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
-  BookOpen,
+  Bell,
   Bot,
-  Boxes,
-  ChevronUp,
-  ClipboardCheck,
-  Home,
-  Inbox,
+  BriefcaseBusiness,
+  ChevronDown,
+  PanelLeftClose,
   Plus,
-  Rocket,
-  Wrench,
+  Smartphone,
+  Sparkles,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/ui/Button'
@@ -20,9 +18,22 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 
 type NavProps = {
   classOverrides?: Record<string, string>
+  selectedMenu?: MenuKey
+  onSelectedMenuChange?: (menu: MenuKey) => void
 }
 
-function NavLogo() {
+export type MenuKey =
+  | 'skills'
+  | 'resource'
+  | 'model'
+  | 'toolbox'
+  | 'knowledge'
+  | 'publisher'
+  | 'evaluator'
+  | 'inspiration'
+  | 'agent'
+
+function BrandMark() {
   return (
     <svg width="108" height="19" viewBox="0 0 108 19" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-[19px] w-[108px] shrink-0">
       <path fillRule="evenodd" clipRule="evenodd" d="M38.2991 10.9893L40.0598 10.7842V12.4629L38.2991 12.667V16.833H36.3782V12.8887L30.3811 13.5879L30.3616 13.4629L30.1467 12.041L30.1262 11.9072L30.261 11.8916L36.3782 11.1934V1.64258H38.2991V10.9893ZM28.7249 4.55566H30.4846V6.18457H28.7278V8.77832L30.4534 8.48926V10.1504L30.3469 10.1699L28.7278 10.4736V14.7939L28.7258 14.9023C28.7079 15.4351 28.556 15.8634 28.2502 16.1719C27.9456 16.4791 27.5051 16.65 26.9446 16.7051L26.8313 16.7148C26.3385 16.7479 25.8189 16.7159 25.3206 16.6221L25.2405 16.6074L25.219 16.5283L24.8 15.0107L25.0002 15.043C25.4486 15.1135 25.8904 15.1336 26.3215 15.1045H26.3225L26.3782 15.0986C26.5074 15.0796 26.6314 15.023 26.7258 14.9297C26.8319 14.8246 26.9094 14.6645 26.9094 14.4355V10.8057L24.9124 11.165L24.8899 11.0352L24.6243 9.45117L26.9075 9.07715V6.18457H25.0374L24.8792 4.55566H26.9075V1.64258H28.7249V4.55566ZM53.8547 9.17383C54.2641 9.17383 54.5963 9.27499 54.8254 9.49805C55.0552 9.72183 55.1604 10.0474 55.1604 10.4482V15.168L55.1555 15.3154C55.133 15.6522 55.0308 15.9268 54.8303 16.1221C54.6019 16.3446 54.2685 16.4424 53.8547 16.4424H43.7981C43.3808 16.4423 43.0473 16.3477 42.8196 16.126C42.6197 15.9313 42.5202 15.6565 42.4983 15.3174L42.4934 15.168V10.4482C42.4934 10.0434 42.5945 9.71725 42.8235 9.49414C43.0519 9.27174 43.3845 9.17388 43.7981 9.17383H53.8547ZM69.1917 16.0391L69.2502 16.2119H66.9407L66.9114 16.1201L65.8967 12.9062H60.4846L59.4895 16.1201L59.4612 16.2119H57.1526L61.9163 2.5498H64.5823L69.1917 16.0391ZM73.3342 16.2119H71.259V2.5498H73.3342V16.2119ZM44.4133 14.5547L44.4143 14.5898C44.43 14.7627 44.5604 14.8817 44.7463 14.8818H52.9055L52.9426 14.8799C53.1207 14.8642 53.2392 14.7344 53.2395 14.5547V13.4775H44.4133V14.5547ZM44.7463 10.7324C44.5566 10.7325 44.4134 10.8773 44.4133 11.0605V12.0703H53.2395V11.0605L53.2375 11.0264C53.2221 10.8706 53.1013 10.7498 52.9407 10.7344L52.9055 10.7324H44.7463ZM61.0276 11.0859H65.3733L63.2112 4.17773L61.0276 11.0859ZM31.554 6.66016C32.5453 6.90029 33.9003 7.25626 35.1917 7.69141L35.2805 7.72168V9.61133L35.1067 9.55176C33.8192 9.1089 32.4692 8.74013 31.4915 8.49219L31.3928 8.4668V6.62109L31.554 6.66016ZM46.5022 6.39648H51.2014L51.6672 4.96484H53.6682L53.2014 6.39648H56.4543V7.95703H41.3127L41.1545 6.39648H44.5383L44.0715 4.96484H46.054L46.5022 6.39648ZM31.5569 2.7959C32.7648 3.10977 33.9863 3.4839 35.1926 3.90723L35.2805 3.93848V5.77734L35.1067 5.71777C33.9069 5.30045 32.6922 4.93231 31.4915 4.62402L31.3928 4.59863V2.75391L31.5569 2.7959ZM49.7786 2.88672H55.5393V4.44531H42.2092L42.051 2.88672H47.8225V1.64258H49.7786V2.88672Z" fill="black" />
@@ -46,40 +57,133 @@ function NavLogo() {
 function NavItem({
   icon,
   label,
-  active = false,
+  active: _active = false,
+  compact = false,
   className,
+  labelClassName,
+  onClick,
 }: {
   icon: React.ReactNode
   label: string
   active?: boolean
+  compact?: boolean
   className: string
+  labelClassName?: string
+  onClick?: () => void
 }) {
   return (
-    <div className={className}>
-      <span className="flex size-4 shrink-0 items-center justify-center">{icon}</span>
-      <span className={cn('text-sm leading-5', active ? 'font-semibold' : 'font-medium')}>{label}</span>
-    </div>
+    <button
+      type="button"
+      className={cn(
+        'group cursor-pointer transform-gpu transition-[transform,background-color,color,box-shadow] duration-200 ease-out active:scale-[0.97]',
+        className
+      )}
+      onClick={onClick}
+    >
+      {icon ? <span className="flex size-4 shrink-0 items-center justify-center">{icon}</span> : null}
+      <span className={cn(compact ? 'text-sm leading-5 font-normal' : 'text-sm leading-5 font-semibold', labelClassName)}>{label}</span>
+    </button>
   )
 }
 
-export function Nav({ classOverrides }: NavProps) {
+export function Nav({
+  classOverrides,
+  selectedMenu: controlledSelectedMenu,
+  onSelectedMenuChange,
+}: NavProps) {
   const [selectedBusiness, setSelectedBusiness] = useState('个人空间')
   const [selectorOpen, setSelectorOpen] = useState(false)
+  const [uncontrolledSelectedMenu, setUncontrolledSelectedMenu] = useState<MenuKey>('skills')
+  const [resourceExpanded, setResourceExpanded] = useState(true)
+  const [showTopFade, setShowTopFade] = useState(false)
+  const [showBottomFade, setShowBottomFade] = useState(false)
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null)
+  const scrollContentRef = useRef<HTMLDivElement | null>(null)
+  const selectedMenu = controlledSelectedMenu ?? uncontrolledSelectedMenu
+  const setSelectedMenu = (menu: MenuKey) => {
+    if (controlledSelectedMenu === undefined) {
+      setUncontrolledSelectedMenu(menu)
+    }
+    onSelectedMenuChange?.(menu)
+  }
+  const resourceIconActive =
+    selectedMenu === 'resource' ||
+    selectedMenu === 'model' ||
+    selectedMenu === 'toolbox' ||
+    selectedMenu === 'knowledge'
   const container = classOverrides?.container ?? 'w-[220px] h-[720px] rounded-[24px] bg-[#f2f2f7] pt-6 pb-2'
-  const titleRow = classOverrides?.titleRow ?? 'h-8 px-4'
-  const variantWorkspaceClass = 'text-[#71717a] hover:bg-[rgba(83,96,143,0.07)]'
-  const workspace = classOverrides?.workspace ?? variantWorkspaceClass
+  const titleRow = classOverrides?.titleRow ?? 'min-h-8 px-4'
+  const variantWorkspaceClass = 'text-[#1c1f23] hover:bg-[rgba(83,96,143,0.07)]'
+  const workspace = cn(variantWorkspaceClass, classOverrides?.workspace)
   const createButton = classOverrides?.createButton ?? 'rounded-full bg-black px-4 py-3 text-white'
-  const sectionTitle = classOverrides?.sectionTitle ?? 'px-3 py-1.5 text-xs leading-4 text-[rgba(28,31,35,0.6)]'
-  const activeItem = classOverrides?.activeItem ?? 'rounded-full px-3 py-1 text-[#1c1f23] bg-[#53608f12]'
-  const item = classOverrides?.item ?? 'rounded-full px-3 py-1 text-[#1c1f23]'
-  const subItem = classOverrides?.subItem ?? 'rounded-full px-3 py-1 text-[#1c1f23]'
+  const sectionTitle = classOverrides?.sectionTitle ?? 'px-4 py-1.5 text-xs leading-4 text-[rgba(28,31,35,0.6)]'
+  // 固化面板样式：rounded-full + px-4/px-3 + py-1
+  const activeItem = cn('rounded-full px-4 py-1 text-[#1c1f23] bg-[#53608f12] transition-colors', classOverrides?.activeItem)
+  const item = cn('rounded-full px-4 py-1 text-[#1c1f23] hover:bg-[#53608f12] transition-colors', classOverrides?.item)
+  // 二级菜单固定保留 hover / selected 背景，并把缩进改成 pl-10
+  const subItem = cn('rounded-full px-4 pl-10 py-1 text-[#1c1f23] hover:bg-[#53608f12]', classOverrides?.subItem)
+  const subActiveItem = cn('rounded-full px-4 pl-10 py-1 text-[#1c1f23] bg-[#53608f12]', classOverrides?.subItem)
+  const menuIcon = (lineSrc: string, flatSrc: string, selected: boolean) => (
+    <span className="relative block size-4 shrink-0">
+      <img
+        src={lineSrc}
+        alt=""
+        className={cn(
+          'absolute inset-0 size-4 transition-opacity',
+          selected ? 'opacity-0' : 'opacity-100'
+        )}
+      />
+      <img
+        src={flatSrc}
+        alt=""
+        className={cn(
+          'absolute inset-0 size-4 transition-opacity',
+          selected ? 'opacity-100' : 'opacity-0'
+        )}
+      />
+    </span>
+  )
+
+  useEffect(() => {
+    const scrollEl = scrollContainerRef.current
+    const contentEl = scrollContentRef.current
+    if (!scrollEl) return
+
+    const updateScrollFade = () => {
+      const { scrollTop, clientHeight, scrollHeight } = scrollEl
+      const maxScrollTop = Math.max(scrollHeight - clientHeight, 0)
+      setShowTopFade(scrollTop > 1)
+      setShowBottomFade(maxScrollTop - scrollTop > 1)
+    }
+
+    updateScrollFade()
+    scrollEl.addEventListener('scroll', updateScrollFade)
+    window.addEventListener('resize', updateScrollFade)
+
+    const scrollObserver = new ResizeObserver(updateScrollFade)
+    scrollObserver.observe(scrollEl)
+
+    const contentObserver = contentEl ? new ResizeObserver(updateScrollFade) : null
+    if (contentEl && contentObserver) {
+      contentObserver.observe(contentEl)
+    }
+
+    return () => {
+      scrollEl.removeEventListener('scroll', updateScrollFade)
+      window.removeEventListener('resize', updateScrollFade)
+      scrollObserver.disconnect()
+      contentObserver?.disconnect()
+    }
+  }, [resourceExpanded])
 
   return (
-    <aside className={cn('flex flex-col justify-between overflow-hidden', container)}>
-      <div className="flex flex-1 flex-col gap-6">
+    <aside className={cn('flex h-full min-h-0 flex-col justify-between overflow-hidden', container)}>
+      <div className="flex min-h-0 flex-1 flex-col">
         <div className={cn('flex items-center', titleRow)}>
-          <NavLogo />
+          <div className="flex items-center gap-[6px]">
+            <BrandMark />
+           
+          </div>
           <div className="ml-2 mr-1 h-3 w-px shrink-0 bg-[#c6cacd]" />
           <div className="flex items-center gap-1">
             <Popover open={selectorOpen} onOpenChange={setSelectorOpen}>
@@ -92,7 +196,7 @@ export function Nav({ classOverrides }: NavProps) {
                     iconName="chevron-down"
                     label={selectedBusiness}
                     classOverrides={{
-                      base: 'cursor-pointer transition-all active:scale-95 inline-flex flex-row-reverse items-center justify-center whitespace-nowrap font-medium',
+                      base: 'cursor-pointer transform-gpu transition-[transform,background-color,color,box-shadow] duration-200 ease-out active:scale-[0.97] inline-flex flex-row-reverse items-center justify-center whitespace-nowrap font-medium',
                       variant: workspace,
                     }}
                   />
@@ -116,61 +220,235 @@ export function Nav({ classOverrides }: NavProps) {
           </div>
         </div>
 
-        <div className="px-3">
-          <div className="rounded-full bg-black p-[1px]">
-            <button className={cn('flex w-full items-center gap-2 rounded-full', createButton)}>
+        <div className="mt-5 px-3">
+          <div className="rounded-full glow-button">
+            <button className={cn('relative z-[1] flex w-full items-center gap-2 rounded-full', createButton)}>
               <Plus className="size-[18px]" strokeWidth={2.4} />
               <span className="text-sm font-medium leading-[22px]">AI创作</span>
             </button>
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 px-3">
-          <div>
-            <div className={sectionTitle}>管理</div>
-            <div className="mt-1 flex flex-col gap-2">
-              <NavItem icon={<BookOpen className="size-4" strokeWidth={2} />} label="Skills" active className={cn('flex items-center gap-[6px]', activeItem)} />
-              <div className="flex flex-col gap-1">
-                <div className={cn('flex items-center justify-between', item)}>
-                  <div className="flex items-center gap-[6px]">
-                    <Inbox className="size-4" strokeWidth={2} />
-                    <span className="text-sm font-medium leading-5">资源库</span>
+        <div className="relative mt-3 flex min-h-0 flex-1 flex-col px-3">
+          {showTopFade ? (
+            <div className="pointer-events-none absolute inset-x-3 top-0 z-[2] h-6 bg-[linear-gradient(to_bottom,rgba(242,242,247,0.96),rgba(242,242,247,0))]" />
+          ) : null}
+          {showBottomFade ? (
+            <div className="pointer-events-none absolute inset-x-3 bottom-0 z-[2] h-6 bg-[linear-gradient(to_top,rgba(242,242,247,0.96),rgba(242,242,247,0))]" />
+          ) : null}
+          <div ref={scrollContainerRef} className="nav-scroll h-full min-h-0 flex-1 overflow-y-auto">
+            <div ref={scrollContentRef} className="flex flex-col gap-4 pb-2">
+              <div>
+                <div className={sectionTitle}>管理</div>
+                <div className="mt-1 flex flex-col gap-2">
+                  <NavItem
+                    icon={menuIcon('/figma/nav-icons/skills-line.svg', '/figma/nav-icons/skills-flat.svg', selectedMenu === 'skills')}
+                    label="Skills"
+                    active={selectedMenu === 'skills'}
+                    className={cn('flex items-center gap-2', selectedMenu === 'skills' ? activeItem : item)}
+                    onClick={() => setSelectedMenu('skills')}
+                  />
+                  <div className="flex w-full flex-col">
+                    <button
+                      type="button"
+                      className={cn(
+                        'group cursor-pointer transform-gpu transition-[transform,background-color,color,box-shadow] duration-200 ease-out active:scale-[0.97] flex items-center justify-between',
+                        selectedMenu === 'resource' ? activeItem : item
+                      )}
+                      onClick={() => {
+                        setResourceExpanded((prev) => !prev)
+                      }}
+                    >
+                      <div className="flex items-center gap-2">
+                        {menuIcon('/figma/nav-icons/resource-line.svg', '/figma/nav-icons/resource-flat.svg', resourceIconActive)}
+                        <span className="text-sm font-medium leading-5">资源库</span>
+                      </div>
+                      <ChevronDown
+                        className={cn(
+                          'size-3 text-[#1c1f23] transition-transform duration-200 ease-out',
+                          resourceExpanded ? 'rotate-180' : 'rotate-0'
+                        )}
+                        strokeWidth={2.2}
+                      />
+                    </button>
+                    <div
+                      className={cn(
+                        'grid w-full overflow-hidden transition-[grid-template-rows,opacity,margin-top] duration-200 ease-out',
+                        resourceExpanded ? 'mt-1' : 'mt-0',
+                        resourceExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                      )}
+                    >
+                      <div className="flex min-h-0 w-full flex-col gap-1 overflow-hidden">
+                        <NavItem
+                          icon={null}
+                          label="模型库"
+                          compact
+                          active={selectedMenu === 'model'}
+                          className={cn('flex w-full items-center', selectedMenu === 'model' ? subActiveItem : subItem)}
+                          onClick={() => {
+                            setSelectedMenu('model')
+                            setResourceExpanded(true)
+                          }}
+                        />
+                        <NavItem
+                          icon={null}
+                          label="工具箱"
+                          compact
+                          active={selectedMenu === 'toolbox'}
+                          className={cn('flex w-full items-center', selectedMenu === 'toolbox' ? subActiveItem : subItem)}
+                          onClick={() => {
+                            setSelectedMenu('toolbox')
+                            setResourceExpanded(true)
+                          }}
+                        />
+                        <NavItem
+                          icon={null}
+                          label="知识库"
+                          compact
+                          active={selectedMenu === 'knowledge'}
+                          className={cn('flex w-full items-center', selectedMenu === 'knowledge' ? subActiveItem : subItem)}
+                          onClick={() => {
+                            setSelectedMenu('knowledge')
+                            setResourceExpanded(true)
+                          }}
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <ChevronUp className="size-3 text-[#1c1f23]" strokeWidth={2.2} />
+                  <NavItem
+                    icon={menuIcon('/figma/nav-icons/publisher-line.svg', '/figma/nav-icons/publisher-flat.svg', selectedMenu === 'publisher')}
+                    label="发布器"
+                    active={selectedMenu === 'publisher'}
+                    className={cn('flex items-center gap-2', selectedMenu === 'publisher' ? activeItem : item)}
+                    onClick={() => setSelectedMenu('publisher')}
+                  />
+                  <NavItem
+                    icon={menuIcon('/figma/nav-icons/evaluator-line.svg', '/figma/nav-icons/evaluator-flat.svg', selectedMenu === 'evaluator')}
+                    label="评估器"
+                    active={selectedMenu === 'evaluator'}
+                    className={cn('flex items-center gap-2', selectedMenu === 'evaluator' ? activeItem : item)}
+                    onClick={() => setSelectedMenu('evaluator')}
+                  />
                 </div>
-                <NavItem icon={<Boxes className="size-4 opacity-0" strokeWidth={2} />} label="模型库" className={cn('flex items-center gap-[6px]', subItem)} />
-                <NavItem icon={<Boxes className="size-4 opacity-0" strokeWidth={2} />} label="工具箱" className={cn('flex items-center gap-[6px]', subItem)} />
-                <NavItem icon={<Boxes className="size-4 opacity-0" strokeWidth={2} />} label="知识库" className={cn('flex items-center gap-[6px]', subItem)} />
               </div>
-              <NavItem icon={<Boxes className="size-4" strokeWidth={2} />} label="发布器" active className={cn('flex items-center gap-[6px]', activeItem)} />
-              <NavItem icon={<ClipboardCheck className="size-4" strokeWidth={2} />} label="评估器" className={cn('flex items-center gap-[6px]', item)} />
-            </div>
-          </div>
 
-          <div>
-            <div className={sectionTitle}>灵感</div>
-            <div className="mt-1 flex flex-col gap-2">
-              <NavItem icon={<Home className="size-4" strokeWidth={2} />} label="灵感广场" active className={cn('flex items-center gap-[6px]', activeItem)} />
-              <NavItem icon={<Bot className="size-4" strokeWidth={2} />} label="智能体" active className={cn('flex items-center gap-[6px]', activeItem)} />
-            </div>
-          </div>
+              <div>
+                <div className={sectionTitle}>灵感</div>
+                <div className="mt-1 flex flex-col gap-2">
+                  <NavItem
+                    icon={menuIcon('/figma/nav-icons/inspiration-line.svg', '/figma/nav-icons/inspiration-flat.svg', selectedMenu === 'inspiration')}
+                    label="灵感广场"
+                    active={selectedMenu === 'inspiration'}
+                    className={cn('flex items-center gap-2', selectedMenu === 'inspiration' ? activeItem : item)}
+                    onClick={() => setSelectedMenu('inspiration')}
+                  />
+                  <NavItem
+                    icon={menuIcon('/figma/nav-icons/agent-line.svg', '/figma/nav-icons/agent-flat.svg', selectedMenu === 'agent')}
+                    label="智能体"
+                    active={selectedMenu === 'agent'}
+                    className={cn('flex items-center gap-2', selectedMenu === 'agent' ? activeItem : item)}
+                    onClick={() => setSelectedMenu('agent')}
+                  />
+                </div>
+              </div>
 
-          <div>
-            <div className={sectionTitle}>最近</div>
-            <div className="mt-1 flex flex-col gap-2">
-              <NavItem icon={<Rocket className="size-4" strokeWidth={2} />} label="AI 应用" className={cn('flex items-center gap-[6px]', item)} />
-              <NavItem icon={<Wrench className="size-4" strokeWidth={2} />} label="工具工作流" className={cn('flex items-center gap-[6px]', item)} />
+              <div>
+                <div className={sectionTitle}>最近</div>
+                <div className="mt-1 flex flex-col gap-2">
+                  <NavItem
+                    icon={<Smartphone className="size-4" strokeWidth={2} />}
+                    label="生成一个小程序"
+                    className={cn('flex items-center gap-2', item)}
+                    labelClassName="font-normal"
+                  />
+                  <NavItem
+                    icon={<Bot className="size-4" strokeWidth={2} />}
+                    label="创建一个 Agent"
+                    className={cn('flex items-center gap-2', item)}
+                    labelClassName="font-normal"
+                  />
+                  <NavItem
+                    icon={<BriefcaseBusiness className="size-4" strokeWidth={2} />}
+                    label="业务助手对话"
+                    className={cn('flex items-center gap-2', item)}
+                    labelClassName="font-normal"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <div className="px-3 pb-2">
-        <div className="rounded-2xl bg-white/70 p-3">
-          <div className="text-xs leading-4 text-[rgba(28,31,35,0.6)]">最近访问</div>
-          <div className="mt-2 text-sm font-medium leading-5 text-[#1c1f23]">编辑器工作台</div>
+        <div className="flex flex-col gap-1">
+          <NavItem icon={<Bell className="size-4" strokeWidth={2} />} label="消息" className={cn('flex items-center gap-2', item)} />
+          <NavItem icon={<PanelLeftClose className="size-4" strokeWidth={2} />} label="收起" className={cn('flex items-center gap-2', item)} />
+        </div>
+        <div className="mt-2 flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-[#f4f4f5]">
+          <div className="flex size-7 items-center justify-center rounded-full bg-[linear-gradient(135deg,#d4d4d8,#a1a1aa)] text-[10px] font-semibold text-white">
+            <Sparkles className="size-3" strokeWidth={2.4} />
+          </div>
+          <div className="text-sm font-semibold leading-5 text-[#27272a]">张俊</div>
         </div>
       </div>
+      <style jsx>{`
+        @property --nav-glow-angle {
+          syntax: '<angle>';
+          initial-value: 0deg;
+          inherits: false;
+        }
+
+        @keyframes navGlowRotation {
+          0% {
+            --nav-glow-angle: 0deg;
+          }
+          100% {
+            --nav-glow-angle: 360deg;
+          }
+        }
+
+        .glow-button {
+          position: relative;
+          isolation: isolate;
+          overflow: visible;
+        }
+
+        .glow-button::after {
+          content: '';
+          position: absolute;
+          inset: -2px;
+          border-radius: inherit;
+          background: conic-gradient(
+            from var(--nav-glow-angle),
+            #7cf6fe,
+            #fff20d,
+            #f66f11,
+            #fff20d,
+            #7cf6fe
+          );
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          animation: navGlowRotation 2s linear infinite paused;
+          pointer-events: none;
+          filter: blur(8px);
+          z-index: -1;
+        }
+
+        .glow-button:hover::after {
+          opacity: 1;
+          animation-play-state: running;
+        }
+
+        .nav-scroll {
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+
+        .nav-scroll::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </aside>
   )
 }

@@ -1,7 +1,8 @@
 {
   "enumState": {
     "variant": "default",
-    "size": "md"
+    "size": "lg",
+    "shape": "rounded"
   },
   "editedLayers": {
     "base": [
@@ -19,11 +20,12 @@
       "focus:ring-[#a1a1aa]/20"
     ],
     "size": [
-      "py-[5px]",
-      "px-2.5",
+      "py-[7px]",
+      "px-3",
       "text-sm",
-      "rounded-md"
-    ]
+      "rounded-lg"
+    ],
+    "shape": []
   },
   "contentMode": "block",
   "iconName": "arrow-down",
@@ -42,6 +44,11 @@
     },
     "base": {
       "": "border outline-none transition-all cursor-pointer"
+    },
+    "shape": {
+      "": "",
+      "rounded": "",
+      "full": "px-4 rounded-full"
     }
   }
 }

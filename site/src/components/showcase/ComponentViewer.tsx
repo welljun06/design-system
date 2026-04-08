@@ -10,11 +10,15 @@ import { iconMap } from '@/ui/Button'
 import { Input } from '@/ui/Input'
 import type { InputSize, InputVariant } from '@/ui/Input'
 import { Select } from '@/ui/Select'
-import type { SelectSize, SelectVariant } from '@/ui/Select'
+import type { SelectShape, SelectSize, SelectVariant } from '@/ui/Select'
 import { Tag } from '@/ui/Tag'
 import { Tabs } from '@/ui/Tabs'
 import type { TabsVariant, TabsSize } from '@/ui/Tabs'
 import { Card } from '@/ui/Card'
+import { AgentCard } from '@/ui/AgentCard'
+import type { AgentCardKind, AgentCardVariant } from '@/ui/AgentCard'
+import { ResourceCard } from '@/ui/ResourceCard'
+import type { ResourceCardVariant } from '@/ui/ResourceCard'
 import { Form } from '@/ui/Form'
 import type { FormLayout, FormFieldType } from '@/ui/Form'
 import { Textarea } from '@/ui/Textarea'
@@ -33,6 +37,7 @@ import { InputGroup } from '@/ui/InputGroup'
 import type { InputGroupSize } from '@/ui/InputGroup'
 import { Nav } from '@/ui/Nav'
 import { BusinessSelector } from '@/ui/BusinessSelector'
+import { Filter } from '@/ui/Filter'
 import { generateCode } from '@/lib/codeGen'
 import type { SerializableEntry } from '@/lib/registry'
 
@@ -250,10 +255,25 @@ function PreviewComponent({
 
 
   if (slug === 'input') return <div className="w-64"><Input variant={(variantProps.variant as InputVariant) ?? 'default'} size={(variantProps.size as InputSize) ?? 'lg'} disabled={variantProps.disabled === 'true'} classOverrides={classOverrides} /></div>
-  if (slug === 'select') return <div className="w-64"><Select variant={(variantProps.variant as SelectVariant) ?? 'default'} size={(variantProps.size as SelectSize) ?? 'lg'} disabled={variantProps.disabled === 'true'} classOverrides={classOverrides} /></div>
+  if (slug === 'select') return (
+    <div className="w-64">
+      <Select
+        variant={(variantProps.variant as SelectVariant) ?? 'default'}
+        size={(variantProps.size as SelectSize) ?? 'lg'}
+        shape={(variantProps.shape as SelectShape) ?? 'rounded'}
+        prefixLabel={variantProps.prefixLabel}
+        placeholder={variantProps.placeholder}
+        clearable={variantProps.clearable === 'true'}
+        disabled={variantProps.disabled === 'true'}
+        classOverrides={classOverrides}
+      />
+    </div>
+  )
   if (slug === 'tabs') return <Tabs variant={(variantProps.variant as TabsVariant) ?? 'glass'} size={(variantProps.size as TabsSize) ?? 'md'} classOverrides={classOverrides} />
   if (slug === 'tag') return <Tag color={(variantProps.color as any) ?? 'white'} type={(variantProps.type as any) ?? 'light'} size={(variantProps.size as any) ?? 'md'} shape={(variantProps.shape as any) ?? 'square'} classOverrides={classOverrides} />
   if (slug === 'card') return <div className="w-72 flex"><Card variant={(variantProps.variant as CardVariant) ?? 'default'} classOverrides={classOverrides} /></div>
+  if (slug === 'resource-card') return <div className="w-[316px]"><ResourceCard variant={(variantProps.variant as ResourceCardVariant) ?? 'tool'} classOverrides={classOverrides} /></div>
+  if (slug === 'agent-card') return <AgentCard variant={(variantProps.variant as AgentCardVariant) ?? 'default'} kind={(variantProps.kind as AgentCardKind) ?? 'agent'} classOverrides={classOverrides} />
   if (slug === 'form') return <Form layout={(variantProps.layout as FormLayout) ?? 'top'} fieldType={(variantProps.fieldType as FormFieldType) ?? 'input'} classOverrides={classOverrides} />
   if (slug === 'textarea') return <div className="w-64"><Textarea variant={(variantProps.variant as TextareaVariant) ?? 'default'} size={(variantProps.size as TextareaSize) ?? 'lg'} classOverrides={classOverrides} /></div>
   if (slug === 'checkbox') return <Checkbox variant={(variantProps.variant as CheckboxVariant) ?? 'default'} classOverrides={classOverrides} />
@@ -264,6 +284,28 @@ function PreviewComponent({
   if (slug === 'input-group') return <div className="w-80"><InputGroup size={(variantProps.size as InputGroupSize) ?? 'lg'} classOverrides={classOverrides} /></div>
   if (slug === 'nav') return <Nav classOverrides={classOverrides} />
   if (slug === 'business-selector') return <BusinessSelector classOverrides={classOverrides} />
+  if (slug === 'filter') return (
+    <div className="w-[760px]">
+      <Filter
+        searchPlaceholder="搜索"
+        filters={['更新时间', '模式']}
+        filterOptions={[
+          [
+            { value: 'updated-desc', label: '最近更新' },
+            { value: 'created-desc', label: '最近创建' },
+            { value: 'updated-asc', label: '最早更新' },
+          ],
+          [
+            { value: 'all', label: '全部模式' },
+            { value: 'agent', label: '智能体' },
+            { value: 'workflow', label: '工作流' },
+          ],
+        ]}
+        ownershipLabel="我创建的"
+        actionLabel="新增智能体"
+      />
+    </div>
+  )
   return null
 }
 

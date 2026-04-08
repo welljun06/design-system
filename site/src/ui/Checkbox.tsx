@@ -6,14 +6,27 @@ import { Checkbox as ShadcnCheckbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 
 export type CheckboxVariant = 'default' | 'card'
+export type CheckboxMode = 'demo' | 'single'
 
 type CheckboxProps = {
   variant?: CheckboxVariant
+  mode?: CheckboxMode
   disabled?: boolean
+  label?: string
+  checked?: boolean
+  onCheckedChange?: (checked: boolean) => void
   classOverrides?: Record<string, string>
 }
 
-export function Checkbox({ variant = 'default', disabled = false, classOverrides }: CheckboxProps) {
+export function Checkbox({
+  variant = 'default',
+  mode = 'demo',
+  disabled = false,
+  label = '选择框标题',
+  checked = false,
+  onCheckedChange,
+  classOverrides,
+}: CheckboxProps) {
   const boxClass = classOverrides?.box ?? 'h-4 w-4 rounded-[3px]'
   const labelClass = classOverrides?.label ?? 'text-sm leading-5 font-normal text-[#1c1f23]'
   const cardTitleClass = classOverrides?.cardTitle ?? 'text-sm leading-5 font-semibold text-[#1c1f23]'
@@ -55,16 +68,36 @@ export function Checkbox({ variant = 'default', disabled = false, classOverrides
       </div>
     )
   }
+  if (mode === 'single') {
+    return (
+      <div className="flex items-start gap-2">
+        <div className="relative h-5 w-4 shrink-0">
+          <ShadcnCheckbox
+            id="cb-single"
+            checked={checked}
+            disabled={disabled}
+            onCheckedChange={(value) => onCheckedChange?.(value === true)}
+            className={cn('absolute left-0 top-[2px]', boxClass)}
+            indicatorClassName='[&>svg]:h-2.5 [&>svg]:w-2.5'
+          />
+        </div>
+        <Label htmlFor="cb-single" className={cn('cursor-pointer select-none font-semibold text-[rgba(34,39,39,0.8)]', disabled ? 'text-[rgba(34,39,39,0.35)]' : labelClass)}>
+          {label}
+        </Label>
+      </div>
+    )
+  }
+
 
   return (
     <div className="flex items-center gap-4 py-1">
       <div className="flex items-start gap-2">
         {renderBox('cb-demo-1', true)}
-        <Label htmlFor="cb-demo-1" className={cn('cursor-pointer select-none', disabled ? 'text-[rgba(34,39,39,0.35)]' : labelClass)}>选择框标题</Label>
+        <Label htmlFor="cb-demo-1" className={cn('cursor-pointer select-none', disabled ? 'text-[rgba(34,39,39,0.35)]' : labelClass)}>{label}</Label>
       </div>
       <div className="flex items-start gap-2">
         {renderBox('cb-demo-2', false)}
-        <Label htmlFor="cb-demo-2" className={cn('cursor-pointer select-none', disabled ? 'text-[rgba(34,39,39,0.35)]' : labelClass)}>选择框标题</Label>
+        <Label htmlFor="cb-demo-2" className={cn('cursor-pointer select-none', disabled ? 'text-[rgba(34,39,39,0.35)]' : labelClass)}>{label}</Label>
       </div>
     </div>
   )

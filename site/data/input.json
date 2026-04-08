@@ -1,6 +1,6 @@
 {
   "enumState": {
-    "variant": "glass",
+    "variant": "default",
     "size": "lg"
   },
   "editedLayers": {
@@ -11,14 +11,13 @@
       "transition-all"
     ],
     "variant": [
-      "border-white/60",
-      "bg-white/25",
+      "border-[#e4e4e7]",
+      "bg-white",
       "text-[#1c1f23]",
-      "placeholder:text-[#71717a]",
-      "focus:border-white/80",
+      "placeholder:text-[#a1a1aa]",
+      "focus:border-[#a1a1aa]",
       "focus:ring-2",
-      "focus:ring-white/20",
-      "backdrop-blur-sm"
+      "focus:ring-[#a1a1aa]/20"
     ],
     "size": [
       "py-[7px]",
@@ -29,6 +28,8 @@
   },
   "contentMode": "block",
   "iconName": "arrow-down",
+  "stateLoading": false,
+  "stateDisabled": false,
   "activeVariantIndex": 0,
   "layerMemory": {
     "variant": {
@@ -39,6 +40,9 @@
       "lg": "py-[7px] px-3 text-sm rounded-lg",
       "md": "py-[5px] px-2.5 text-sm rounded-md",
       "sm": "py-[3px] px-2 text-xs rounded-md"
+    },
+    "base": {
+      "": "w-full border outline-none transition-all"
     }
   }
 }

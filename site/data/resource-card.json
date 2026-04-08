@@ -1,0 +1,57 @@
+{
+  "enumState": {},
+  "editedLayers": {
+    "container": [
+      "overflow-hidden",
+      "rounded-2xl",
+      "border",
+      "border-[#f2f2f7]",
+      "bg-white"
+    ],
+    "cover": [
+      "relative",
+      "aspect-[316/136]",
+      "overflow-hidden"
+    ],
+    "badge": [
+      "absolute",
+      "left-1/2",
+      "top-1/2",
+      "flex",
+      "h-14",
+      "min-w-[112px]",
+      "-translate-x-1/2",
+      "-translate-y-1/2",
+      "items-center",
+      "justify-center",
+      "rounded-[20px]",
+      "border",
+      "border-[rgba(45,66,107,0.12)]",
+      "bg-white",
+      "px-4",
+      "shadow-[0_1px_4px_rgba(0,0,0,0.08)]"
+    ],
+    "title": [
+      "text-base",
+      "font-semibold",
+      "leading-[22px]",
+      "text-[#1c1c23]"
+    ],
+    "meta": [
+      "text-xs",
+      "leading-4",
+      "text-[rgba(34,39,39,0.6)]"
+    ],
+    "description": [
+      "text-xs",
+      "leading-4",
+      "text-[rgba(34,39,39,0.6)]"
+    ]
+  },
+  "contentMode": "block",
+  "iconName": "arrow-down",
+  "stateLoading": false,
+  "stateDisabled": false,
+  "activeVariantIndex": 0,
+  "layerMemory": {}
+}

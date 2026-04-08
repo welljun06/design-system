@@ -19,7 +19,7 @@ type TagProps = {
   classOverrides?: Record<string, string>
 }
 
-const defaultBase = 'inline-flex items-center font-semibold'
+const defaultBase = 'inline-flex items-center font-semibold whitespace-nowrap'
 
 const colorTypeMap: Record<TagColor, Record<TagType, string>> = {
   white: {

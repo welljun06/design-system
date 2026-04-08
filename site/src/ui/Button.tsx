@@ -8,7 +8,7 @@ import {
   Search, Settings, Share2, Download,
   Upload, Send, Heart, Star,
   Edit3, Trash2, Copy, ExternalLink,
-  ChevronDown, ChevronRight, ChevronLeft, ChevronUp,
+  ChevronDown, ChevronRight, ChevronLeft, ChevronUp, MoreHorizontal,
   Loader2,
   type LucideIcon,
 } from 'lucide-react'
@@ -59,6 +59,7 @@ export const iconMap: Record<string, LucideIcon> = {
   'trash': Trash2,
   'copy': Copy,
   'external-link': ExternalLink,
+  'more-horizontal': MoreHorizontal,
   'chevron-down': ChevronDown,
   'chevron-right': ChevronRight,
   'chevron-left': ChevronLeft,

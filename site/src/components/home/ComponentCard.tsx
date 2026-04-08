@@ -9,6 +9,8 @@ import { Select } from '@/ui/Select'
 import { Tag } from '@/ui/Tag'
 import { Tabs } from '@/ui/Tabs'
 import { Card } from '@/ui/Card'
+import { AgentCard } from '@/ui/AgentCard'
+import { ResourceCard } from '@/ui/ResourceCard'
 import { Form } from '@/ui/Form'
 import { Textarea } from '@/ui/Textarea'
 import { Checkbox } from '@/ui/Checkbox'
@@ -19,6 +21,7 @@ import { Upload } from '@/ui/Upload'
 import { InputGroup } from '@/ui/InputGroup'
 import { Nav } from '@/ui/Nav'
 import { BusinessSelector } from '@/ui/BusinessSelector'
+import { Filter } from '@/ui/Filter'
 
 function usesTopCropPreview(slug: string) {
   return slug === 'nav'
@@ -56,6 +59,16 @@ function PreviewThumbnail({ slug }: { slug: string }) {
   if (slug === 'card') return (
     <div className="w-48">
       <Card />
+    </div>
+  )
+  if (slug === 'resource-card') return (
+    <div className="w-[180px]">
+      <ResourceCard />
+    </div>
+  )
+  if (slug === 'agent-card') return (
+    <div className="scale-[0.46] origin-center">
+      <AgentCard />
     </div>
   )
   if (slug === 'form') return (
@@ -112,6 +125,26 @@ function PreviewThumbnail({ slug }: { slug: string }) {
       >
         <BusinessSelector />
       </div>
+    </div>
+  )
+  if (slug === 'filter') return (
+    <div className="w-[280px] scale-[0.52] origin-center">
+      <Filter
+        searchPlaceholder="搜索"
+        filters={['更新时间', '模式']}
+        filterOptions={[
+          [
+            { value: 'updated-desc', label: '最近更新' },
+            { value: 'created-desc', label: '最近创建' },
+          ],
+          [
+            { value: 'all', label: '全部模式' },
+            { value: 'agent', label: '智能体' },
+          ],
+        ]}
+        ownershipLabel="我创建的"
+        actionLabel="新增智能体"
+      />
     </div>
   )
   return null

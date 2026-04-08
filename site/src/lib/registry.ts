@@ -197,7 +197,7 @@ export const registry: RegistryEntry[] = [
     slug: 'select',
     name: 'Select',
     category: '基础组件',
-    description: '下拉选择器，支持多种尺寸和视觉风格。基于 Radix UI 构建。',
+    description: '下拉选择器，支持多种尺寸、视觉风格和形状。基于 Radix UI 构建。',
     layers: {
       base: {
         label: 'Base',
@@ -221,28 +221,40 @@ export const registry: RegistryEntry[] = [
       size: {
         label: 'Size',
         variantPropKey: 'size',
-        classes: ['py-[7px]', 'px-3', 'text-sm', 'rounded-lg'],
+        classes: ['py-[7px]', 'text-sm'],
         enumOptions: [
-          { key: 'lg', label: 'LG — 36px', description: '大尺寸选择器，用于表单主要选择项', classes: ['py-[7px]', 'px-3', 'text-sm', 'rounded-lg'] },
-          { key: 'md', label: 'MD — 32px', description: '默认尺寸，适用于大多数表单场景', classes: ['py-[5px]', 'px-2.5', 'text-sm', 'rounded-md'] },
-          { key: 'sm', label: 'SM — 24px', description: '紧凑尺寸，用于筛选栏或工具栏', classes: ['py-[3px]', 'px-2', 'text-xs', 'rounded-md'] },
+          { key: 'lg', label: 'LG — 36px', description: '大尺寸选择器，用于表单主要选择项', classes: ['py-[7px]', 'text-sm'] },
+          { key: 'md', label: 'MD — 32px', description: '默认尺寸，适用于大多数表单场景', classes: ['py-[5px]', 'text-sm'] },
+          { key: 'sm', label: 'SM — 24px', description: '紧凑尺寸，用于筛选栏或工具栏', classes: ['py-[3px]', 'text-xs'] },
+        ],
+      },
+      shape: {
+        label: 'Shape',
+        variantPropKey: 'shape',
+        classes: [],
+        enumOptions: [
+          { key: 'rounded', label: '圆角矩形', description: '常规圆角形态，随尺寸使用默认左右内边距', classes: [] },
+          { key: 'full', label: '全圆角', description: '胶囊形态，左右内边距固定为 16px', classes: ['px-4', 'rounded-full'] },
         ],
       },
     },
     variants: [
-      { label: 'Default', props: { variant: 'default', size: 'lg' } },
-      { label: 'Glass', props: { variant: 'glass', size: 'lg' } },
-      { label: 'MD', props: { variant: 'default', size: 'md' } },
-      { label: 'SM', props: { variant: 'default', size: 'sm' } },
-      { label: 'Disabled', props: { variant: 'default', size: 'lg', disabled: 'true' } },
+      { label: 'Default', props: { variant: 'default', size: 'lg', shape: 'rounded' } },
+      { label: 'Glass', props: { variant: 'glass', size: 'lg', shape: 'rounded' } },
+      { label: '全圆角', props: { variant: 'default', size: 'lg', shape: 'full' } },
+      { label: '筛选', props: { variant: 'default', size: 'lg', shape: 'full', prefixLabel: '更新时间', clearable: 'true' } },
+      { label: 'MD', props: { variant: 'default', size: 'md', shape: 'rounded' } },
+      { label: 'SM', props: { variant: 'default', size: 'sm', shape: 'rounded' } },
+      { label: 'Disabled', props: { variant: 'default', size: 'lg', shape: 'rounded', disabled: 'true' } },
     ],
     code: (overrides) => {
       const base = overrides?.base ?? 'border outline-none transition-all cursor-pointer'
       const variant = overrides?.variant ?? 'border-[#e4e4e7] bg-white text-[#1c1f23] focus:border-[#a1a1aa] focus:ring-2 focus:ring-[#a1a1aa]/20'
-      const size = overrides?.size ?? 'py-[7px] px-3 text-sm rounded-lg'
+      const size = overrides?.size ?? 'py-[7px] text-sm'
+      const shape = overrides?.shape || 'px-3 rounded-lg'
       return `{/* Requires: @radix-ui/react-select, lucide-react */}
 <Select.Root>
-  <Select.Trigger className="w-full flex items-center justify-between ${base} ${variant} ${size}">
+  <Select.Trigger className="w-full flex items-center justify-between ${base} ${variant} ${size} ${shape}">
     <Select.Value placeholder="请选择..." />
     <ChevronDown size={14} color="#a1a1aa" />
   </Select.Trigger>
@@ -802,6 +814,173 @@ export const registry: RegistryEntry[] = [
     },
   },
   {
+    slug: 'resource-card',
+    name: 'Resource Card',
+    category: '业务组件',
+    description: '适用于工具、技能、模型、知识库等场景的通用资源卡片，支持渐变头图和中心内容块。',
+    layers: {
+      container: {
+        label: 'Container',
+        classes: ['overflow-hidden', 'rounded-2xl', 'border', 'border-[#f2f2f7]', 'bg-white'],
+      },
+      cover: {
+        label: 'Cover',
+        classes: ['relative', 'aspect-[316/136]', 'overflow-hidden'],
+      },
+      badge: {
+        label: 'Badge',
+        classes: ['absolute', 'left-1/2', 'top-1/2', 'flex', 'h-14', 'min-w-[112px]', '-translate-x-1/2', '-translate-y-1/2', 'items-center', 'justify-center', 'rounded-[20px]', 'border', 'border-[rgba(45,66,107,0.12)]', 'bg-white', 'px-4', 'shadow-[0_1px_4px_rgba(0,0,0,0.08)]'],
+      },
+      title: {
+        label: 'Title',
+        classes: ['text-base', 'font-semibold', 'leading-[22px]', 'text-[#1c1c23]'],
+      },
+      meta: {
+        label: 'Meta',
+        classes: ['text-xs', 'leading-4', 'text-[rgba(34,39,39,0.6)]'],
+      },
+      description: {
+        label: 'Description',
+        classes: ['text-xs', 'leading-4', 'text-[rgba(34,39,39,0.6)]'],
+      },
+    },
+    variants: [
+      { label: '工具', props: { variant: 'tool' } },
+      { label: '技能', props: { variant: 'skill' } },
+      { label: '模型', props: { variant: 'model' } },
+      { label: '知识库', props: { variant: 'knowledge' } },
+    ],
+    code: (overrides) => {
+      const container = overrides?.container ?? 'overflow-hidden rounded-2xl border border-[#f2f2f7] bg-white'
+      const cover = overrides?.cover ?? 'relative aspect-[316/136] overflow-hidden'
+      const badge = overrides?.badge ?? 'absolute left-1/2 top-1/2 flex size-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-xl border border-[rgba(45,66,107,0.12)] bg-white shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+      const title = overrides?.title ?? 'text-base font-semibold leading-[22px] text-[#1c1c23]'
+      const meta = overrides?.meta ?? 'text-xs leading-4 text-[rgba(34,39,39,0.6)]'
+      const description = overrides?.description ?? 'text-xs leading-4 text-[rgba(34,39,39,0.6)]'
+      return `{/* Requires: lucide-react */}
+<article className="${container}">
+  <div className="${cover}">
+    <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,#89d6ff_0%,#62bbff_20%,#3a93ff_58%,#1f81ff_100%)]" />
+    <div className="absolute inset-0 bg-[linear-gradient(234.734deg,rgba(31,129,255,0)_0%,#1f81ff_99.071%)]" />
+    <div className="${badge}">
+      <span className="text-[22px] leading-none">🔍</span>
+    </div>
+  </div>
+  <div className="flex flex-col gap-2 px-4 pb-4 pt-3">
+    <div className="flex items-center justify-between gap-3">
+      <h3 className="${title} truncate">视频评论智能总结</h3>
+      <div className="${meta} flex shrink-0 items-center gap-1">
+        <Bot size={12} />
+        <span>86</span>
+      </div>
+    </div>
+    <p className="${description} line-clamp-1">快速提炼评论区观点、情绪和热点，适合复盘、选题和运营洞察。</p>
+  </div>
+</article>`
+    },
+  },
+  {
+    slug: 'agent-card',
+    name: 'Agent Card',
+    category: '业务组件',
+    description: '智能体信息卡片，适用于智能体市场、推荐列表和创作者广场等横向列表场景。',
+    layers: {
+      container: {
+        label: 'Container',
+        classes: ['w-[404px]', 'max-w-full', 'overflow-hidden', 'rounded-[20px]', 'border', 'border-[rgba(45,66,107,0.12)]', 'bg-white'],
+      },
+      inner: {
+        label: 'Inner',
+        classes: ['flex', 'flex-col', 'gap-3', 'p-5'],
+      },
+      cover: {
+        label: 'Cover',
+        classes: ['relative', 'size-16', 'shrink-0', 'overflow-hidden', 'rounded-xl', 'bg-[radial-gradient(circle_at_20%_20%,#9ce8ff_0%,#55b6ff_30%,#3d67ff_65%,#1f2147_100%)]'],
+      },
+      title: {
+        label: 'Title',
+        classes: ['text-base', 'font-semibold', 'leading-[22px]', 'text-[#222727]'],
+      },
+      tag: {
+        label: 'Tag',
+        classes: ['inline-flex', 'h-5', 'shrink-0', 'items-center', 'gap-1', 'rounded-md', 'border', 'border-[rgba(45,66,107,0.12)]', 'bg-white', 'px-1.5', 'text-xs', 'font-semibold', 'leading-4', 'text-[#e72e75]'],
+      },
+      description: {
+        label: 'Description',
+        classes: ['text-xs', 'leading-4', 'text-[rgba(34,39,39,0.6)]'],
+      },
+      author: {
+        label: 'Author',
+        classes: ['text-xs', 'leading-[18px]', 'text-[rgba(34,39,39,0.6)]'],
+      },
+      meta: {
+        label: 'Meta',
+        classes: ['text-xs', 'leading-4', 'text-[rgba(34,39,39,0.6)]'],
+      },
+    },
+    variants: [
+      { label: '智能体', props: { variant: 'default', kind: 'agent' } },
+      { label: '工作流', props: { variant: 'default', kind: 'workflow' } },
+      { label: '列表·智能体', props: { variant: 'list', kind: 'agent' } },
+      { label: '列表·工作流', props: { variant: 'list', kind: 'workflow' } },
+      { label: '精选', props: { variant: 'featured', kind: 'agent' } },
+    ],
+    code: (overrides) => {
+      const container = overrides?.container ?? 'w-[404px] max-w-full overflow-hidden rounded-[20px] border border-[rgba(45,66,107,0.12)] bg-white'
+      const inner = overrides?.inner ?? 'flex flex-col gap-3 p-5'
+      const cover = overrides?.cover ?? 'relative size-16 shrink-0 overflow-hidden rounded-xl bg-[radial-gradient(circle_at_20%_20%,#9ce8ff_0%,#55b6ff_30%,#3d67ff_65%,#1f2147_100%)]'
+      const title = overrides?.title ?? 'text-base font-semibold leading-[22px] text-[#222727]'
+      const description = overrides?.description ?? 'text-xs leading-4 text-[rgba(34,39,39,0.6)]'
+      const author = overrides?.author ?? 'text-xs leading-[18px] text-[rgba(34,39,39,0.6)]'
+      const meta = overrides?.meta ?? 'text-xs leading-4 text-[rgba(34,39,39,0.6)]'
+      return `{/* Requires: lucide-react, Tag */}
+<article className="${container}">
+  <div className="${inner}">
+    <div className="flex items-start gap-3">
+      <div className="${cover}">
+        <img
+          src="/figma/agent-card-avatar-placeholder.svg"
+          alt=""
+          className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover"
+        />
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex items-center gap-1">
+          <h3 className="${title} min-w-0 max-w-full truncate">爆款短视频灵感助手</h3>
+            <Tag
+              color="white"
+              type="ghost"
+              size="md"
+              shape="square"
+            >
+              <Bot className="size-3" strokeWidth={2} />
+            </Tag>
+        </div>
+        <p className="${description} mt-1 truncate">从 0 到 1 打造爆款短视频，创意灵感源源不断，源源不断</p>
+      </div>
+    </div>
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        <div className="flex size-5 items-center justify-center rounded-full bg-[linear-gradient(135deg,#ff9968_0%,#ff5d5d_100%)] text-[10px] font-semibold leading-none text-white">S</div>
+        <span className="${author}">SSSHY99</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="${meta} flex items-center gap-1">
+          <Eye size={12} />
+          <span>233</span>
+        </div>
+        <span className="h-[10px] w-px bg-[rgba(45,66,107,0.12)]" />
+        <div className="${meta} flex items-center gap-1">
+          <Star size={12} />
+          <span>3</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>`
+    },
+  },
+  {
     slug: 'business-selector',
     name: 'Business Selector',
     category: '业务组件',
@@ -1023,6 +1202,39 @@ export const registry: RegistryEntry[] = [
     },
   },
   {
+    slug: 'filter',
+    name: 'Filter',
+    category: '业务组件',
+    description: '列表页顶部筛选业务组件，组合搜索、双筛选下拉、归属勾选和右侧操作按钮。',
+    layers: {
+      container: {
+        label: 'Container',
+        classes: ['flex', 'h-9', 'items-center', 'justify-between', 'gap-6'],
+      },
+    },
+    variants: [
+      { label: 'Default', props: {} },
+    ],
+    code: () => {
+      return `<Filter
+  searchPlaceholder="搜索"
+  filters={['更新时间', '模式']}
+  filterOptions={[
+    [
+      { value: 'updated-desc', label: '最近更新' },
+      { value: 'created-desc', label: '最近创建' },
+    ],
+    [
+      { value: 'all', label: '全部模式' },
+      { value: 'agent', label: '智能体' },
+    ],
+  ]}
+  ownershipLabel="我创建的"
+  actionLabel="新增智能体"
+/>`
+    },
+  },
+  {
     slug: 'nav',
     name: 'Nav',
     category: '基础组件',
@@ -1046,19 +1258,19 @@ export const registry: RegistryEntry[] = [
       },
       sectionTitle: {
         label: 'Section Title',
-        classes: ['px-3', 'py-1.5', 'text-xs', 'leading-4', 'text-[rgba(28,31,35,0.6)]'],
+        classes: ['px-4', 'py-1.5', 'text-xs', 'leading-4', 'text-[rgba(28,31,35,0.6)]'],
       },
       activeItem: {
         label: 'Active Item',
-        classes: ['rounded-full', 'px-3', 'py-1', 'text-[#1c1f23]', 'bg-[#53608f12]'],
+        classes: ['rounded-full', 'px-4', 'py-1', 'text-[#1c1f23]', 'bg-[#53608f12]'],
       },
       item: {
         label: 'Item',
-        classes: ['rounded-full', 'px-3', 'py-1', 'text-[#1c1f23]'],
+        classes: ['rounded-full', 'px-4', 'py-1', 'text-[#1c1f23]'],
       },
       subItem: {
         label: 'Sub Item',
-        classes: ['rounded-full', 'px-3', 'py-1', 'text-[#1c1f23]'],
+        classes: ['rounded-full', 'px-4', 'pl-9', 'py-1', 'text-[#1c1f23]'],
       },
     },
     variants: [
@@ -1067,12 +1279,12 @@ export const registry: RegistryEntry[] = [
     code: (overrides) => {
       const container = overrides?.container ?? 'w-[220px] h-[720px] rounded-[24px] bg-[#f2f2f7] pt-6 pb-2'
       const titleRow = overrides?.titleRow ?? 'h-8 px-4'
-      const workspace = overrides?.workspace ?? 'rounded-md px-[6px] py-[2px] text-[#71717a] hover:bg-[rgba(83,96,143,0.07)]'
+      const workspace = overrides?.workspace ?? 'rounded-md px-[6px] py-[2px] text-[#1c1f23] hover:bg-transparent'
       const createButton = overrides?.createButton ?? 'rounded-full bg-black px-4 py-3 text-white'
-      const sectionTitle = overrides?.sectionTitle ?? 'px-3 py-1.5 text-xs leading-4 text-[rgba(28,31,35,0.6)]'
-      const activeItem = overrides?.activeItem ?? 'rounded-full px-3 py-1 text-[#1c1f23] bg-[#53608f12]'
-      const item = overrides?.item ?? 'rounded-full px-3 py-1 text-[#1c1f23]'
-      const subItem = overrides?.subItem ?? 'rounded-full px-3 py-1 text-[#1c1f23]'
+      const sectionTitle = overrides?.sectionTitle ?? 'px-4 py-1.5 text-xs leading-4 text-[rgba(28,31,35,0.6)]'
+      const activeItem = overrides?.activeItem ?? 'rounded-full px-4 py-1 text-[#1c1f23] bg-[#53608f12]'
+      const item = overrides?.item ?? 'rounded-full px-4 py-1 text-[#1c1f23]'
+      const subItem = overrides?.subItem ?? 'rounded-full px-4 pl-9 py-1 text-[#1c1f23]'
       return `{/* Requires: lucide-react, @radix-ui/react-popover */}
 const [selectedBusiness, setSelectedBusiness] = useState('个人空间')
 const [selectorOpen, setSelectorOpen] = useState(false)
@@ -1101,10 +1313,12 @@ const [selectorOpen, setSelectorOpen] = useState(false)
       </Popover>
     </div>
     <div className="px-3">
-      <button className="flex w-full items-center gap-2 ${createButton}">
-        <Plus size={18} />
-        <span className="text-sm font-medium leading-[22px]">AI创作</span>
-      </button>
+      <div className="rounded-full glow-button">
+        <button className="flex w-full items-center gap-2 rounded-full glow-button ${createButton}">
+          <Plus size={18} />
+          <span className="text-sm font-medium leading-[22px]">AI创作</span>
+        </button>
+      </div>
     </div>
     <div className="flex flex-col gap-3 px-3">
       <div>
@@ -1124,6 +1338,43 @@ const [selectorOpen, setSelectorOpen] = useState(false)
       </div>
     </div>
   </div>
+  <style jsx>{\`
+    @property --nav-glow-angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+
+    @keyframes navGlowRotation {
+      0% { --nav-glow-angle: 0deg; }
+      100% { --nav-glow-angle: 360deg; }
+    }
+
+    .glow-button {
+      position: relative;
+      isolation: isolate;
+      overflow: visible;
+    }
+
+    .glow-button::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: inherit;
+      background: conic-gradient(from var(--nav-glow-angle), #7cf6fe, #fff20d, #f66f11, #fff20d, #7cf6fe);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      animation: navGlowRotation 2s linear infinite paused;
+      pointer-events: none;
+      filter: blur(8px);
+      z-index: -1;
+    }
+
+    .glow-button:hover::after {
+      opacity: 1;
+      animation-play-state: running;
+    }
+  \`}</style>
 </aside>`
     },
   },

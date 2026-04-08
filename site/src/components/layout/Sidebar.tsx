@@ -84,6 +84,7 @@ export function Sidebar() {
             {[
               { href: '/templates/form', name: '表单页' },
               { href: '/templates/editor', name: '编辑器页' },
+              { href: '/templates/resource-list', name: '列表页' },
             ].map((item) => (
               <Link
                 key={item.href}

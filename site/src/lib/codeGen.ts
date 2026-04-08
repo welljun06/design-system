@@ -39,10 +39,11 @@ export function generateCode(slug: string, classOverrides?: Record<string, strin
 
   if (slug === 'select') {
     const base = classOverrides?.base ?? 'border border-[#e4e4e7] bg-white text-[#1c1f23] outline-none focus:border-[#a1a1aa] focus:ring-2 focus:ring-[#a1a1aa]/20 transition-all cursor-pointer'
-    const size = classOverrides?.size ?? 'py-[7px] px-3 text-sm rounded-lg'
+    const size = classOverrides?.size ?? 'py-[7px] text-sm'
+    const shape = classOverrides?.shape || (props?.shape === 'full' ? 'px-4 rounded-full' : 'px-3 rounded-lg')
     return `{/* Requires: @radix-ui/react-select */}
 <Select.Root>
-  <Select.Trigger className="${base} ${size} flex items-center justify-between">
+  <Select.Trigger className="${base} ${size} ${shape} flex items-center justify-between">
     <Select.Value placeholder="请选择..." />
     <Select.Icon>
       <ChevronDown size={14} color="#a1a1aa" />
@@ -215,15 +216,195 @@ export function generateCode(slug: string, classOverrides?: Record<string, strin
 </div>`
   }
 
+  if (slug === 'resource-card') {
+    const container = classOverrides?.container ?? 'overflow-hidden rounded-2xl border border-[#f2f2f7] bg-white'
+    const cover = classOverrides?.cover ?? 'relative aspect-[316/136] overflow-hidden'
+    const badge = classOverrides?.badge ?? 'absolute left-1/2 top-1/2 flex h-14 min-w-[112px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[20px] border border-[rgba(45,66,107,0.12)] bg-white px-4 shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+    const title = classOverrides?.title ?? 'text-base font-semibold leading-[22px] text-[#1c1c23]'
+    const meta = classOverrides?.meta ?? 'text-xs leading-4 text-[rgba(34,39,39,0.6)]'
+    const description = classOverrides?.description ?? 'text-xs leading-4 text-[rgba(34,39,39,0.6)]'
+    return `{/* Requires: lucide-react */}
+<article className="${container}">
+  <div className="${cover}">
+    <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,#89d6ff_0%,#62bbff_20%,#3a93ff_58%,#1f81ff_100%)]" />
+    <div className="absolute inset-0 bg-[linear-gradient(234.734deg,rgba(31,129,255,0)_0%,#1f81ff_99.071%)]" />
+    <div className="${badge}">
+      <span className="text-[22px] leading-none">🔍</span>
+    </div>
+  </div>
+  <div className="flex flex-col gap-2 px-4 pb-4 pt-3">
+    <div className="flex items-center justify-between gap-3">
+      <h3 className="${title} truncate">视频评论智能总结</h3>
+      <div className="${meta} flex shrink-0 items-center gap-1">
+        <Bot size={12} />
+        <span>86</span>
+      </div>
+    </div>
+    <p className="${description} line-clamp-1">快速提炼评论区观点、情绪和热点，适合复盘、选题和运营洞察。</p>
+  </div>
+</article>`
+  }
+
+  if (slug === 'agent-card') {
+    const container = classOverrides?.container ?? 'w-[404px] max-w-full overflow-hidden rounded-[20px] border border-[rgba(45,66,107,0.12)] bg-white'
+    const inner = classOverrides?.inner ?? 'flex flex-col gap-3 p-5'
+    const cover = classOverrides?.cover ?? 'relative size-16 shrink-0 overflow-hidden rounded-xl bg-[radial-gradient(circle_at_20%_20%,#9ce8ff_0%,#55b6ff_30%,#3d67ff_65%,#1f2147_100%)]'
+    const title = classOverrides?.title ?? 'text-base font-semibold leading-[22px] text-[#222727]'
+    const description = classOverrides?.description ?? 'text-xs leading-4 text-[rgba(34,39,39,0.6)]'
+    const author = classOverrides?.author ?? 'text-xs leading-[18px] text-[rgba(34,39,39,0.6)]'
+    const meta = classOverrides?.meta ?? 'text-xs leading-4 text-[rgba(34,39,39,0.6)]'
+    const kind = props?.kind === 'workflow' ? 'workflow' : 'agent'
+    const tagIcon = kind === 'workflow'
+      ? '<GitBranch className="size-3" strokeWidth={2} />'
+      : '<Bot className="size-3" strokeWidth={2} />'
+    if (props?.variant === 'featured') {
+      const featuredContainer = 'w-[313px] max-w-full overflow-hidden rounded-[24px] bg-[#7da489] p-1'
+      const featuredInner = 'relative flex h-[400px] flex-col justify-end overflow-hidden rounded-[20px] p-4'
+      const featuredTitle = 'text-base font-medium leading-[18px] text-white'
+      const featuredDescription = 'text-xs leading-[18px] text-white'
+      const featuredAuthor = 'text-xs leading-[18px] text-white'
+      const featuredMeta = 'text-xs leading-[18px] text-white'
+      return `{/* Requires: lucide-react */}
+<article className="${featuredContainer}">
+  <div className="${featuredInner}">
+    <img src="/figma/agent-card-featured-bg.png" alt="" className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover" />
+    <div
+      className="pointer-events-none absolute inset-0"
+      style={{
+        backgroundImage:
+          'linear-gradient(187.283deg, rgb(125, 164, 137) 2.0293%, rgba(125, 164, 137, 0) 22.153%, rgba(125, 164, 137, 0) 55.482%, rgb(125, 164, 137) 72.23%)',
+      }}
+    />
+    <div className="relative z-[1] flex h-[90px] flex-col justify-end gap-2">
+      <h3 className="${featuredTitle}">抖音账号小助手</h3>
+      <p className="${featuredDescription} line-clamp-2 h-9">服务于抖音官方 B 号，能够为 C 端用户解答抖音账号相关疑问，提供查询抖音账号相关数据的服务，实现用户与官方直接对话。</p>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="flex size-5 items-center justify-center rounded-full bg-[linear-gradient(135deg,#8b6b57_0%,#d7dce1_46%,#93a8b2_100%)] text-[10px] font-semibold leading-none text-white">S</div>
+          <span className="${featuredAuthor}">SSSHY99</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="${featuredMeta} flex items-center gap-1">
+            <Eye size={12} />
+            <span>286k</span>
+          </div>
+          <span className="h-[10px] w-px bg-white/12" />
+          <div className="${featuredMeta} flex items-center gap-1">
+            <Sparkles size={12} />
+            <span>86</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>`
+    }
+    if (props?.variant === 'list') {
+      const listInner = classOverrides?.inner ?? 'flex flex-col gap-3 px-5 pb-4 pt-5'
+      return `{/* Requires: lucide-react, Tag */}
+<article className="${container}">
+  <div className="${listInner}">
+    <div className="flex items-start gap-3">
+      <div className="${cover}">
+        <img
+          src="/figma/agent-card-avatar-placeholder.svg"
+          alt=""
+          className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover"
+        />
+      </div>
+      <div className="min-w-0 flex-1 space-y-1">
+        <div className="flex min-w-0 items-center gap-1">
+          <h3 className="${title} min-w-0 max-w-full truncate">爆款短视频灵感助手</h3>
+          <Tag color="green" type="light" size="md" shape="square">已发布</Tag>
+          <Tag color="white" type="ghost" size="md" shape="square">
+            ${tagIcon}
+          </Tag>
+        </div>
+        <p className="${description} truncate">围绕选题、脚本和封面方向提供成体系的短视频创作灵感支持。</p>
+      </div>
+    </div>
+    <div className="flex items-center gap-2">
+      <div className="flex size-5 items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(135deg,#ff9968_0%,#ff5d5d_100%)] text-[10px] font-semibold leading-none text-white">S</div>
+      <span className="${author}">SSSHY99 ｜更新于 2022-09-21 00:00</span>
+    </div>
+    <div className="h-px w-full bg-[rgba(45,66,107,0.12)]" />
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-1">
+        <div className="flex size-6 items-center justify-center rounded-xl bg-black text-[11px] font-semibold leading-none text-white">抖</div>
+        <div className="flex size-6 items-center justify-center rounded-xl bg-[#f2f4f7] text-[11px] font-semibold leading-none text-[#4b5563]">剪</div>
+      </div>
+      <div className="flex items-center gap-1">
+        <button type="button" className="inline-flex h-6 items-center justify-center gap-1 rounded-lg px-2 text-xs font-semibold leading-4 text-[rgba(34,39,39,0.8)] transition-colors hover:bg-[#f5f7fa]">
+          <Paintbrush size={16} />
+          <span>做同款</span>
+        </button>
+        <button type="button" className="inline-flex size-6 items-center justify-center rounded-lg text-[rgba(34,39,39,0.8)] transition-colors hover:bg-[#f5f7fa]">
+          <Star size={16} />
+        </button>
+        <button type="button" className="inline-flex size-6 items-center justify-center rounded-lg text-[rgba(34,39,39,0.8)] transition-colors hover:bg-[#f5f7fa]">
+          <MoreHorizontal size={16} />
+        </button>
+      </div>
+    </div>
+  </div>
+</article>`
+    }
+    return `{/* Requires: lucide-react, Tag */}
+<article className="${container}">
+  <div className="${inner}">
+    <div className="flex items-start gap-3">
+      <div className="${cover}">
+        <img
+          src="/figma/agent-card-avatar-placeholder.svg"
+          alt=""
+          className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover"
+        />
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex items-center gap-1">
+          <h3 className="${title} min-w-0 max-w-full truncate">爆款短视频灵感助手</h3>
+            <Tag
+              color="white"
+              type="ghost"
+              size="md"
+              shape="square"
+            >
+              ${tagIcon}
+            </Tag>
+        </div>
+        <p className="${description} mt-1 truncate">从 0 到 1 打造爆款短视频，创意灵感源源不断，源源不断</p>
+      </div>
+    </div>
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        <div className="flex size-5 items-center justify-center rounded-full bg-[linear-gradient(135deg,#ff9968_0%,#ff5d5d_100%)] text-[10px] font-semibold leading-none text-white">S</div>
+        <span className="${author}">SSSHY99</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="${meta} flex items-center gap-1">
+          <Eye size={12} />
+          <span>233</span>
+        </div>
+        <span className="h-[10px] w-px bg-[rgba(45,66,107,0.12)]" />
+        <div className="${meta} flex items-center gap-1">
+          <Star size={12} />
+          <span>3</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>`
+  }
+
   if (slug === 'nav') {
     const container = classOverrides?.container ?? 'w-[220px] h-[720px] rounded-[24px] bg-[#f2f2f7] pt-6 pb-2'
     const titleRow = classOverrides?.titleRow ?? 'h-8 px-4'
-    const workspace = classOverrides?.workspace ?? 'rounded-md px-[6px] py-[2px] text-[#71717a] hover:bg-[rgba(83,96,143,0.07)]'
+    const workspace = classOverrides?.workspace ?? 'rounded-md px-[6px] py-[2px] text-[#1c1f23] hover:bg-transparent'
     const createButton = classOverrides?.createButton ?? 'rounded-full bg-black px-4 py-3 text-white'
-    const sectionTitle = classOverrides?.sectionTitle ?? 'px-3 py-1.5 text-xs leading-4 text-[rgba(28,31,35,0.6)]'
-    const activeItem = classOverrides?.activeItem ?? 'rounded-full px-3 py-1 text-[#1c1f23] bg-[#53608f12]'
-    const item = classOverrides?.item ?? 'rounded-full px-3 py-1 text-[#1c1f23]'
-    const subItem = classOverrides?.subItem ?? 'rounded-full px-3 py-1 text-[#1c1f23]'
+    const sectionTitle = classOverrides?.sectionTitle ?? 'px-4 py-1.5 text-xs leading-4 text-[rgba(28,31,35,0.6)]'
+    const activeItem = classOverrides?.activeItem ?? 'rounded-full px-4 py-1 text-[#1c1f23] bg-[#53608f12]'
+    const item = classOverrides?.item ?? 'rounded-full px-4 py-1 text-[#1c1f23]'
+    const subItem = classOverrides?.subItem ?? 'rounded-full px-4 pl-9 py-1 text-[#1c1f23]'
     return `{/* Requires: lucide-react, @radix-ui/react-popover */}
 const [selectedBusiness, setSelectedBusiness] = useState('个人空间')
 const [selectorOpen, setSelectorOpen] = useState(false)
@@ -252,10 +433,12 @@ const [selectorOpen, setSelectorOpen] = useState(false)
       </Popover>
     </div>
     <div className="px-3">
-      <button className="flex w-full items-center gap-2 ${createButton}">
-        <Plus size={18} />
-        <span className="text-sm font-medium leading-[22px]">AI创作</span>
-      </button>
+      <div className="rounded-full glow-button">
+        <button className="flex w-full items-center gap-2 rounded-full glow-button ${createButton}">
+          <Plus size={18} />
+          <span className="text-sm font-medium leading-[22px]">AI创作</span>
+        </button>
+      </div>
     </div>
     <div className="flex flex-col gap-3 px-3">
       <div>
@@ -275,6 +458,43 @@ const [selectorOpen, setSelectorOpen] = useState(false)
       </div>
     </div>
   </div>
+  <style jsx>{\`
+    @property --nav-glow-angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+
+    @keyframes navGlowRotation {
+      0% { --nav-glow-angle: 0deg; }
+      100% { --nav-glow-angle: 360deg; }
+    }
+
+    .glow-button {
+      position: relative;
+      isolation: isolate;
+      overflow: visible;
+    }
+
+    .glow-button::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: inherit;
+      background: conic-gradient(from var(--nav-glow-angle), #7cf6fe, #fff20d, #f66f11, #fff20d, #7cf6fe);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      animation: navGlowRotation 2s linear infinite paused;
+      pointer-events: none;
+      filter: blur(8px);
+      z-index: -1;
+    }
+
+    .glow-button:hover::after {
+      opacity: 1;
+      animation-play-state: running;
+    }
+  \`}</style>
 </aside>`
   }
 

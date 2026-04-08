@@ -1,7 +1,7 @@
 {
   "enumState": {
-    "color": "white",
-    "type": "light",
+    "color": "orange",
+    "type": "solid",
     "size": "lg",
     "shape": "circle"
   },
