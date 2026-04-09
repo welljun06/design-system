@@ -1,10 +1,10 @@
 export const metadata = {
-  title: '项目脚手架 — Design System',
-  description: '快速部署 AI 平台基础框架，在此基础上 vibe coding。',
+  title: '快速开始 — Design System',
+  description: '快速获取 AI 平台脚手架，支持项目内 vibe coding、Skill 封装调用与组件 PE 复用。',
 }
 
-const degitCommand = `npx degit welljun06/ai-platform-skill my-project
-cd my-project && npm install && npm run dev`
+const degitCommand = `npx degit welljun06/design-system my-project
+cd my-project/site && npm install && npm run dev`
 
 const aiPromptTemplate = `你是一位专业的前端工程师，正在基于以下设计系统构建 UI。
 
@@ -23,12 +23,12 @@ const aiPromptTemplate = `你是一位专业的前端工程师，正在基于以
 ### GlassButton
 \`\`\`tsx
 // 胶囊形
-<button className="cursor-pointer border border-white/60 bg-white/25 shadow-[inset_1px_1px_4px_2px_rgba(0,0,0,0.03)] hover:bg-white/50 transition-colors transition-transform active:scale-95 flex h-9 items-center justify-center rounded-[39px] px-4 text-sm text-[#1c1f23] leading-[20px]">
+<button className="cursor-pointer border border-white/60 bg-white/25 shadow-[inset_1px_1px_4px_2px_rgba(0,0,0,0.03)] hover:bg-white/50 transition-all active:scale-95 flex h-9 items-center justify-center rounded-[39px] px-4 text-sm text-[#1c1f23] leading-[20px]">
   Click me
 </button>
 
 // 圆形
-<button className="cursor-pointer border border-white/60 bg-white/25 shadow-[inset_1px_1px_4px_2px_rgba(0,0,0,0.03)] hover:bg-white/50 transition-colors transition-transform active:scale-95 flex h-9 w-9 shrink-0 items-center justify-center rounded-full">
+<button className="cursor-pointer border border-white/60 bg-white/25 shadow-[inset_1px_1px_4px_2px_rgba(0,0,0,0.03)] hover:bg-white/50 transition-all active:scale-95 flex h-9 w-9 shrink-0 items-center justify-center rounded-full">
   <Icon />
 </button>
 \`\`\`
@@ -118,6 +118,7 @@ const aiPromptTemplate = `你是一位专业的前端工程师，正在基于以
 - 图标使用内联 SVG，不引入图标库
 - 所有交互状态：hover、active:scale-95、transition-colors
 - 页面背景使用上述 radial-gradient
+- 如果直接在项目里 vibe coding，请把新的页面设计结论持续沉淀到 CLAUDE.md 的 design / page rules 部分
 `
 
 export default function ScaffoldPage() {
@@ -127,14 +128,50 @@ export default function ScaffoldPage() {
       <div className="mb-10">
         <h1
           className="text-2xl font-bold tracking-tight mb-3"
-          style={{ color: '#fafafa' }}
+          style={{ color: '#09090b' }}
         >
-          项目脚手架
+          快速开始
         </h1>
         <p className="text-sm" style={{ color: '#71717a', lineHeight: '1.7' }}>
-          快速部署 AI 平台基础框架，在此基础上 vibe coding。已内置本设计系统的所有 Token 和组件规范。
+          这不是一个只用来“拉项目”的脚手架页面，而是一套围绕 AI 设计系统复用的工作方式说明。
+          你可以直接在项目里 vibe coding、后续把能力封装成 Skills，也可以只复制组件 PE 片段快速落地到其他项目。
         </p>
       </div>
+
+      <Section title="三种用法">
+        <div className="space-y-3">
+          {[
+            {
+              title: '1. 直接拉取项目，在项目上 vibe coding',
+              description:
+                '最完整的体验方式。直接拉下本项目后，以现有组件、模板、页面结构为基础继续生成和迭代。这样不仅复用组件最快，而且新的设计决定、页面样式规则还能持续沉淀到项目里的 CLAUDE.md。',
+            },
+            {
+              title: '2. 后续封装成 Skills，按需灵活调用',
+              description:
+                '后面会把这套能力进一步封装成 Skills。届时可以按场景调用，例如页面生成、列表页搭建、AI 工作台布局、组件细化等，不需要每次都从完整项目开始。',
+            },
+            {
+              title: '3. 直接复制组件 PE / Prompt 片段',
+              description:
+                '如果你不想完整引入项目，也可以直接拷贝某个组件、模板或页面片段的 PE，快速复用已有的结构、样式和交互表达。',
+            },
+          ].map((item) => (
+            <div
+              key={item.title}
+              className="rounded-xl border px-4 py-4"
+              style={{ borderColor: '#e4e4e7', backgroundColor: '#ffffff' }}
+            >
+              <p className="text-sm font-semibold mb-1.5" style={{ color: '#09090b' }}>
+                {item.title}
+              </p>
+              <p className="text-sm" style={{ color: '#71717a', lineHeight: '1.7' }}>
+                {item.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </Section>
 
       {/* Includes */}
       <Section title="包含内容">
@@ -165,15 +202,33 @@ export default function ScaffoldPage() {
         </ul>
       </Section>
 
+      <Section title="核心原理">
+        <div className="space-y-3 text-sm" style={{ color: '#71717a', lineHeight: '1.8' }}>
+          <p>
+            这套脚手架的核心不是“从零生成”，而是把已经打磨过的组件代码片段、页面模板、设计 Token 和页面规则先封装好，
+            让 AI 在已有资产上快速复用，而不是每次重新猜一遍。
+          </p>
+          <p>
+            具体来说，就是把组件的结构、样式表达、交互习惯和页面布局沉淀成可直接复用的代码片段与 Prompt/PE，
+            这样在做新页面时，AI 可以优先拼装和延展，而不是重新发明组件。
+          </p>
+          <p>
+            如果你是直接在项目里 vibe coding，新的页面样式结论、布局经验和设计规则会继续记录进
+            <code className="mx-1 rounded bg-[#f4f4f5] px-1.5 py-0.5 text-xs text-[#3f3f46]">CLAUDE.md</code>
+            的 design / page rules 部分，形成可以持续继承的项目记忆。
+          </p>
+        </div>
+      </Section>
+
       {/* Get it */}
       <Section title="获取">
         <div
           className="rounded-xl overflow-hidden"
-          style={{ border: '1px solid #1a1a1a' }}
+          style={{ border: '1px solid #e4e4e7' }}
         >
           <div
             className="flex items-center justify-between px-4 py-2 border-b"
-            style={{ backgroundColor: '#0d0d0d', borderColor: '#1a1a1a' }}
+            style={{ backgroundColor: '#fafafa', borderColor: '#e4e4e7' }}
           >
             <span className="text-xs" style={{ color: '#52525b' }}>
               Terminal
@@ -181,8 +236,8 @@ export default function ScaffoldPage() {
           </div>
           <pre
             style={{
-              backgroundColor: '#0d0d0d',
-              color: '#e4e4e7',
+              backgroundColor: '#f6f8fa',
+              color: '#24292e',
               padding: '1rem 1.25rem',
               margin: 0,
               fontSize: '13px',
@@ -208,11 +263,48 @@ export default function ScaffoldPage() {
         </p>
       </Section>
 
+      <Section title="推荐流程">
+        <div
+          className="rounded-xl overflow-hidden"
+          style={{ border: '1px solid #e4e4e7' }}
+        >
+          <table className="w-full text-sm">
+            <tbody>
+              {[
+                ['项目内 vibe coding', '拉取脚手架 → 启动项目 → 在已有组件/模板基础上继续生成页面与交互'],
+                ['Skill 化调用', '把常见页面模式、组件片段、设计规则整理成可重复调用的 Skill 能力'],
+                ['复制组件 PE', '按需复制单个组件或模板片段，快速接入到其他项目中'],
+              ].map(([key, value], i) => (
+                <tr
+                  key={key}
+                  style={{
+                    borderBottom: i < 2 ? '1px solid #e4e4e7' : 'none',
+                  }}
+                >
+                  <td
+                    className="px-4 py-3 w-36 font-medium align-top"
+                    style={{ color: '#52525b', backgroundColor: '#fafafa' }}
+                  >
+                    {key}
+                  </td>
+                  <td
+                    className="px-4 py-3"
+                    style={{ color: '#71717a', backgroundColor: '#ffffff' }}
+                  >
+                    {value}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Section>
+
       {/* Tech stack details */}
       <Section title="技术栈详情">
         <div
           className="rounded-xl overflow-hidden"
-          style={{ border: '1px solid #1a1a1a' }}
+          style={{ border: '1px solid #e4e4e7' }}
         >
           <table className="w-full text-sm">
             <tbody>
@@ -226,18 +318,18 @@ export default function ScaffoldPage() {
                 <tr
                   key={key}
                   style={{
-                    borderBottom: i < 4 ? '1px solid #1a1a1a' : 'none',
+                    borderBottom: i < 4 ? '1px solid #e4e4e7' : 'none',
                   }}
                 >
                   <td
                     className="px-4 py-3 w-28 font-medium"
-                    style={{ color: '#71717a', backgroundColor: '#0d0d0d' }}
+                    style={{ color: '#52525b', backgroundColor: '#fafafa' }}
                   >
                     {key}
                   </td>
                   <td
                     className="px-4 py-3"
-                    style={{ color: '#a1a1aa', backgroundColor: '#09090b' }}
+                    style={{ color: '#71717a', backgroundColor: '#ffffff' }}
                   >
                     {value}
                   </td>
@@ -248,18 +340,29 @@ export default function ScaffoldPage() {
         </div>
       </Section>
 
+      <Section title="最终目标">
+        <div className="rounded-xl border px-4 py-4" style={{ borderColor: '#e4e4e7', backgroundColor: '#ffffff' }}>
+          <p className="text-sm" style={{ color: '#71717a', lineHeight: '1.8' }}>
+            这套体系的目标不是直接替代设计师，而是把重复搭建、组件拼装、样式回忆和基础页面生成这些高频工作尽量交给 AI，
+            让设计师和产品团队把更多时间留给真正重要的事情：
+            探索更新的交互方式、验证更大胆的概念、快速比较多个创新方案，并把精力用在更有创造力的判断上。
+          </p>
+        </div>
+      </Section>
+
       {/* AI Prompt */}
       <Section title="AI Prompt 模板">
         <p className="text-sm mb-4" style={{ color: '#71717a' }}>
           将此 Prompt 提供给 AI 助手（如 Claude、Cursor、v0 等），可快速生成符合本设计系统规范的组件和页面。
+          如果你只想复用单个组件/模板，也可以把里面的片段当作组件 PE 直接复制使用。
         </p>
         <div
           className="rounded-xl overflow-hidden"
-          style={{ border: '1px solid #1a1a1a' }}
+          style={{ border: '1px solid #e4e4e7' }}
         >
           <div
             className="flex items-center justify-between px-4 py-2 border-b"
-            style={{ backgroundColor: '#0d0d0d', borderColor: '#1a1a1a' }}
+            style={{ backgroundColor: '#fafafa', borderColor: '#e4e4e7' }}
           >
             <span className="text-xs" style={{ color: '#52525b' }}>
               AI Prompt
@@ -268,8 +371,8 @@ export default function ScaffoldPage() {
           <pre
             className="overflow-x-auto"
             style={{
-              backgroundColor: '#0d0d0d',
-              color: '#e4e4e7',
+              backgroundColor: '#f6f8fa',
+              color: '#24292e',
               maxHeight: '480px',
               overflowY: 'auto',
               padding: '1rem 1.25rem',
@@ -287,7 +390,7 @@ export default function ScaffoldPage() {
       {/* Footer */}
       <div
         className="mt-12 pt-6 border-t flex items-center gap-2 text-sm"
-        style={{ borderColor: '#1a1a1a', color: '#3f3f46' }}
+        style={{ borderColor: '#e4e4e7', color: '#3f3f46' }}
       >
         <a
           href="https://github.com/welljun06/ai-platform-skill"

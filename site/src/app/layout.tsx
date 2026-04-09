@@ -1,8 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import { Header } from '@/components/layout/Header'
 import { Sidebar } from '@/components/layout/Sidebar'
-import { registry } from '@/lib/registry'
 
 export const metadata: Metadata = {
   title: 'Design System',
@@ -14,18 +12,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const components = registry.map((c) => ({
-    slug: c.slug,
-    name: c.name,
-    category: c.category,
-    description: c.description,
-  }))
-
   return (
     <html lang="zh-CN">
       <body>
-        <Header components={components} />
-        <div className="flex flex-row" style={{ height: 'calc(100vh - 52px)' }}>
+        <div className="flex flex-row" style={{ height: '100vh' }}>
           <div className="hidden md:flex h-full shrink-0">
             <Sidebar />
           </div>
